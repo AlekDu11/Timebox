@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1c"/>
+      <stop offset="100%" style="stop-color:#0c0c0e"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0d070"/>
+      <stop offset="50%" style="stop-color:#c8a050"/>
+      <stop offset="100%" style="stop-color:#9a7030"/>
+    </linearGradient>
+    <linearGradient id="goldtop" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#e8c860" stop-opacity="0.9"/>
+      <stop offset="100%" style="stop-color:#c8a050" stop-opacity="0.6"/>
+    </linearGradient>
+    <linearGradient id="goldbottom" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#c8a050"/>
+      <stop offset="100%" style="stop-color:#e8c860"/>
+    </linearGradient>
+    <linearGradient id="frame" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#d0a848"/>
+      <stop offset="100%" style="stop-color:#8a6830"/>
+    </linearGradient>
+    <radialGradient id="sandglow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#f0d070" stop-opacity="0.3"/>
+      <stop offset="100%" style="stop-color:#f0d070" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softglow">
+      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#c8a050" flood-opacity="0.5"/>
+    </filter>
+    <clipPath id="topHalf">
+      <path d="M 156 90 Q 156 90 256 256 Q 356 90 356 90 Z"/>
+    </clipPath>
+    <clipPath id="bottomHalf">
+      <path d="M 156 422 Q 156 422 256 256 Q 356 422 356 422 Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="110" fill="url(#bg)"/>
+
+  <!-- Subtle radial glow -->
+  <rect width="512" height="512" rx="110" fill="url(#sandglow)"/>
+
+  <!-- ═══ HOURGLASS SHAPE ═══ -->
+
+  <!-- Top bulb fill (empty - dark) -->
+  <path d="M 168 96 L 344 96 Q 344 96 264 248 L 248 248 Q 168 96 168 96 Z" fill="#151517"/>
+
+  <!-- Sand falling in top bulb — gold fill from top -->
+  <path d="M 168 96 L 344 96 L 320 140 L 192 140 Z" fill="url(#goldtop)" opacity="0.85"/>
+  <path d="M 192 140 L 320 140 L 300 175 L 212 175 Z" fill="url(#goldtop)" opacity="0.7"/>
+  <path d="M 212 175 L 300 175 L 284 206 L 228 206 Z" fill="url(#goldtop)" opacity="0.5"/>
+  <path d="M 228 206 L 284 206 L 272 228 L 240 228 Z" fill="url(#goldtop)" opacity="0.3"/>
+
+  <!-- Sand stream — thin golden line through middle -->
+  <line x1="256" y1="245" x2="256" y2="268" stroke="url(#gold)" stroke-width="4" opacity="0.9" filter="url(#softglow)"/>
+  <ellipse cx="256" cy="270" rx="5" ry="3" fill="#e8c860" opacity="0.8"/>
+
+  <!-- Bottom bulb fill — accumulated sand -->
+  <path d="M 168 416 L 344 416 Q 344 416 264 264 L 248 264 Q 168 416 168 416 Z" fill="#151517"/>
+
+  <!-- Sand pile in bottom — gold -->
+  <path d="M 248 264 L 264 264 L 308 348 L 204 348 Z" fill="url(#goldbottom)" opacity="0.4"/>
+  <path d="M 204 348 L 308 348 L 326 384 L 186 384 Z" fill="url(#goldbottom)" opacity="0.65"/>
+  <path d="M 186 384 L 326 384 L 344 416 L 168 416 Z" fill="url(#goldbottom)" opacity="0.9"/>
+
+  <!-- Glow on sand pile -->
+  <ellipse cx="256" cy="400" rx="60" ry="20" fill="#c8a050" opacity="0.15"/>
+
+  <!-- ═══ HOURGLASS FRAME ═══ -->
+
+  <!-- Top bar -->
+  <rect x="148" y="80" width="216" height="18" rx="9" fill="url(#frame)" filter="url(#softglow)"/>
+
+  <!-- Bottom bar -->
+  <rect x="148" y="414" width="216" height="18" rx="9" fill="url(#frame)" filter="url(#softglow)"/>
+
+  <!-- Left side struts -->
+  <line x1="158" y1="96" x2="168" y2="418" stroke="url(#frame)" stroke-width="10" stroke-linecap="round"/>
+
+  <!-- Right side struts -->
+  <line x1="354" y1="96" x2="344" y2="418" stroke="url(#frame)" stroke-width="10" stroke-linecap="round"/>
+
+  <!-- Hourglass outline (just the curves, transparent fill) -->
+  <path d="M 168 98 Q 256 98 344 98 L 264 250 L 248 250 L 168 98 Z"
+        fill="none" stroke="url(#frame)" stroke-width="2.5" opacity="0.4"/>
+  <path d="M 168 414 Q 256 414 344 414 L 264 262 L 248 262 L 168 414 Z"
+        fill="none" stroke="url(#frame)" stroke-width="2.5" opacity="0.4"/>
+
+  <!-- ═══ SMALL DOTS — life grid subtle hint ═══ -->
+  <!-- tiny squares scattered suggesting the grid concept -->
+  <rect x="64" y="180" width="8" height="8" rx="2" fill="#c8a050" opacity="0.2"/>
+  <rect x="64" y="196" width="8" height="8" rx="2" fill="#c8a050" opacity="0.15"/>
+  <rect x="64" y="212" width="8" height="8" rx="2" fill="#c8a050" opacity="0.1"/>
+
+  <rect x="440" y="300" width="8" height="8" rx="2" fill="#c8a050" opacity="0.2"/>
+  <rect x="440" y="316" width="8" height="8" rx="2" fill="#c8a050" opacity="0.15"/>
+  <rect x="440" y="332" width="8" height="8" rx="2" fill="#c8a050" opacity="0.1"/>
+</svg>

@@ -1,0 +1,2498 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0e0e0f">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Timebox">
+<meta name="description" content="Timebox — Visualize your life in weeks. Track goals. Leave letters to your future self.">
+<meta property="og:title" content="Timebox — Your Life in Weeks">
+<meta property="og:description" content="Timebox — Visualize your life in weeks. Track goals. Leave letters to your future self.">
+<meta property="og:type" content="website">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Timebox — Life in Weeks</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,700&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════
+   NEO-STOIC DARK — Stone · Deep Grey · Gold
+══════════════════════════════════════ */
+:root {
+  --bg:    #0e0e0f;
+  --bg2:   #131314;
+  --s1:    #18181a;
+  --s2:    #1e1e20;
+  --b1:    #2a2a2d;
+  --b2:    #333337;
+  --b3:    #3e3e42;
+  --text:  #e8e4dc;
+  --text2: #a8a49c;
+  --muted: #666260;
+  --muted2:#3a3836;
+  --gold:  #c8a050;
+  --gold2: #e0b860;
+  --goldd: #8a6c30;
+  --goldl: rgba(200,160,80,.1);
+  --stone: #4a4845;
+  --green: #4a9060;
+  --greenl:rgba(74,144,96,.12);
+  --red:   #a04040;
+  --redl:  rgba(160,64,64,.12);
+  --blue:  #3868a0;
+  --bluel: rgba(56,104,160,.12);
+  --amber: #b87828;
+  --amberl:rgba(184,120,40,.12);
+  --violet:#6858d0;
+  --violet2:#8878e8;
+  --orange:#c07828;
+  --orangel:rgba(192,120,40,.1);
+  --pink:  #a04878;
+  --teal:  #287870;
+  --shadow:rgba(0,0,0,.6);
+  --shadow2:rgba(0,0,0,.3);
+}
+
+/* Stone texture overlay */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.038'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
+
+/* ══ BASE ══ */
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospace;min-height:100vh;overflow-x:hidden}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes mIn{from{opacity:0;transform:scale(.97) translateY(8px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(200,160,80,.3)}50%{opacity:.85;box-shadow:0 0 0 4px rgba(200,160,80,.08)}}
+@keyframes confettiFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes tickAnim{0%{transform:scale(1.4)}100%{transform:scale(1)}}
+
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px}
+
+/* ══════════════════════════════════════
+   INTRO
+══════════════════════════════════════ */
+#intro{position:fixed;inset:0;background:var(--bg);z-index:900;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .7s,transform .7s}
+#intro.out{opacity:0;transform:translateY(-20px);pointer-events:none}
+
+.i-logo{font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:6px;text-transform:uppercase;color:var(--muted);margin-bottom:32px;animation:fadeUp .8s both .05s}
+.i-title{font-family:'Cormorant Garamond',serif;font-size:clamp(56px,9vw,112px);font-weight:900;line-height:.9;letter-spacing:-3px;text-align:center;color:var(--text);animation:fadeUp .8s both .2s}
+.i-title em{color:var(--gold);font-style:italic;font-weight:400}
+.i-rule{width:60px;height:1px;background:var(--b2);margin:28px auto;animation:fadeIn .8s both .35s}
+.i-sub{font-size:11px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;text-align:center;animation:fadeUp .8s both .4s}
+
+.i-form{margin-top:52px;display:flex;flex-direction:column;align-items:center;gap:20px;animation:fadeUp .8s both .55s}
+.i-row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.ifield{display:flex;flex-direction:column;gap:8px}
+.ifield label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-weight:700}
+.ifield input{background:var(--s1);border:1.5px solid var(--b1);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:16px;padding:13px 18px;width:210px;outline:none;transition:border-color .2s,box-shadow .2s;border-radius:2px}
+.ifield input:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--goldl)}
+
+.i-lang{display:flex;gap:8px}
+.lang-btn{background:var(--s1);border:1.5px solid var(--b1);color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;font-weight:700;padding:7px 16px;cursor:pointer;transition:all .2s;border-radius:2px}
+.lang-btn.on{border-color:var(--gold);color:var(--gold);background:var(--goldl)}
+
+.btn-start{background:var(--text);color:var(--bg);border:none;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;padding:17px 56px;cursor:pointer;transition:all .25s;border-radius:2px;position:relative;overflow:hidden}
+.btn-start::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transform:translateX(-100%);transition:transform .5s}
+.btn-start:hover::before{transform:translateX(100%)}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 8px 32px var(--shadow)}
+
+/* ══════════════════════════════════════
+   APP SHELL
+══════════════════════════════════════ */
+#app{opacity:0;transition:opacity .6s .2s;position:relative;z-index:1;min-height:100vh}
+#app.on{opacity:1}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:200;background:rgba(247,243,236,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--b1);padding:0 48px;display:flex;align-items:center;justify-content:space-between;height:58px;transition:background .4s}
+[data-theme="dark"] .nav,[data-theme="cosmos"] .nav{background:rgba(12,11,16,.92)}
+[data-theme="paper"] .nav{background:rgba(240,235,224,.92)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--gold);letter-spacing:1px;cursor:pointer;transition:opacity .2s}
+.nav-logo:hover{opacity:.8}
+.nav-tabs{display:flex}
+.ntab{background:none;border:none;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:0 18px;height:58px;cursor:pointer;transition:color .2s;border-bottom:2px solid transparent;position:relative;top:1px}
+.ntab:hover{color:var(--text2)}
+.ntab.on{color:var(--gold);border-bottom-color:var(--gold)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-age{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:1px}
+.theme-switcher{display:flex;gap:4px}
+.tbtn{width:22px;height:22px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all .2s;position:relative}
+.tbtn:hover,.tbtn.on{border-color:var(--text);transform:scale(1.15)}
+.tbtn-light{background:radial-gradient(circle at 40% 40%,#f0e8d0,#d4c8a8)}
+.tbtn-dark{background:radial-gradient(circle at 40% 40%,#2a2840,#0c0b10)}
+.tbtn-cosmos{background:radial-gradient(circle at 40% 40%,#6040b8,#04030c)}
+.tbtn-paper{background:radial-gradient(circle at 40% 40%,#e8d8b0,#c8b080)}
+.nav-lang{background:none;border:1.5px solid var(--b2);color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;padding:4px 10px;cursor:pointer;transition:all .2s;border-radius:2px}
+.nav-lang:hover{border-color:var(--muted);color:var(--text2)}
+.pro-nav{background:var(--gold);color:var(--bg);font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;border:none;cursor:pointer;border-radius:2px;transition:all .2s}
+.pro-nav:hover{background:var(--gold2);transform:scale(1.05)}
+
+/* PAGES */
+.page{display:none}
+.page.on{display:block}
+.inner{padding:52px 48px;max-width:1140px;margin:0 auto}
+
+/* SHARED */
+.ptitle{font-family:'Cormorant Garamond',serif;font-size:54px;font-weight:900;letter-spacing:-2px;line-height:.92;color:var(--text)}
+.ptitle em{color:var(--gold);font-style:italic;font-weight:400}
+.section-label{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:16px}
+.card{background:var(--s1);border:1px solid var(--b1);border-radius:3px;box-shadow:0 2px 12px var(--shadow2)}
+
+/* ══════════════════════════════════════
+   TODAY WIDGET
+══════════════════════════════════════ */
+.today-widget{background:var(--text);color:var(--bg);padding:28px 36px;border-radius:3px;margin-bottom:40px;position:relative;overflow:hidden;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center}
+.today-widget::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(255,255,255,.08),transparent 70%)}
+.tw-left{}
+.tw-quote{font-family:'Cormorant Garamond',serif;font-size:clamp(14px,2vw,18px);font-style:italic;font-weight:400;line-height:1.5;opacity:.9;margin-bottom:10px}
+.tw-week{font-size:10px;letter-spacing:3px;text-transform:uppercase;opacity:.5;font-weight:700}
+.tw-right{text-align:right;flex-shrink:0}
+.tw-pct-wrap{position:relative;width:80px;height:80px;margin-left:auto}
+.tw-svg{transform:rotate(-90deg)}
+.tw-pct-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.tw-pct-num{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;line-height:1}
+.tw-pct-lbl{font-size:8px;letter-spacing:1px;opacity:.5;font-weight:700;text-transform:uppercase}
+.tw-bar-wrap{margin-top:14px}
+.tw-bar-track{height:3px;background:rgba(255,255,255,.2);border-radius:2px;overflow:hidden}
+.tw-bar-fill{height:100%;background:rgba(255,255,255,.8);border-radius:2px;transition:width 1s cubic-bezier(.16,1,.3,1)}
+.tw-bar-label{font-size:9px;opacity:.5;margin-top:5px;letter-spacing:1px;font-weight:700}
+
+/* ══════════════════════════════════════
+   HOME PAGE
+══════════════════════════════════════ */
+.home-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:48px}
+.home-intro{}
+.home-tagline{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:14px}
+.home-desc{font-size:13px;color:var(--text2);line-height:1.9;margin-top:14px}
+.home-mini-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:24px}
+.hms{background:var(--s1);border:1px solid var(--b1);padding:16px 20px;border-radius:3px}
+.hms-n{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold);line-height:1}
+.hms-l{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:4px;font-weight:700}
+
+.preview-card{background:var(--s1);border:1px solid var(--b1);padding:24px;border-radius:3px;box-shadow:0 2px 12px var(--shadow2)}
+.preview-grid{display:grid;grid-template-columns:repeat(52,1fr);gap:1px;margin-bottom:12px}
+.pcell{aspect-ratio:1;border-radius:1px}
+.pcell.lived{background:var(--gold);opacity:.5}
+.pcell.current{background:var(--violet);animation:pulse 2s infinite}
+.pcell.future{background:var(--b1)}
+.pcell.chapter{opacity:.7}
+.preview-cta{font-size:9px;color:var(--muted);letter-spacing:2px;cursor:pointer;transition:color .2s;font-weight:700;text-transform:uppercase}
+.preview-cta:hover{color:var(--gold)}
+
+.home-trackers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.htcard{background:var(--s1);border:1px solid var(--b1);padding:18px 20px;border-radius:3px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.htcard:hover{transform:translateY(-2px);box-shadow:0 6px 24px var(--shadow)}
+.htcard-top{height:2px;margin:-18px -20px 14px;border-radius:3px 3px 0 0}
+.htcard-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;color:var(--text);margin-bottom:2px}
+.htcard-sub{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:12px}
+.htcard-bar{height:3px;background:var(--b1);border-radius:2px;overflow:hidden;margin-bottom:8px}
+.htcard-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.16,1,.3,1)}
+.htcard-bottom{display:flex;justify-content:space-between;align-items:center}
+.htcard-pct{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700}
+.htcard-streak{font-size:9px;color:var(--orange);font-weight:700}
+.home-add-btn{background:none;border:1.5px dashed var(--b2);color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:20px;cursor:pointer;transition:all .2s;width:100%;border-radius:3px}
+.home-add-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ══════════════════════════════════════
+   LIFE PAGE
+══════════════════════════════════════ */
+.life-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:36px}
+.edit-link{font-size:9px;letter-spacing:2px;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:4px;transition:color .2s;font-weight:700;text-transform:uppercase}
+.edit-link:hover{color:var(--gold)}
+
+.stats-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:40px}
+.stile{background:var(--s1);border:1px solid var(--b1);padding:22px 26px;border-radius:3px;box-shadow:0 2px 8px var(--shadow2);position:relative;overflow:hidden;transition:box-shadow .2s}
+.stile:hover{box-shadow:0 4px 20px var(--shadow)}
+.stile::after{content:'';position:absolute;bottom:0;left:0;height:3px;width:0;transition:width 1.4s cubic-bezier(.16,1,.3,1);border-radius:0 0 3px 3px}
+.stile.anim::after{width:100%}
+.stile:nth-child(1)::after{background:var(--gold)}
+.stile:nth-child(2)::after{background:var(--violet)}
+.stile:nth-child(3)::after{background:var(--blue)}
+.stile:nth-child(4)::after{background:var(--green)}
+.sl{font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:8px}
+.sn{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;line-height:1;color:var(--text)}
+.stile:nth-child(1) .sn{color:var(--gold)}
+.stile:nth-child(2) .sn{color:var(--violet)}
+.ss{font-size:10px;color:var(--muted);margin-top:4px}
+
+/* CHAPTER TOOLS */
+.chapter-toolbar{display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.toolbar-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-right:4px}
+.chapter-chip{display:flex;align-items:center;gap:6px;padding:6px 12px;border:1.5px solid var(--b1);background:var(--s1);font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all .2s;border-radius:20px;color:var(--text2)}
+.chapter-chip:hover{border-color:var(--b2);background:var(--s2)}
+.chapter-chip.on{color:var(--s1)}
+.chapter-chip .chip-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.chapter-chip-add{background:none;border:1.5px dashed var(--b2);color:var(--muted)}
+.chapter-chip-add:hover{border-color:var(--gold);color:var(--gold)}
+.chapter-erase{background:none;border:1.5px solid var(--b1);color:var(--muted);padding:6px 12px;font-size:9px;font-weight:700;letter-spacing:1px;cursor:pointer;border-radius:20px;transition:all .2s}
+.chapter-erase:hover{border-color:var(--red);color:var(--red)}
+
+/* GRID */
+.grid-topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.grid-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-weight:700}
+.legend{display:flex;gap:16px}
+.leg{display:flex;align-items:center;gap:6px;font-size:8px;color:var(--muted);letter-spacing:1px;font-weight:700}
+.lsq{width:9px;height:9px;border-radius:1px}
+.lsq.l{background:var(--gold);opacity:.6}
+.lsq.m{background:var(--green)}
+.lsq.c{background:var(--violet)}
+.lsq.f{background:var(--b1)}
+.lsq.n{background:var(--blue);opacity:.8}
+.grid-hint{font-size:8px;color:var(--muted2);letter-spacing:1px;margin-bottom:10px;font-weight:700;text-transform:uppercase}
+.gscroll{overflow-x:auto;padding-bottom:8px}
+.grows{min-width:700px}
+.grow{display:flex;align-items:center;gap:4px;margin-bottom:2px}
+.rlbl{width:26px;font-size:7px;color:var(--muted2);text-align:right;flex-shrink:0;font-weight:700}
+.rcells{display:grid;grid-template-columns:repeat(52,1fr);gap:2px;flex:1}
+.wc{aspect-ratio:1;border-radius:1px;cursor:pointer;transition:transform .1s;position:relative}
+.wc.lived{background:var(--gold);opacity:.45}
+.wc.marked{background:var(--green)!important;opacity:1!important}
+.wc.has-note{outline:2px solid var(--blue);outline-offset:-1px}
+.wc.has-capsule{outline:2px solid var(--pink)!important;outline-offset:-1px}
+.wc.chapter-painted{}
+.wc.current{background:var(--violet);opacity:1;animation:pulse 2s infinite}
+.wc.future{background:var(--b1)}
+.wc:hover{transform:scale(2);z-index:20;opacity:1!important;outline:2px solid var(--gold)!important}
+
+/* ══════════════════════════════════════
+   WEEKLY REVIEW
+══════════════════════════════════════ */
+.review-banner{background:linear-gradient(135deg,var(--goldl),var(--bluel));border:1px solid var(--b1);padding:20px 28px;border-radius:3px;display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;gap:20px}
+.review-banner-text{font-size:12px;color:var(--text2);line-height:1.6}
+.review-banner-text strong{color:var(--text)}
+.btn-review{background:var(--text);color:var(--bg);border:none;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:11px 22px;cursor:pointer;border-radius:2px;transition:all .2s;white-space:nowrap}
+.btn-review:hover{transform:translateY(-1px);box-shadow:0 4px 16px var(--shadow)}
+
+/* ══════════════════════════════════════
+   TRACKERS
+══════════════════════════════════════ */
+.tr-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:28px}
+.btn-new{background:var(--s1);border:1.5px solid var(--b1);color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:11px 20px;cursor:pointer;transition:all .2s;border-radius:2px}
+.btn-new:hover{border-color:var(--gold);background:var(--goldl);box-shadow:0 2px 12px var(--shadow2)}
+.catrow{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:24px}
+.cpill{background:var(--s1);border:1.5px solid var(--b1);color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;cursor:pointer;transition:all .2s;border-radius:20px}
+.cpill:hover{border-color:var(--b2);color:var(--text2)}
+.cpill.on{border-color:var(--gold);color:var(--gold);background:var(--goldl)}
+.tlist{display:flex;flex-direction:column;gap:20px}
+
+/* TRACKER CARD */
+.tcard{background:var(--s1);border:1px solid var(--b1);padding:28px 32px;border-radius:3px;box-shadow:0 2px 8px var(--shadow2);transition:box-shadow .2s}
+.tcard:hover{box-shadow:0 4px 20px var(--shadow)}
+.tcard-accent{height:3px;margin:-28px -32px 22px;border-radius:3px 3px 0 0}
+.tcard-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.tcard-left{display:flex;align-items:center;gap:12px}
+.tcard-icon{font-size:22px;line-height:1}
+.tcard-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--text);line-height:1;margin-bottom:2px}
+.tcard-meta{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:700}
+.tcard-acts{display:flex;gap:6px;align-items:center}
+.tact{background:var(--s2);border:1px solid var(--b1);color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;letter-spacing:1px;padding:5px 11px;cursor:pointer;transition:all .15s;border-radius:2px}
+.tact:hover{color:var(--text);border-color:var(--b2)}
+.tact.del:hover{color:var(--red);border-color:var(--red)}
+.streak-badge{display:flex;align-items:center;gap:4px;background:var(--orangel);border:1px solid var(--orange);padding:4px 10px;font-size:9px;color:var(--orange);font-weight:700;border-radius:20px}
+
+/* Milestone row */
+.ms-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.ms{display:flex;align-items:center;gap:5px;font-size:8px;font-weight:700;letter-spacing:1px;padding:5px 12px;border:1.5px solid var(--b1);color:var(--muted);border-radius:20px;transition:all .3s}
+.ms.reached{border-color:currentColor}
+
+/* Grid inside tracker */
+.tgrid-wrap{margin-bottom:16px}
+.tgrid-bar{display:flex;justify-content:space-between;margin-bottom:8px}
+.tgrid-lbl{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:700}
+.tgrid-info{font-size:8px;color:var(--muted2);font-weight:700}
+.tnum-row{display:grid;gap:2px;margin-bottom:3px}
+.tnum{font-size:6px;color:transparent;text-align:center;font-weight:700}
+.tnum.show{color:var(--muted2)}
+.tgrid-single{display:grid;gap:2px}
+.tgrid-rows{}
+.tgrow{display:flex;align-items:center;gap:3px;margin-bottom:2px}
+.trow-lbl{font-size:7px;color:var(--muted2);text-align:right;flex-shrink:0;width:20px;font-weight:700}
+.trow-cells{display:grid;gap:2px;flex:1}
+.tcell{aspect-ratio:1;border:1px solid var(--b1);cursor:pointer;transition:transform .1s,background .15s;border-radius:1px}
+.tcell:hover{transform:scale(1.7);z-index:8;border-color:var(--gold)!important}
+.tcell.done{opacity:.85}
+.tcell.today-mark{border-style:dashed!important;animation:pulse 2s infinite}
+
+/* Progress */
+.prog-row{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.pbar{flex:1;height:4px;background:var(--b1);border-radius:2px;overflow:hidden}
+.pfill{height:100%;border-radius:2px;transition:width .9s cubic-bezier(.16,1,.3,1)}
+.ppct{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;line-height:1;min-width:56px;text-align:right}
+.prog-counts{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);font-weight:700}
+
+/* Chart */
+.chart-section{margin-top:16px;border-top:1px solid var(--b1);padding-top:16px}
+.chart-title{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:10px}
+.chart-bars{display:flex;align-items:flex-end;gap:3px;height:52px}
+.cbar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px}
+.cbar{width:100%;background:var(--b1);position:relative;border-radius:2px 2px 0 0}
+.cbar-fill{position:absolute;bottom:0;left:0;right:0;transition:height .8s cubic-bezier(.16,1,.3,1);border-radius:2px 2px 0 0}
+.cbar-lbl{font-size:6px;color:var(--muted2);font-weight:700}
+
+/* ══════════════════════════════════════
+   FREEMIUM BANNER
+══════════════════════════════════════ */
+.free-banner{background:linear-gradient(135deg,var(--goldl),var(--s2));border:1px solid var(--b1);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;border-radius:3px;gap:16px}
+.free-text{font-size:11px;color:var(--text2);font-weight:400}
+.free-text strong{color:var(--text);font-weight:700}
+.free-count{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold)}
+.free-count span{font-size:12px;color:var(--muted);font-weight:400}
+.btn-pro{background:var(--gold);color:var(--s1);border:none;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:11px 20px;cursor:pointer;border-radius:2px;transition:all .2s;white-space:nowrap}
+.btn-pro:hover{background:var(--gold2);transform:translateY(-1px)}
+
+/* ══════════════════════════════════════
+   MODALS — shared
+══════════════════════════════════════ */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:600;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.overlay.open{display:flex}
+.modal{background:var(--s1);border:1px solid var(--b1);padding:40px;width:480px;max-width:95vw;max-height:90vh;overflow-y:auto;border-radius:4px;box-shadow:0 20px 60px var(--shadow);animation:mIn .3s cubic-bezier(.16,1,.3,1)}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--text);margin-bottom:22px}
+.modal-title em{color:var(--gold);font-style:italic}
+.mf{margin-bottom:14px}
+.mf label{display:block;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:7px}
+.mf input,.mf select,.mf textarea{width:100%;background:var(--bg);border:1.5px solid var(--b1);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:14px;padding:11px 14px;outline:none;transition:border-color .2s;border-radius:2px}
+.mf input:focus,.mf select:focus,.mf textarea:focus{border-color:var(--gold)}
+.mf select option{background:var(--s1)}
+.mf textarea{resize:vertical;min-height:80px;line-height:1.6}
+.cswatches{display:flex;gap:7px;flex-wrap:wrap}
+.cswatch{width:22px;height:22px;cursor:pointer;border:2px solid transparent;border-radius:50%;transition:all .15s}
+.cswatch:hover,.cswatch.on{border-color:var(--text);transform:scale(1.2)}
+.mbtns{display:flex;gap:10px;margin-top:20px}
+.mbtn-c{flex:1;background:var(--s2);border:1.5px solid var(--b1);color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:12px;cursor:pointer;transition:all .2s;border-radius:2px}
+.mbtn-c:hover{color:var(--text2);border-color:var(--b2)}
+.mbtn-ok{flex:2;background:var(--text);border:none;color:var(--bg);font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:12px;cursor:pointer;transition:all .2s;border-radius:2px}
+.mbtn-ok:hover{background:var(--gold);box-shadow:0 4px 16px var(--shadow)}
+
+/* ══════════════════════════════════════
+   NOTE MODAL
+══════════════════════════════════════ */
+.note-week-info{font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:var(--muted);margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--b1)}
+
+/* ══════════════════════════════════════
+   TIME CAPSULE MODAL
+══════════════════════════════════════ */
+.capsule-icon{font-size:48px;text-align:center;margin-bottom:12px}
+.capsule-desc{font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:20px;text-align:center}
+.capsule-year-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.capsule-yr-btn{background:var(--s2);border:1.5px solid var(--b1);color:var(--muted);font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;padding:16px;cursor:pointer;transition:all .2s;border-radius:3px;text-align:center}
+.capsule-yr-btn:hover,.capsule-yr-btn.on{border-color:var(--gold);color:var(--gold);background:var(--goldl)}
+.capsule-yr-btn small{display:block;font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:4px;font-weight:700}
+.capsule-preview{background:var(--goldl);border:1px solid var(--b1);padding:12px 16px;border-radius:3px;font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:16px;text-align:center;font-weight:700}
+
+/* ══════════════════════════════════════
+   WEEKLY REVIEW MODAL
+══════════════════════════════════════ */
+.review-modal{width:560px}
+.review-date{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:20px}
+.review-q{margin-bottom:20px}
+.review-q-label{font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:var(--text2);margin-bottom:8px}
+.review-q-num{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:6px}
+.mood-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.mood-btn{background:var(--s2);border:1.5px solid var(--b1);font-size:20px;width:48px;height:48px;cursor:pointer;transition:all .2s;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.mood-btn:hover,.mood-btn.on{border-color:var(--gold);background:var(--goldl);transform:scale(1.1)}
+.review-progress{background:var(--b1);height:6px;border-radius:3px;margin-bottom:20px;overflow:hidden}
+.review-prog-fill{height:100%;background:var(--gold);border-radius:3px;transition:width .3s}
+
+/* ══════════════════════════════════════
+   CHAPTER MODAL
+══════════════════════════════════════ */
+.chapter-color-row{display:flex;gap:8px;flex-wrap:wrap}
+.ch-color{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s}
+.ch-color:hover,.ch-color.on{border-color:var(--text);transform:scale(1.15)}
+
+/* ══════════════════════════════════════
+   PRO MODAL
+══════════════════════════════════════ */
+.pro-modal-inner{text-align:center}
+.pro-crown{font-size:52px;margin-bottom:12px}
+.pro-title{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:900;color:var(--gold);margin-bottom:4px;letter-spacing:-1px}
+.pro-sub-text{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:32px}
+.pro-feats{text-align:left;margin-bottom:28px;display:flex;flex-direction:column;gap:10px}
+.pro-feat{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--text2)}
+.pro-feat-icon{font-size:16px;width:24px;text-align:center}
+.pro-feat-check{color:var(--green);font-weight:700;margin-left:auto}
+.pro-plans{display:flex;gap:12px;margin-bottom:22px}
+.pro-plan{flex:1;border:1.5px solid var(--b1);padding:18px 14px;cursor:pointer;transition:all .2s;border-radius:3px;text-align:center}
+.pro-plan:hover,.pro-plan.on{border-color:var(--gold);background:var(--goldl)}
+.pro-plan-period{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:6px}
+.pro-plan-price{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--text)}
+.pro-plan-price span{font-size:12px;color:var(--muted);font-weight:400}
+.pro-plan-save{font-size:8px;color:var(--green);font-weight:700;letter-spacing:1px;margin-top:3px}
+.btn-upgrade{width:100%;background:var(--gold);border:none;color:var(--s1);font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;padding:16px;cursor:pointer;border-radius:2px;transition:all .2s;margin-bottom:12px}
+.btn-upgrade:hover{background:var(--gold2);box-shadow:0 8px 24px var(--shadow)}
+.pro-dismiss{font-size:9px;color:var(--muted);cursor:pointer;letter-spacing:1px;transition:color .2s;font-weight:700}
+.pro-dismiss:hover{color:var(--text2)}
+
+/* ══════════════════════════════════════
+   CERTIFICATE
+══════════════════════════════════════ */
+.cert-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:700;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.cert-overlay.open{display:flex}
+.cert{background:var(--s1);border:2px solid var(--gold);padding:52px 60px;width:580px;max-width:95vw;text-align:center;border-radius:4px;position:relative;animation:mIn .5s cubic-bezier(.16,1,.3,1);box-shadow:0 24px 80px var(--shadow)}
+.cert::before,.cert::after{content:'';position:absolute;width:32px;height:32px}
+.cert::before{top:14px;left:14px;border-top:2px solid var(--gold);border-left:2px solid var(--gold)}
+.cert::after{bottom:14px;right:14px;border-bottom:2px solid var(--gold);border-right:2px solid var(--gold)}
+.cert-corners-2::before{content:'';position:absolute;top:14px;right:14px;width:32px;height:32px;border-top:2px solid var(--gold);border-right:2px solid var(--gold)}
+.cert-corners-2::after{content:'';position:absolute;bottom:14px;left:14px;width:32px;height:32px;border-bottom:2px solid var(--gold);border-left:2px solid var(--gold)}
+.cert-emoji{font-size:48px;margin-bottom:12px}
+.cert-eyebrow{font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:10px}
+.cert-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:900;color:var(--gold);margin-bottom:4px;letter-spacing:-1px}
+.cert-presents{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:6px}
+.cert-name{font-family:'Cormorant Garamond',serif;font-size:26px;font-style:italic;color:var(--text);margin-bottom:16px}
+.cert-desc{font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:20px}
+.cert-stars{font-size:18px;letter-spacing:6px;color:var(--gold);margin-bottom:16px}
+.cert-date{font-size:9px;color:var(--muted);letter-spacing:2px;border-top:1px solid var(--b1);padding-top:14px;margin-bottom:18px;font-weight:700;text-transform:uppercase}
+.cert-btns{display:flex;gap:10px;justify-content:center}
+.cert-btn{background:var(--s2);border:1.5px solid var(--b1);color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:10px 20px;cursor:pointer;transition:all .2s;border-radius:2px}
+.cert-btn.primary{background:var(--gold);border-color:var(--gold);color:var(--s1)}
+.cert-btn:hover{border-color:var(--b2);color:var(--text)}
+.cert-btn.primary:hover{background:var(--gold2)}
+
+/* CONFETTI */
+#confetti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:800;overflow:hidden}
+.cp{position:absolute;animation:confettiFall linear forwards}
+
+/* TOOLTIP */
+#tip{position:fixed;background:var(--text);color:var(--bg);padding:8px 14px;font-size:10px;pointer-events:none;z-index:800;display:none;border-radius:3px;font-weight:700;letter-spacing:.5px;box-shadow:0 4px 16px var(--shadow)}
+#tip small{display:block;color:rgba(255,255,255,.5);font-size:8px;margin-top:2px;font-weight:400;letter-spacing:1px}
+[data-theme="light"] #tip small{color:rgba(0,0,0,.4)}
+.ctx{position:fixed;background:var(--s1);border:1px solid var(--b1);z-index:700;min-width:170px;display:none;border-radius:3px;box-shadow:0 8px 32px var(--shadow);overflow:hidden}
+.ctx-item{padding:10px 16px;font-size:10px;cursor:pointer;color:var(--text2);transition:background .15s;font-weight:700;letter-spacing:.5px}
+.ctx-item:hover{background:var(--s2);color:var(--text)}
+.ctx-item.g{color:var(--green)}
+.ctx-item.r{color:var(--red)}
+.ctx-item.b{color:var(--blue)}
+.ctx-item.p{color:var(--pink)}
+.ctx-div{height:1px;background:var(--b1)}
+
+/* Time capsule indicator */
+.capsule-indicator{display:inline-flex;align-items:center;gap:4px;background:var(--orangel);border:1px solid var(--orange);padding:3px 10px;border-radius:20px;font-size:8px;color:var(--orange);font-weight:700;letter-spacing:1px;margin-bottom:8px}
+
+@media(max-width:768px){
+  .nav{padding:0 16px}
+  .inner{padding:24px 16px}
+  .stats-strip{grid-template-columns:1fr 1fr}
+  .home-grid{grid-template-columns:1fr}
+  .today-widget{grid-template-columns:1fr}
+  .tcard{padding:20px 16px}
+  .cert{padding:36px 24px}
+  .ifield input{width:100%;max-width:210px}
+}
+</style>
+<!-- Firebase Auth -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<style>
+/* AUTH */
+.auth-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:800;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.auth-overlay.open{display:flex}
+.auth-box{background:var(--s1);border:1px solid var(--b2);padding:44px;width:420px;max-width:95vw;animation:mIn .3s cubic-bezier(.16,1,.3,1)}
+.auth-logo{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--gold);text-align:center;margin-bottom:6px;letter-spacing:2px}
+.auth-subtitle{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:28px}
+.auth-tabs{display:flex;margin-bottom:24px;border-bottom:1px solid var(--b1)}
+.auth-tab{flex:1;background:none;border:none;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;padding:10px;cursor:pointer;transition:color .2s;border-bottom:2px solid transparent;position:relative;top:1px}
+.auth-tab.on{color:var(--gold);border-bottom-color:var(--gold)}
+.auth-field{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.auth-field label{font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+.auth-field input{background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:14px;padding:11px 14px;outline:none;transition:border-color .2s}
+.auth-field input:focus{border-color:var(--gold)}
+.auth-error{font-size:10px;color:var(--red);margin-bottom:10px;min-height:16px;text-align:center}
+.auth-btn{width:100%;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;padding:14px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;margin-bottom:12px}
+.auth-btn::before{content:'';position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.auth-btn:hover::before{transform:scaleX(1)}
+.auth-btn span{position:relative;z-index:1}.auth-btn:hover span{color:var(--bg)}
+.auth-sep{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--muted);font-size:9px;letter-spacing:2px}
+.auth-sep::before,.auth-sep::after{content:'';flex:1;height:1px;background:var(--b2)}
+.auth-google{width:100%;background:none;border:1px solid var(--b2);color:var(--text2);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;padding:12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.auth-google:hover{border-color:var(--b3);color:var(--text)}
+.auth-skip{display:block;text-align:center;font-size:9px;color:var(--muted);letter-spacing:2px;cursor:pointer;margin-top:14px;transition:color .2s}
+.auth-skip:hover{color:var(--text2)}
+/* Profile dropdown */
+.profile-btn{background:none;border:1px solid var(--b2);color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:2px;padding:4px 10px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
+.profile-btn:hover{border-color:var(--muted);color:var(--text2)}
+.profile-avatar{width:20px;height:20px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--bg);font-weight:700}
+.profile-menu{position:absolute;top:52px;right:48px;background:var(--s1);border:1px solid var(--b2);min-width:200px;z-index:300;display:none;box-shadow:0 8px 32px var(--shadow)}
+.profile-menu.open{display:block}
+.profile-menu-item{padding:10px 16px;font-size:9px;letter-spacing:1px;cursor:pointer;color:var(--text2);transition:background .15s;display:flex;align-items:center;gap:8px}
+.profile-menu-item:hover{background:var(--s2);color:var(--text)}
+.profile-menu-item.danger{color:var(--red)}
+.profile-menu-info{padding:12px 16px;border-bottom:1px solid var(--b1)}
+.profile-email{font-size:10px;color:var(--muted);letter-spacing:.5px}
+.sync-badge{font-size:8px;color:var(--green);letter-spacing:1px;display:flex;align-items:center;gap:4px;margin-top:3px}
+</style>
+</head>
+<body>
+
+<div id="confetti"></div>
+
+<!-- ══════════ INTRO ══════════ -->
+<div id="intro">
+  <div class="i-logo" id="iLogo">Timebox</div>
+  <div class="i-title" id="iTitle">Твоє<br>Життя в <em>Тижнях</em></div>
+  <div class="i-rule"></div>
+  <div class="i-sub" id="iSub">4680 тижнів · 90 років · кожен має значення</div>
+  <div class="i-form">
+    <div class="i-row">
+      <div class="ifield"><label id="lBirth">Дата народження</label><input type="date" id="birthIn"></div>
+      <div class="ifield"><label id="lLife">Тривалість (років)</label><input type="number" id="lifeIn" value="90" min="50" max="120"></div>
+    </div>
+    <div class="i-lang">
+      <button class="lang-btn on" onclick="setLang('uk',this)">🇺🇦 УКР</button>
+      <button class="lang-btn" onclick="setLang('en',this)">🇬🇧 EN</button>
+      <button class="lang-btn" onclick="setLang('de',this)">🇩🇪 DE</button>
+      <button class="lang-btn" onclick="setLang('es',this)">🇪🇸 ES</button>
+      <button class="lang-btn" onclick="setLang('fr',this)">🇫🇷 FR</button>
+      <button class="lang-btn" onclick="setLang('pt',this)">🇵🇹 PT</button>
+      <button class="lang-btn" onclick="setLang('pl',this)">🇵🇱 PL</button>
+    </div>
+    <button class="btn-start" id="btnStart" onclick="startApp()">Почати →</button>
+  </div>
+</div>
+
+<!-- ══════════ APP ══════════ -->
+<div id="app">
+  <nav class="nav">
+    <div class="nav-logo" onclick="showPage('home',null)">TB</div>
+    <div class="nav-tabs">
+      <button class="ntab on" id="ntHome" onclick="showPage('home',this)">Головна</button>
+      <button class="ntab" id="ntLife" onclick="showPage('life',this)">Моє Життя</button>
+      <button class="ntab" id="ntTr" onclick="showPage('trackers',this)">Трекери</button>
+      <button class="ntab" id="ntDays" onclick="showPage('days',this)">Дні</button>
+    </div>
+    <div class="nav-right">
+      <span class="nav-age" id="navAge"></span>
+      <div style="position:relative">
+        <button class="profile-btn" id="profileBtn" onclick="toggleProfileMenu()" style="display:none">
+          <div class="profile-avatar" id="profileAvatar">?</div>
+          <span id="profileBtnLabel">Профіль</span>
+        </button>
+        <button class="auth-btn-nav" id="authOpenBtn" onclick="openAuth()" style="background:none;border:1px solid var(--b2);color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:2px;padding:4px 12px;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--b2)';this.style.color='var(--muted)'">
+          <span id="authBtnText">Увійти</span>
+        </button>
+        <div class="profile-menu" id="profileMenu">
+          <div class="profile-menu-info">
+            <div id="profileEmailDisplay" class="profile-email"></div>
+            <div class="sync-badge">☁ <span id="syncStatus">Синхронізовано</span></div>
+          </div>
+          <div class="profile-menu-item" onclick="syncToCloud()">☁ <span id="pmSync">Зберегти в хмару</span></div>
+          <div class="profile-menu-item danger" onclick="signOut()">→ <span id="pmLogout">Вийти</span></div>
+        </div>
+      </div>
+      <button class="pro-nav" id="navProBtn" onclick="openPro()">✦ PRO</button>
+      <select id="navLang" onchange="setLang(this.value)" style="background:var(--s1);border:1px solid var(--b2);color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:9px;padding:4px 8px;outline:none;cursor:pointer;transition:all .2s">
+        <option value="uk">🇺🇦 УКР</option>
+        <option value="en">🇬🇧 EN</option>
+        <option value="de">🇩🇪 DE</option>
+        <option value="es">🇪🇸 ES</option>
+        <option value="fr">🇫🇷 FR</option>
+        <option value="pt">🇵🇹 PT</option>
+        <option value="pl">🇵🇱 PL</option>
+      </select>
+    </div>
+  </nav>
+
+  <!-- HOME -->
+  <div class="page on" id="page-home">
+    <div class="inner">
+      <div id="todayWidget"></div>
+      <div class="home-grid">
+        <div>
+          <div class="home-tagline" id="hTagline">Твій особистий дашборд</div>
+          <div class="ptitle" id="hTitle">Твоє<br><em>Життя</em></div>
+          <div class="home-desc" id="hDesc">Візуалізуй своє життя у тижнях. Відстежуй прогрес у спорті, фінансах, навчанні та будь-яких цілях. Пиши нотатки до кожного тижня. Залишай листи собі в майбутнє.</div>
+          <div class="home-mini-stats">
+            <div class="hms"><div class="hms-n" id="hs1">—</div><div class="hms-l" id="hsl1">Прожито тижнів</div></div>
+            <div class="hms"><div class="hms-n" id="hs2">—</div><div class="hms-l" id="hsl2">Залишилось</div></div>
+            <div class="hms"><div class="hms-n" id="hs3">—</div><div class="hms-l" id="hsl3">Вік</div></div>
+            <div class="hms"><div class="hms-n" id="hs4">—</div><div class="hms-l" id="hsl4">% прожито</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-card">
+            <div class="section-label" id="prevLbl">Перші 20 років</div>
+            <div class="preview-grid" id="previewGrid"></div>
+            <div class="preview-cta" id="prevCta" onclick="showPage('life',document.getElementById('ntLife'))">→ Переглянути повну сітку</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label" id="hTrLbl">Трекери цілей</div>
+      <div class="home-trackers-grid" id="homeTrGrid"></div>
+    </div>
+  </div>
+
+  <!-- LIFE -->
+  <div class="page" id="page-life">
+    <div class="inner">
+      <div class="life-head">
+        <div class="ptitle" id="lifePT">Моє<br><em>Життя</em></div>
+        <span class="edit-link" id="editLnk" onclick="resetApp()">← Змінити</span>
+      </div>
+      <div class="stats-strip">
+        <div class="stile" id="st0"><div class="sl" id="sl0">Прожито тижнів</div><div class="sn" id="sn0">—</div><div class="ss" id="ss0">—</div></div>
+        <div class="stile" id="st1"><div class="sl" id="sl1">Залишилось</div><div class="sn" id="sn1">—</div><div class="ss" id="ss1">—</div></div>
+        <div class="stile" id="st2"><div class="sl" id="sl2">Всього тижнів</div><div class="sn" id="sn2">—</div><div class="ss" id="ss2">—</div></div>
+        <div class="stile" id="st3"><div class="sl" id="sl3">Прожито</div><div class="sn" id="sn3">—</div><div class="ss" id="ss3">%</div></div>
+      </div>
+
+      <!-- Weekly review banner -->
+      <div id="reviewBanner"></div>
+
+      <!-- Chapter toolbar -->
+      <div class="chapter-toolbar" id="chapterToolbar"></div>
+
+      <div class="grid-topbar">
+        <div class="grid-lbl" id="gridLbl">↓ Рік · Тиждень →</div>
+        <div class="legend">
+          <div class="leg"><div class="lsq l"></div><span id="ll1">прожито</span></div>
+          <div class="leg"><div class="lsq m"></div><span id="ll2">відмічено</span></div>
+          <div class="leg"><div class="lsq n"></div><span id="ll3">нотатка</span></div>
+          <div class="leg"><div class="lsq c"></div><span id="ll4">зараз</span></div>
+          <div class="leg"><div class="lsq f"></div><span id="ll5">майбутнє</span></div>
+        </div>
+      </div>
+      <div class="grid-hint" id="gridHint">Клік — відмітити · Правий клік — нотатка, лист у майбутнє, розділ</div>
+      <div class="gscroll"><div class="grows" id="gridRows"></div></div>
+    </div>
+  </div>
+
+  <!-- TRACKERS -->
+  <div class="page" id="page-trackers">
+    <div class="inner">
+      <div id="freeBanner"></div>
+      <div class="tr-head">
+        <div class="ptitle" id="trPT">Мої<br><em>Трекери</em></div>
+        <button class="btn-new" id="btnNewTr" onclick="tryAdd()">+ Новий трекер</button>
+      </div>
+      <div class="catrow" id="catRow"></div>
+      <div class="tlist" id="tList"></div>
+    </div>
+  </div>
+
+  <!-- DAYS PAGE -->
+  <div class="page" id="page-days">
+    <div class="inner">
+      <div class="life-head">
+        <div class="ptitle" id="daysPT">Мій<br><em>Рік у Днях</em></div>
+        <span class="edit-link" onclick="showPage('life',document.getElementById('ntLife'))">← Тижні</span>
+      </div>
+      <div class="stats-strip" style="grid-template-columns:repeat(3,1fr)">
+        <div class="stile"><div class="sl" id="dsl0">Прожито днів</div><div class="sn" id="dsn0" style="color:var(--gold)">—</div><div class="ss" id="dss0">—</div></div>
+        <div class="stile"><div class="sl" id="dsl1">Залишилось</div><div class="sn" id="dsn1">—</div><div class="ss" id="dss1">—</div></div>
+        <div class="stile"><div class="sl" id="dsl2">Поточний день року</div><div class="sn" id="dsn2">—</div><div class="ss" id="dss2">з 365</div></div>
+      </div>
+      <div class="grid-topbar">
+        <div class="grid-lbl" id="daysGridLbl">↓ Рік · День →</div>
+        <div class="legend">
+          <div class="leg"><div class="lsq l"></div><span id="dll1">прожито</span></div>
+          <div class="leg"><div class="lsq m"></div><span id="dll2">відмічено</span></div>
+          <div class="leg"><div class="lsq c"></div><span id="dll3">сьогодні</span></div>
+          <div class="leg"><div class="lsq f"></div><span id="dll4">майбутнє</span></div>
+        </div>
+      </div>
+      <div class="grid-hint" id="daysHint">Клік — відмітити · Правий клік — нотатка</div>
+      <div class="gscroll">
+        <div id="daysGrid" style="min-width:900px"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NOTE MODAL -->
+<div class="overlay" id="noteOverlay">
+  <div class="modal">
+    <div class="modal-title"><em id="noteTitleWeek">Тиждень</em></div>
+    <div class="note-week-info" id="noteWeekInfo"></div>
+    <div id="capsuleReadView" style="display:none"></div>
+    <div class="mf" id="noteInputWrap"><label id="lNote">Нотатка</label><textarea id="noteText" rows="4" placeholder="Що сталось цього тижня?"></textarea></div>
+    <div class="mf" id="moodWrap">
+      <label id="lMood">Настрій тижня</label>
+      <div class="mood-row" id="moodRow">
+        <button class="mood-btn" data-mood="😊" onclick="selectMood(this)">😊</button>
+        <button class="mood-btn" data-mood="😐" onclick="selectMood(this)">😐</button>
+        <button class="mood-btn" data-mood="😔" onclick="selectMood(this)">😔</button>
+        <button class="mood-btn" data-mood="🔥" onclick="selectMood(this)">🔥</button>
+        <button class="mood-btn" data-mood="😴" onclick="selectMood(this)">😴</button>
+        <button class="mood-btn" data-mood="🎉" onclick="selectMood(this)">🎉</button>
+      </div>
+    </div>
+    <div class="mbtns">
+      <button class="mbtn-c" onclick="closeNote()">Скасувати</button>
+      <button class="mbtn-ok" onclick="saveNote()">Зберегти →</button>
+    </div>
+  </div>
+</div>
+
+<!-- TIME CAPSULE MODAL -->
+<div class="overlay" id="capsuleOverlay">
+  <div class="modal">
+    <div style="text-align:center;font-size:40px;margin-bottom:8px">✉️</div>
+    <div class="modal-title" style="text-align:center" id="capsuleTitle">Лист у Майбутнє</div>
+    <div style="font-size:10px;color:var(--text2);text-align:center;line-height:1.7;margin-bottom:16px" id="capsuleDesc">Напиши повідомлення собі. Воно з'явиться у вибраному тижні через роки — і нагадає, ким ти був тоді.</div>
+    <div class="mf" style="margin-bottom:10px">
+      <label id="lCapYr" style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px">Коли відкрити</label>
+      <!-- Month buttons -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px">
+        <div class="capsule-yr-btn" id="cap1mo" onclick="selectCapMo(1,this)" style="font-size:11px">+1 міс.<small id="cap1molbl"></small></div>
+        <div class="capsule-yr-btn" id="cap3mo" onclick="selectCapMo(3,this)" style="font-size:11px">+3 міс.<small id="cap3molbl"></small></div>
+        <div class="capsule-yr-btn" id="cap6mo" onclick="selectCapMo(6,this)" style="font-size:11px">+6 міс.<small id="cap6molbl"></small></div>
+        <div class="capsule-yr-btn" id="cap12mo" onclick="selectCapMo(12,this)" style="font-size:11px">+12 міс.<small id="cap12molbl"></small></div>
+      </div>
+      <!-- Year buttons -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px">
+        <div class="capsule-yr-btn on" id="cap1" onclick="selectCapYr(1,this)">+1 рік<small id="cap1lbl"></small></div>
+        <div class="capsule-yr-btn" id="cap5" onclick="selectCapYr(5,this)">+5 років<small id="cap5lbl"></small></div>
+        <div class="capsule-yr-btn" id="cap10" onclick="selectCapYr(10,this)">+10 років<small id="cap10lbl"></small></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
+        <label style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);white-space:nowrap" id="lCapCustom">Або вкажи місяців:</label>
+        <input type="number" id="capCustomYr" min="1" max="960" placeholder="24" style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:8px 12px;outline:none;transition:border-color .2s" oninput="selectCapMoCustom(+this.value)" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'">
+      </div>
+    </div>
+    <div class="capsule-preview" id="capsulePreview"></div>
+    <div class="mf"><label id="lCapMsg">Твій лист</label><textarea id="capsuleMsg" rows="5" placeholder="Привіт, майбутній я! Зараз мені..."></textarea></div>
+    <div class="mbtns">
+      <button class="mbtn-c" onclick="closeCapsule()">Скасувати</button>
+      <button class="mbtn-ok" onclick="saveCapsule()">Запечатати ✉</button>
+    </div>
+  </div>
+</div>
+
+<!-- WEEKLY REVIEW MODAL -->
+<div class="overlay" id="reviewOverlay">
+  <div class="modal review-modal">
+    <div class="review-date" id="reviewDate"></div>
+    <div class="modal-title" id="reviewTitle">Підсумок тижня</div>
+    <div class="review-progress"><div class="review-prog-fill" id="reviewProg" style="width:33%"></div></div>
+    <div id="reviewStep1">
+      <div class="review-q">
+        <div class="review-q-num" id="rqn1">Питання 1 з 3</div>
+        <div class="review-q-label" id="rql1">Як пройшов цей тиждень?</div>
+        <div class="mood-row">
+          <button class="mood-btn" data-mood="😊" onclick="selectReviewMood(this)">😊</button>
+          <button class="mood-btn" data-mood="😐" onclick="selectReviewMood(this)">😐</button>
+          <button class="mood-btn" data-mood="😔" onclick="selectReviewMood(this)">😔</button>
+          <button class="mood-btn" data-mood="🔥" onclick="selectReviewMood(this)">🔥</button>
+          <button class="mood-btn" data-mood="🎉" onclick="selectReviewMood(this)">🎉</button>
+        </div>
+      </div>
+      <div class="review-q">
+        <div class="review-q-num" id="rqn2">Питання 2 з 3</div>
+        <div class="review-q-label" id="rql2">Що найкраще сталось цього тижня?</div>
+        <textarea id="reviewBest" rows="3" style="width:100%;background:var(--bg);border:1.5px solid var(--b1);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:10px 13px;outline:none;border-radius:2px;resize:none;line-height:1.6" placeholder="Навіть одна мала перемога рахується..."></textarea>
+      </div>
+      <div class="review-q">
+        <div class="review-q-num" id="rqn3">Питання 3 з 3</div>
+        <div class="review-q-label" id="rql3">Що зробиш інакше наступного тижня?</div>
+        <textarea id="reviewNext" rows="3" style="width:100%;background:var(--bg);border:1.5px solid var(--b1);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:10px 13px;outline:none;border-radius:2px;resize:none;line-height:1.6" placeholder="Один невеликий крок..."></textarea>
+      </div>
+    </div>
+    <div class="mbtns">
+      <button class="mbtn-c" onclick="closeReview()">Пропустити</button>
+      <button class="mbtn-ok" onclick="saveReview()">Зберегти тиждень →</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHAPTER MODAL -->
+<div class="overlay" id="chapterOverlay">
+  <div class="modal">
+    <div class="modal-title" id="chapterModalTitle"><em>Новий розділ</em></div>
+    <div class="mf"><label id="lChName">Назва розділу</label><input type="text" id="chName" placeholder="Університет, Перша робота..."></div>
+    <div class="mf"><label id="lChColor">Колір</label>
+      <div class="chapter-color-row" id="chColorRow"></div>
+    </div>
+    <div class="mbtns">
+      <button class="mbtn-c" onclick="closeChapterModal()">Скасувати</button>
+      <button class="mbtn-ok" onclick="saveChapter()">Створити →</button>
+    </div>
+  </div>
+</div>
+
+<!-- TRACKER MODAL -->
+<div class="overlay" id="trOverlay">
+  <div class="modal">
+    <div class="modal-title" id="trMTitle">Новий трекер</div>
+    <div class="mf"><label id="trl-name">Назва</label><input type="text" id="tName" placeholder="Ранкова пробіжка"></div>
+    <div class="mf">
+      <label id="trl-cat">Категорія</label>
+      <select id="tCat" onchange="toggleCustomCat(this.value)" style="margin-bottom:6px"></select>
+      <input type="text" id="tCatCustom" placeholder="Введи свою категорію..." style="display:none;width:100%;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'">
+    </div>
+    <div class="mf"><label id="trl-period">Період</label><select id="tPeriod"></select></div>
+    <div class="mf"><label id="trl-unit">Одиниця</label><select id="tUnit"></select></div>
+    <div class="mf"><label id="trl-goal">Ціль</label><input type="number" id="tGoal" value="52" min="1"></div>
+    <div class="mf"><label id="trl-color">Колір</label><div class="cswatches" id="cSwatches"></div></div>
+    <div class="mbtns">
+      <button class="mbtn-c" onclick="closeTrModal()">Скасувати</button>
+      <button class="mbtn-ok" onclick="saveTr()">Зберегти →</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRO MODAL -->
+<div class="overlay" id="proOverlay">
+  <div class="modal pro-modal-inner" style="text-align:center">
+    <div class="pro-crown">♛</div>
+    <div class="pro-title">Timebox Pro</div>
+    <div class="pro-sub-text" id="proSub">Розблокуй повний потенціал</div>
+    <div class="pro-feats" id="proFeats"></div>
+    <div class="pro-plans">
+      <div class="pro-plan on" onclick="selPlan(this,'m')">
+        <div class="pro-plan-period" id="planM">Місяць</div>
+        <div class="pro-plan-price">$2<span>/міс</span></div>
+        <div class="pro-plan-save"></div>
+      </div>
+      <div class="pro-plan" onclick="selPlan(this,'y')">
+        <div class="pro-plan-period" id="planY">Рік</div>
+        <div class="pro-plan-price">$12<span>/рік</span></div>
+        <div class="pro-plan-save" id="planSave">Економія 50%</div>
+      </div>
+    </div>
+    <button class="btn-upgrade" id="btnUpgrade" onclick="doPro()">✦ Отримати Pro</button>
+    <div class="pro-dismiss" id="proDismiss" onclick="closePro()">Продовжити безкоштовно</div>
+  </div>
+</div>
+
+<!-- CERTIFICATE -->
+<div class="cert-overlay" id="certOverlay">
+  <div class="cert" id="certBox">
+    <div class="cert-corners-2"></div>
+    <div class="cert-emoji" id="certEmoji">🏆</div>
+    <div class="cert-eyebrow" id="certEyebrow">Сертифікат досягнення</div>
+    <div class="cert-title" id="certTitleText">ЦІЛЬ ДОСЯГНУТА</div>
+    <div class="cert-presents" id="certPresents">нагороджується</div>
+    <div class="cert-name" id="certName">—</div>
+    <div class="cert-desc" id="certDesc">—</div>
+    <div class="cert-stars">★ ★ ★</div>
+    <div class="cert-date" id="certDate">—</div>
+    <div class="cert-btns">
+      <button class="cert-btn" onclick="closeCert()">Закрити</button>
+      <button class="cert-btn primary" onclick="alert('Зроби скріншот для збереження!')">⬇ Зберегти</button>
+    </div>
+  </div>
+</div>
+
+<div id="tip"><span id="tipM"></span><small id="tipS"></small></div>
+<div class="ctx" id="ctx">
+  <div class="ctx-item g" id="ctxMark">✓ Відмітити</div>
+  <div class="ctx-item b" id="ctxNote">📝 Нотатка / настрій</div>
+  <div class="ctx-item p" id="ctxCapsule">✉️ Лист у майбутнє</div>
+  <div class="ctx-item" id="ctxChapter">🎨 Призначити розділ</div>
+  <div class="ctx-div"></div>
+  <div class="ctx-item r" id="ctxClear">✗ Очистити</div>
+  <div class="ctx-div"></div>
+  <div class="ctx-item" id="ctxInfo" style="color:var(--muted);cursor:default;font-size:8px;font-weight:700;letter-spacing:1px"></div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+//  TRANSLATIONS
+// ══════════════════════════════════════
+const T={
+uk:{
+  logo:'Timebox',
+  iTitle:'Твоє<br>Життя в <em>Тижнях</em>',
+  iSub:'4680 тижнів · 90 років · кожен має значення',
+  lBirth:'Дата народження',lLife:'Тривалість (років)',
+  btnStart:'Почати →',
+  navHome:'Головна',navLife:'Моє Життя',navTr:'Трекери',navLang:'EN',
+  hTagline:'Твій особистий дашборд',
+  hTitle:'Твоє<br><em>Життя</em>',
+  hDesc:'Візуалізуй своє життя у тижнях. Відстежуй прогрес у спорті, фінансах, навчанні та будь-яких цілях. Пиши нотатки до кожного тижня. Залишай листи собі в майбутнє.',
+  hsl1:'Прожито тижнів',hsl2:'Залишилось',hsl3:'Вік',hsl4:'% прожито',
+  prevLbl:'Перші 20 років',prevCta:'→ Переглянути повну сітку',
+  hTrLbl:'Трекери прогресу твоїх цілей',
+  homeAddBtn:'+ Додати трекер',
+  lifePT:'Моє<br><em>Життя</em>',editLnk:'← Змінити',
+  sl0:'Прожито тижнів',sl1:'Залишилось',sl2:'Всього тижнів',sl3:'Прожито',
+  gridLbl:'↓ Рік · Тиждень →',
+  ll1:'прожито',ll2:'відмічено',ll3:'нотатка',ll4:'зараз',ll5:'майбутнє',
+  gridHint:'Клік — відмітити · Правий клік — нотатка, лист у майбутнє, розділ',
+  trPT:'Мої<br><em>Трекери</em>',btnNewTr:'+ Новий трекер',
+  trMTitle:'Новий трекер',trMTitleE:'Редагувати трекер',
+  'trl-name':'Назва','trl-cat':'Категорія','trl-period':'Період','trl-unit':'Одиниця','trl-goal':'Ціль','trl-color':'Колір',
+  mBtnC:'Скасувати',mBtnOk:'Зберегти →',
+  catAll:'Всі',
+  periods:{'none':'Без терміну','3mo':'3 місяці','1yr':'1 рік','2yr':'2 роки','5yr':'5 років','10yr':'10 років'},
+  units:{none:'Без виміру',weeks:'Тижні',days:'Дні',years:'Роки'},
+  cats:{sport:'Спорт',finance:'Фінанси',discipline:'Дисципліна',health:"Здоров'я",learn:'Навчання',creative:'Творчість',custom:'Інше'},
+  catIcons:{sport:'🏃',finance:'💰',discipline:'🎯',health:'❤️',learn:'📚',creative:'🎨',custom:'⚡'},
+  unitShort:{none:'',weeks:'тиж.',days:'дн.',years:'р.'},
+  doneLbl:'виконано',goalLbl:'ціль',yr:'р.',wk:'тиж.',
+  yrLbl:'Рік',wkLbl:'Тиждень',
+  noTrackers:'Поки немає трекерів',
+  streakLbl:'стрік',
+  freeLbl:(u,l)=>`${u} з ${l} трекерів використано`,
+  freeUpgrade:'Необмежено у Pro',
+  limitTitle:'Ліміт досягнуто',
+  ctxMark:'✓ Відмітити',ctxUnmark:'✗ Зняти відмітку',
+  ctxNote:'📝 Нотатка / настрій',ctxCapsule:'✉️ Лист у майбутнє',
+  ctxChapter:'🎨 Призначити розділ',ctxClear:'✗ Очистити все',
+  milestone25:'25%',milestone50:'50%',milestone75:'75%',milestone100:'🏆 100%',
+  certEyebrow:'Сертифікат досягнення',certTitle:'ЦІЛЬ ДОСЯГНУТА',certPresents:'нагороджується',
+  certDesc:(n,p)=>`за успішне виконання цілі "${n}" протягом ${p}`,
+  proSub:'Розблокуй повний потенціал',
+  proFeats:[['♾️','Необмежена кількість трекерів'],['🏆','Сертифікати та досягнення'],['📊','Детальна статистика'],['🔥','Стріки та нагороди'],['✉️','Листи у майбутнє'],['🎨','Всі теми оформлення']],
+  planM:'Місяць',planY:'Рік',planSave:'Економія 50%',
+  btnUpgrade:'✦ Отримати Pro',proDismiss:'Продовжити безкоштовно',
+  capsuleTitle:'Лист у Майбутнє',
+  capsuleDesc:'Напиши повідомлення собі. Воно з\'явиться у вибраному тижні через роки — і нагадає, ким ти був тоді.',
+  lCapMsg:'Твій лист',capSeal:'Запечатати ✉',
+  lNote:'Нотатка тижня',lMood:'Настрій',
+  reviewTitle:'Підсумок тижня',
+  rql1:'Як пройшов цей тиждень?',rql2:'Що найкраще сталось?',rql3:'Що зробиш інакше наступного тижня?',
+  rqn1:'Питання 1 з 3',rqn2:'Питання 2 з 3',rqn3:'Питання 3 з 3',
+  reviewBannerText:'Новий тиждень! Час підвести підсумок минулого.',
+  btnReview:'Підсумок тижня →',
+  saveReview:'Зберегти тиждень →',skipReview:'Пропустити',
+  chapterModalTitle:'Новий розділ',
+  lChName:'Назва розділу',lChColor:'Колір',chCreate:'Створити →',
+  toolbarPaint:'Розділи:',toolbarAddCh:'+ Додати',toolbarErase:'Стерти',
+  twWeek:(n,p,q)=>`Твій ${n}-й тиждень завершено на ${p}%. ${q}`,
+  twQ:['Що ти встиг зробити сьогодні?','Цей тиждень не повториться. Використай його.','Кожна година важлива. Дій зараз.','Зроби хоч одну важливу річ сьогодні.'],
+  chartTitle:'Прогрес по місяцях',
+  months:['Січ','Лют','Бер','Кві','Тра','Чер','Лип','Сер','Вер','Жов','Лис','Гру'],
+  capOpened:'✉️ Лист з минулого',capFrom:'Написано',capTo:'Відкрилось',
+},
+en:{
+  logo:'Timebox',
+  iTitle:'Your<br>Life in <em>Weeks</em>',
+  iSub:'4680 weeks · 90 years · each one matters',
+  lBirth:'Date of birth',lLife:'Lifespan (years)',
+  btnStart:'Start →',
+  navHome:'Home',navLife:'My Life',navTr:'Trackers',navLang:'УКР',
+  hTagline:'Your personal dashboard',
+  hTitle:'Your<br><em>Life</em>',
+  hDesc:'Visualize your life in weeks. Track progress in sport, finance, learning, and any goal. Write notes for each week. Leave letters to your future self.',
+  hsl1:'Weeks lived',hsl2:'Remaining',hsl3:'Age',hsl4:'% lived',
+  prevLbl:'First 20 years',prevCta:'→ View full grid',
+  hTrLbl:'Your goal progress trackers',
+  homeAddBtn:'+ Add tracker',
+  lifePT:'My<br><em>Life</em>',editLnk:'← Change',
+  sl0:'Weeks lived',sl1:'Remaining',sl2:'Total weeks',sl3:'Lived',
+  gridLbl:'↓ Year · Week →',
+  ll1:'lived',ll2:'marked',ll3:'note',ll4:'now',ll5:'future',
+  gridHint:'Click to mark · Right-click for note, time capsule, chapter',
+  trPT:'My<br><em>Trackers</em>',btnNewTr:'+ New tracker',
+  trMTitle:'New tracker',trMTitleE:'Edit tracker',
+  'trl-name':'Name','trl-cat':'Category','trl-period':'Period','trl-unit':'Unit','trl-goal':'Goal','trl-color':'Color',
+  mBtnC:'Cancel',mBtnOk:'Save →',
+  catAll:'All',
+  periods:{'none':'No deadline','3mo':'3 months','1yr':'1 year','2yr':'2 years','5yr':'5 years','10yr':'10 years'},
+  units:{none:'No unit',weeks:'Weeks',days:'Days',years:'Years'},
+  cats:{sport:'Sport',finance:'Finance',discipline:'Discipline',health:'Health',learn:'Learning',creative:'Creative',custom:'Other'},
+  catIcons:{sport:'🏃',finance:'💰',discipline:'🎯',health:'❤️',learn:'📚',creative:'🎨',custom:'⚡'},
+  unitShort:{none:'',weeks:'wks',days:'days',years:'yrs'},
+  doneLbl:'done',goalLbl:'goal',yr:'yr',wk:'wk',
+  yrLbl:'Year',wkLbl:'Week',
+  noTrackers:'No trackers yet',
+  streakLbl:'streak',
+  freeLbl:(u,l)=>`${u} of ${l} trackers used`,
+  freeUpgrade:'Unlimited in Pro',
+  limitTitle:'Limit reached',
+  ctxMark:'✓ Mark',ctxUnmark:'✗ Unmark',
+  ctxNote:'📝 Note / mood',ctxCapsule:'✉️ Letter to future self',
+  ctxChapter:'🎨 Assign chapter',ctxClear:'✗ Clear all',
+  milestone25:'25%',milestone50:'50%',milestone75:'75%',milestone100:'🏆 100%',
+  certEyebrow:'Certificate of Achievement',certTitle:'GOAL ACHIEVED',certPresents:'awarded to',
+  certDesc:(n,p)=>`for successfully completing goal "${n}" over ${p}`,
+  proSub:'Unlock your full potential',
+  proFeats:[['♾️','Unlimited trackers'],['🏆','Certificates & achievements'],['📊','Detailed stats'],['🔥','Streaks & rewards'],['✉️','Letters to future self'],['🎨','All themes']],
+  planM:'Month',planY:'Year',planSave:'Save 50%',
+  btnUpgrade:'✦ Get Pro',proDismiss:'Continue free',
+  capsuleTitle:'Letter to the Future',
+  capsuleDesc:'Write a message to yourself. It will appear on the chosen week years from now — reminding you who you were.',
+  lCapMsg:'Your letter',capSeal:'Seal ✉',
+  lNote:'Week note',lMood:'Mood',
+  reviewTitle:'Week in review',
+  rql1:'How was this week?',rql2:'What was the best thing that happened?',rql3:'What will you do differently next week?',
+  rqn1:'Question 1 of 3',rqn2:'Question 2 of 3',rqn3:'Question 3 of 3',
+  reviewBannerText:'New week! Time to reflect on the past one.',
+  btnReview:'Week in review →',
+  saveReview:'Save week →',skipReview:'Skip',
+  chapterModalTitle:'New Chapter',
+  lChName:'Chapter name',lChColor:'Color',chCreate:'Create →',
+  toolbarPaint:'Chapters:',toolbarAddCh:'+ Add',toolbarErase:'Erase',
+  twWeek:(n,p,q)=>`Your week #${n} is ${p}% complete. ${q}`,
+  twQ:['What have you accomplished today?','This week won\'t come back. Make it count.','Every hour matters. Act now.','Do at least one important thing today.'],
+  chartTitle:'Monthly progress',
+  months:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+  capOpened:'✉️ Letter from the past',capFrom:'Written',capTo:'Opened',
+},
+de:{
+  iTitle:'Dein<br>Leben in <em>Wochen</em>',iSub:'4680 Wochen · 90 Jahre · jede zählt',
+  lBirth:'Geburtsdatum',lLife:'Lebenserwartung (Jahre)',btnStart:'Starten →',
+  navHome:'Startseite',navLife:'Mein Leben',navTr:'Tracker',navLang:'DE',
+  hTagline:'Dein persönliches Dashboard',hTitle:'Dein<br><em>Leben</em>',
+  hDesc:'Visualisiere dein Leben in Wochen. Verfolge Fortschritte in Sport, Finanzen und Lernen.',
+  hsl1:'Gelebte Wochen',hsl2:'Verbleibend',hsl3:'Alter',hsl4:'% gelebt',
+  prevLbl:'Erste 20 Jahre',prevCta:'→ Vollständiges Raster',
+  hTrLbl:'Ziel-Tracker',homeAddBtn:'+ Tracker hinzufügen',
+  lifePT:'Mein<br><em>Leben</em>',editLnk:'← Ändern',
+  sl0:'Gelebte Wochen',sl1:'Verbleibend',sl2:'Wochen gesamt',sl3:'Gelebt',
+  gridLbl:'↓ Jahr · Woche →',ll1:'gelebt',ll2:'markiert',ll3:'Notiz',ll4:'jetzt',ll5:'Zukunft',
+  gridHint:'Klick zum Markieren · Rechtsklick für Menü',
+  trPT:'Meine<br><em>Tracker</em>',btnNewTr:'+ Neuer Tracker',
+  trMTitle:'Neuer Tracker',trMTitleE:'Tracker bearbeiten',
+  'trl-name':'Name','trl-cat':'Kategorie','trl-period':'Zeitraum','trl-unit':'Einheit','trl-goal':'Ziel','trl-color':'Farbe',
+  catAll:'Alle',
+  periods:{'none':'Kein Termin','3mo':'3 Monate','1yr':'1 Jahr','2yr':'2 Jahre','5yr':'5 Jahre','10yr':'10 Jahre'},
+  units:{none:'Keine Einheit',weeks:'Wochen',days:'Tage',years:'Jahre'},
+  cats:{sport:'Sport',finance:'Finanzen',discipline:'Disziplin',health:'Gesundheit',learn:'Lernen',creative:'Kreativ',custom:'Andere'},
+  catIcons:{sport:'🏃',finance:'💰',discipline:'🎯',health:'❤️',learn:'📚',creative:'🎨',custom:'⚡'},
+  unitShort:{none:'',weeks:'Wo.',days:'Tg.',years:'J.'},
+  doneLbl:'erledigt',goalLbl:'Ziel',yr:'J.',wk:'Wo.',yrLbl:'Jahr',wkLbl:'Woche',
+  noTrackers:'Noch keine Tracker',streakLbl:'Streak',freeLbl:(u,l)=>`${u} von ${l} Trackern`,freeUpgrade:'Unbegrenzt in Pro',
+  ctxMark:'✓ Markieren',ctxUnmark:'✗ Markierung entfernen',ctxNote:'📝 Notiz',ctxCap:'✉️ Brief an Zukunft',ctxCh:'🎨 Kapitel',ctxClear:'✗ Löschen',
+  certEyebrow:'Erfolgszertifikat',certTitle:'ZIEL ERREICHT',certPresents:'ausgezeichnet an',
+  certDesc:(n,p)=>`für das Erreichen des Ziels "${n}"${p?' über '+p:''}`,
+  proSub:'Schalte dein volles Potenzial frei',
+  proFeats:[['♾️','Unbegrenzte Tracker'],['🏆','Zertifikate'],['📊','Statistiken'],['🔥','Streaks'],['✉️','Briefe an dich'],['🎨','Kapitel']],
+  planM:'Monat',planY:'Jahr',planSave:'50% sparen',btnUpgrade:'✦ Pro holen',
+  capTitle:'Brief an die Zukunft',capDesc:'Schreib dir selbst. Er erscheint Jahre später.',
+  lCapMsg:'Dein Brief',lCapCustom:'Eigene Dauer (Jahre):',
+  lNote:'Wochennotiz',lMood:'Stimmung',
+  revTitle:'Wochenrückblick',rql1:'Wie war die Woche?',rql2:'Was war das Beste?',rql3:'Was machst du anders?',
+  revBannerText:'Neue Woche — Zeit für Reflexion.',btnReview:'Rückblick →',
+  lChName:'Kapitelname',lChColor:'Farbe',toolbarPaint:'Kapitel:',toolbarAddCh:'+ Kapitel',toolbarErase:'Löschen',
+  twWeek:(n,p,q)=>`Woche #${n} — ${p}% abgeschlossen. ${q}`,
+  twQ:['Was hast du heute erreicht?','Diese Woche kommt nicht wieder.','Jede Stunde ist wertvoll.','Tu heute eine wichtige Sache.'],
+  months:['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'],
+  capOpened:'✉️ Brief aus der Vergangenheit',capFrom:'Geschrieben',capTo:'Geöffnet',
+  authTitle:'Willkommen',authSubtitle:'Melde dich an um deine Daten zu speichern',
+  authEmail:'E-Mail',authPass:'Passwort',authLogin:'Anmelden',authRegister:'Registrieren',
+  authLogout:'Abmelden',authProfile:'Profil',authSaved:'Daten werden in der Cloud gespeichert',
+  dayView:'↓ Jahr · Tag →',dayLbl:'Tag',dayHint:'Klick zum Markieren des Tages',
+},
+es:{
+  iTitle:'Tu<br>Vida en <em>Semanas</em>',iSub:'4680 semanas · 90 años · cada una importa',
+  lBirth:'Fecha de nacimiento',lLife:'Esperanza de vida (años)',btnStart:'Comenzar →',
+  navHome:'Inicio',navLife:'Mi Vida',navTr:'Seguimiento',navLang:'ES',
+  hTagline:'Tu panel personal',hTitle:'Tu<br><em>Vida</em>',
+  hDesc:'Visualiza tu vida en semanas. Sigue el progreso en deporte, finanzas y aprendizaje.',
+  hsl1:'Semanas vividas',hsl2:'Restantes',hsl3:'Edad',hsl4:'% vivido',
+  prevLbl:'Primeros 20 años',prevCta:'→ Ver cuadrícula completa',
+  hTrLbl:'Seguimiento de objetivos',homeAddBtn:'+ Añadir tracker',
+  lifePT:'Mi<br><em>Vida</em>',editLnk:'← Cambiar',
+  sl0:'Semanas vividas',sl1:'Restantes',sl2:'Semanas totales',sl3:'Vivido',
+  gridLbl:'↓ Año · Semana →',ll1:'vivido',ll2:'marcado',ll3:'nota',ll4:'ahora',ll5:'futuro',
+  gridHint:'Clic para marcar · Clic derecho para menú',
+  trPT:'Mis<br><em>Trackers</em>',btnNewTr:'+ Nuevo tracker',
+  trMTitle:'Nuevo tracker',trMTitleE:'Editar tracker',
+  'trl-name':'Nombre','trl-cat':'Categoría','trl-period':'Período','trl-unit':'Unidad','trl-goal':'Objetivo','trl-color':'Color',
+  catAll:'Todos',
+  periods:{'none':'Sin plazo','3mo':'3 meses','1yr':'1 año','2yr':'2 años','5yr':'5 años','10yr':'10 años'},
+  units:{none:'Sin unidad',weeks:'Semanas',days:'Días',years:'Años'},
+  cats:{sport:'Deporte',finance:'Finanzas',discipline:'Disciplina',health:'Salud',learn:'Aprendizaje',creative:'Creativo',custom:'Otro'},
+  catIcons:{sport:'🏃',finance:'💰',discipline:'🎯',health:'❤️',learn:'📚',creative:'🎨',custom:'⚡'},
+  unitShort:{none:'',weeks:'sem.',days:'días',years:'años'},
+  doneLbl:'completado',goalLbl:'objetivo',yr:'años',wk:'sem.',yrLbl:'Año',wkLbl:'Semana',
+  noTrackers:'Sin trackers aún',streakLbl:'racha',freeLbl:(u,l)=>`${u} de ${l} trackers`,freeUpgrade:'Ilimitado en Pro',
+  ctxMark:'✓ Marcar',ctxUnmark:'✗ Desmarcar',ctxNote:'📝 Nota',ctxCap:'✉️ Carta al futuro',ctxCh:'🎨 Capítulo',ctxClear:'✗ Limpiar',
+  certEyebrow:'Certificado de logro',certTitle:'OBJETIVO ALCANZADO',certPresents:'otorgado a',
+  certDesc:(n,p)=>`por completar el objetivo "${n}"${p?' durante '+p:''}`,
+  proSub:'Desbloquea tu potencial completo',
+  proFeats:[['♾️','Trackers ilimitados'],['🏆','Certificados'],['📊','Estadísticas'],['🔥','Rachas'],['✉️','Cartas al futuro'],['🎨','Capítulos']],
+  planM:'Mes',planY:'Año',planSave:'Ahorra 50%',btnUpgrade:'✦ Obtener Pro',
+  capTitle:'Carta al Futuro',capDesc:'Escríbete a ti mismo. Aparecerá años después.',
+  lCapMsg:'Tu carta',lCapCustom:'Plazo personalizado (años):',
+  lNote:'Nota de la semana',lMood:'Estado de ánimo',
+  revTitle:'Revisión semanal',rql1:'¿Cómo fue la semana?',rql2:'¿Qué fue lo mejor?',rql3:'¿Qué harás diferente?',
+  revBannerText:'Nueva semana — tiempo de reflexionar.',btnReview:'Revisión →',
+  lChName:'Nombre del capítulo',lChColor:'Color',toolbarPaint:'Capítulos:',toolbarAddCh:'+ Capítulo',toolbarErase:'Borrar',
+  twWeek:(n,p,q)=>`Semana #${n} — ${p}% completada. ${q}`,
+  twQ:['¿Qué lograste hoy?','Esta semana no volverá.','Cada hora es valiosa.','Haz al menos una cosa importante hoy.'],
+  months:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+  capOpened:'✉️ Carta del pasado',capFrom:'Escrita',capTo:'Abierta',
+  authTitle:'Bienvenido',authSubtitle:'Inicia sesión para guardar tus datos',
+  authEmail:'Correo',authPass:'Contraseña',authLogin:'Iniciar sesión',authRegister:'Registrarse',
+  authLogout:'Cerrar sesión',authProfile:'Perfil',authSaved:'Datos guardados en la nube',
+  dayView:'↓ Año · Día →',dayLbl:'Día',dayHint:'Clic para marcar el día',
+},
+fr:{
+  iTitle:'Ta<br>Vie en <em>Semaines</em>',iSub:'4680 semaines · 90 ans · chacune compte',
+  lBirth:'Date de naissance',lLife:'Espérance de vie (ans)',btnStart:'Commencer →',
+  navHome:'Accueil',navLife:'Ma Vie',navTr:'Suivi',navLang:'FR',
+  hTagline:'Ton tableau de bord personnel',hTitle:'Ta<br><em>Vie</em>',
+  hDesc:'Visualise ta vie en semaines. Suis tes progrès en sport, finances et apprentissage.',
+  hsl1:'Semaines vécues',hsl2:'Restantes',hsl3:'Âge',hsl4:'% vécu',
+  prevLbl:'20 premières années',prevCta:'→ Voir la grille complète',
+  hTrLbl:'Suivi de tes objectifs',homeAddBtn:'+ Ajouter un tracker',
+  lifePT:'Ma<br><em>Vie</em>',editLnk:'← Modifier',
+  sl0:'Semaines vécues',sl1:'Restantes',sl2:'Semaines totales',sl3:'Vécu',
+  gridLbl:'↓ Année · Semaine →',ll1:'vécu',ll2:'marqué',ll3:'note',ll4:'maintenant',ll5:'futur',
+  gridHint:'Clic pour marquer · Clic droit pour menu',
+  trPT:'Mes<br><em>Trackers</em>',btnNewTr:'+ Nouveau tracker',
+  trMTitle:'Nouveau tracker',trMTitleE:'Modifier le tracker',
+  'trl-name':'Nom','trl-cat':'Catégorie','trl-period':'Période','trl-unit':'Unité','trl-goal':'Objectif','trl-color':'Couleur',
+  catAll:'Tous',
+  periods:{'none':'Sans délai','3mo':'3 mois','1yr':'1 an','2yr':'2 ans','5yr':'5 ans','10yr':'10 ans'},
+  units:{none:'Sans unité',weeks:'Semaines',days:'Jours',years:'Années'},
+  cats:{sport:'Sport',finance:'Finances',discipline:'Discipline',health:'Santé',learn:'Apprentissage',creative:'Créatif',custom:'Autre'},
+  catIcons:{sport:'🏃',finance:'💰',discipline:'🎯',health:'❤️',learn:'📚',creative:'🎨',custom:'⚡'},
+  unitShort:{none:'',weeks:'sem.',days:'j.',years:'ans'},
+  doneLbl:'accompli',goalLbl:'objectif',yr:'ans',wk:'sem.',yrLbl:'Année',wkLbl:'Semaine',
+  noTrackers:'Pas encore de trackers',streakLbl:'série',freeLbl:(u,l)=>`${u} sur ${l} trackers`,freeUpgrade:'Illimité en Pro',
+  ctxMark:'✓ Marquer',ctxUnmark:'✗ Démarquer',ctxNote:'📝 Note',ctxCap:'✉️ Lettre au futur',ctxCh:'🎨 Chapitre',ctxClear:'✗ Effacer',
+  certEyebrow:"Certificat d'accomplissement",certTitle:'OBJECTIF ATTEINT',certPresents:'décerné à',
+  certDesc:(n,p)=>`pour avoir accompli l'objectif "${n}"${p?' en '+p:''}`,
+  proSub:'Débloque ton plein potentiel',
+  proFeats:[['♾️','Trackers illimités'],['🏆','Certificats'],['📊','Statistiques'],['🔥','Séries'],['✉️','Lettres au futur'],['🎨','Chapitres']],
+  planM:'Mois',planY:'An',planSave:'Économise 50%',btnUpgrade:'✦ Obtenir Pro',
+  capTitle:'Lettre au Futur',capDesc:'Écris-toi un message. Il apparaîtra des années plus tard.',
+  lCapMsg:'Ta lettre',lCapCustom:'Durée personnalisée (années):',
+  lNote:'Note de la semaine',lMood:'Humeur',
+  revTitle:'Bilan de la semaine',rql1:'Comment était la semaine?',rql2:'Quel a été le meilleur moment?',rql3:'Que feras-tu différemment?',
+  revBannerText:'Nouvelle semaine — temps de réflexion.',btnReview:'Bilan →',
+  lChName:'Nom du chapitre',lChColor:'Couleur',toolbarPaint:'Chapitres:',toolbarAddCh:'+ Chapitre',toolbarErase:'Effacer',
+  twWeek:(n,p,q)=>`Semaine #${n} — ${p}% accomplie. ${q}`,
+  twQ:["Qu'as-tu accompli aujourd'hui?",'Cette semaine ne reviendra pas.','Chaque heure est précieuse.','Fais au moins une chose importante.'],
+  months:['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'],
+  capOpened:'✉️ Lettre du passé',capFrom:'Écrite',capTo:'Ouverte',
+  authTitle:'Bienvenue',authSubtitle:'Connecte-toi pour sauvegarder tes données',
+  authEmail:'Email',authPass:'Mot de passe',authLogin:'Se connecter',authRegister:"S'inscrire",
+  authLogout:'Se déconnecter',authProfile:'Profil',authSaved:'Données sauvegardées dans le cloud',
+  dayView:'↓ Année · Jour →',dayLbl:'Jour',dayHint:'Clic pour marquer le jour',
+},
+pt:{
+  iTitle:'A Tua<br>Vida em <em>Semanas</em>',iSub:'4680 semanas · 90 anos · cada uma importa',
+  lBirth:'Data de nascimento',lLife:'Esperança de vida (anos)',btnStart:'Começar →',
+  navHome:'Início',navLife:'Minha Vida',navTr:'Rastreadores',navLang:'PT',
+  hTagline:'O teu painel pessoal',hTitle:'A Tua<br><em>Vida</em>',
+  hDesc:'Visualiza a tua vida em semanas. Acompanha progressos em desporto, finanças e aprendizagem.',
+  hsl1:'Semanas vividas',hsl2:'Restantes',hsl3:'Idade',hsl4:'% vivido',
+  prevLbl:'Primeiros 20 anos',prevCta:'→ Ver grelha completa',
+  hTrLbl:'Rastreadores de objetivos',homeAddBtn:'+ Adicionar rastreador',
+  lifePT:'Minha<br><em>Vida</em>',editLnk:'← Alterar',
+  sl0:'Semanas vividas',sl1:'Restantes',sl2:'Semanas totais',sl3:'Vivido',
+  gridLbl:'↓ Ano · Semana →',ll1:'vivido',ll2:'marcado',ll3:'nota',ll4:'agora',ll5:'futuro',
+  gridHint:'Clique para marcar · Clique direito para menu',
+  trPT:'Meus<br><em>Rastreadores</em>',btnNewTr:'+ Novo rastreador',
+  trMTitle:'Novo rastreador',trMTitleE:'Editar rastreador',
+  'trl-name':'Nome','trl-cat':'Categoria','trl-period':'Período','trl-unit':'Unidade','trl-goal':'Objetivo','trl-color':'Cor',
+  catAll:'Todos',
+  periods:{'none':'Sem prazo','3mo':'3 meses','1yr':'1 ano','2yr':'2 anos','5yr':'5 anos','10yr':'10 anos'},
+  units:{none:'Sem unidade',weeks:'Semanas',days:'Dias',years:'Anos'},
+  cats:{sport:'Desporto',finance:'Finanças',discipline:'Disciplina',health:'Saúde',learn:'Aprendizagem',creative:'Criativo',custom:'Outro'},
+  catIcons:{sport:'🏃',finance:'💰',discipline:'🎯',health:'❤️',learn:'📚',creative:'🎨',custom:'⚡'},
+  unitShort:{none:'',weeks:'sem.',days:'dias',years:'anos'},
+  doneLbl:'concluído',goalLbl:'objetivo',yr:'anos',wk:'sem.',yrLbl:'Ano',wkLbl:'Semana',
+  noTrackers:'Sem rastreadores ainda',streakLbl:'sequência',freeLbl:(u,l)=>`${u} de ${l} rastreadores`,freeUpgrade:'Ilimitado no Pro',
+  ctxMark:'✓ Marcar',ctxUnmark:'✗ Desmarcar',ctxNote:'📝 Nota',ctxCap:'✉️ Carta ao futuro',ctxCh:'🎨 Capítulo',ctxClear:'✗ Limpar',
+  certEyebrow:'Certificado de conquista',certTitle:'OBJETIVO ALCANÇADO',certPresents:'atribuído a',
+  certDesc:(n,p)=>`por completar o objetivo "${n}"${p?' durante '+p:''}`,
+  proSub:'Desbloqueia o teu potencial',
+  proFeats:[['♾️','Rastreadores ilimitados'],['🏆','Certificados'],['📊','Estatísticas'],['🔥','Sequências'],['✉️','Cartas ao futuro'],['🎨','Capítulos']],
+  planM:'Mês',planY:'Ano',planSave:'Poupa 50%',btnUpgrade:'✦ Obter Pro',
+  capTitle:'Carta ao Futuro',capDesc:'Escreve para ti mesmo. Aparecerá anos depois.',
+  lCapMsg:'A tua carta',lCapCustom:'Prazo personalizado (anos):',
+  lNote:'Nota da semana',lMood:'Humor',
+  revTitle:'Revisão semanal',rql1:'Como foi a semana?',rql2:'Qual foi o melhor momento?',rql3:'O que farás diferente?',
+  revBannerText:'Nova semana — tempo de reflexão.',btnReview:'Revisão →',
+  lChName:'Nome do capítulo',lChColor:'Cor',toolbarPaint:'Capítulos:',toolbarAddCh:'+ Capítulo',toolbarErase:'Apagar',
+  twWeek:(n,p,q)=>`Semana #${n} — ${p}% concluída. ${q}`,
+  twQ:['O que conseguiste hoje?','Esta semana não volta.','Cada hora é valiosa.','Faz pelo menos uma coisa importante.'],
+  months:['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+  capOpened:'✉️ Carta do passado',capFrom:'Escrita',capTo:'Aberta',
+  authTitle:'Bem-vindo',authSubtitle:'Inicia sessão para guardar os teus dados',
+  authEmail:'Email',authPass:'Palavra-passe',authLogin:'Iniciar sessão',authRegister:'Registar',
+  authLogout:'Terminar sessão',authProfile:'Perfil',authSaved:'Dados guardados na nuvem',
+  dayView:'↓ Ano · Dia →',dayLbl:'Dia',dayHint:'Clique para marcar o dia',
+},
+pl:{
+  iTitle:'Twoje<br>Życie w <em>Tygodniach</em>',iSub:'4680 tygodni · 90 lat · każdy ma znaczenie',
+  lBirth:'Data urodzenia',lLife:'Oczekiwana długość życia (lat)',btnStart:'Rozpocznij →',
+  navHome:'Strona główna',navLife:'Moje Życie',navTr:'Trackery',navLang:'PL',
+  hTagline:'Twój osobisty pulpit',hTitle:'Twoje<br><em>Życie</em>',
+  hDesc:'Wizualizuj swoje życie w tygodniach. Śledź postępy w sporcie, finansach i nauce.',
+  hsl1:'Przeżytych tygodni',hsl2:'Pozostało',hsl3:'Wiek',hsl4:'% przeżytego',
+  prevLbl:'Pierwsze 20 lat',prevCta:'→ Zobacz pełną siatkę',
+  hTrLbl:'Trackery celów',homeAddBtn:'+ Dodaj tracker',
+  lifePT:'Moje<br><em>Życie</em>',editLnk:'← Zmień',
+  sl0:'Przeżytych tygodni',sl1:'Pozostało',sl2:'Tygodni łącznie',sl3:'Przeżyto',
+  gridLbl:'↓ Rok · Tydzień →',ll1:'przeżyto',ll2:'zaznaczono',ll3:'notatka',ll4:'teraz',ll5:'przyszłość',
+  gridHint:'Klik aby zaznaczyć · Prawy klik dla menu',
+  trPT:'Moje<br><em>Trackery</em>',btnNewTr:'+ Nowy tracker',
+  trMTitle:'Nowy tracker',trMTitleE:'Edytuj tracker',
+  'trl-name':'Nazwa','trl-cat':'Kategoria','trl-period':'Okres','trl-unit':'Jednostka','trl-goal':'Cel','trl-color':'Kolor',
+  catAll:'Wszystkie',
+  periods:{'none':'Bez terminu','3mo':'3 miesiące','1yr':'1 rok','2yr':'2 lata','5yr':'5 lat','10yr':'10 lat'},
+  units:{none:'Bez jednostki',weeks:'Tygodnie',days:'Dni',years:'Lata'},
+  cats:{sport:'Sport',finance:'Finanse',discipline:'Dyscyplina',health:'Zdrowie',learn:'Nauka',creative:'Kreatywność',custom:'Inne'},
+  catIcons:{sport:'🏃',finance:'💰',discipline:'🎯',health:'❤️',learn:'📚',creative:'🎨',custom:'⚡'},
+  unitShort:{none:'',weeks:'tyg.',days:'dni',years:'lat'},
+  doneLbl:'wykonano',goalLbl:'cel',yr:'lat',wk:'tyg.',yrLbl:'Rok',wkLbl:'Tydzień',
+  noTrackers:'Brak trackerów',streakLbl:'seria',freeLbl:(u,l)=>`${u} z ${l} trackerów`,freeUpgrade:'Nieograniczone w Pro',
+  ctxMark:'✓ Zaznacz',ctxUnmark:'✗ Odznacz',ctxNote:'📝 Notatka',ctxCap:'✉️ List do przyszłości',ctxCh:'🎨 Rozdział',ctxClear:'✗ Wyczyść',
+  certEyebrow:'Certyfikat osiągnięcia',certTitle:'CEL OSIĄGNIĘTY',certPresents:'przyznano dla',
+  certDesc:(n,p)=>`za ukończenie celu "${n}"${p?' w ciągu '+p:''}`,
+  proSub:'Odblokuj swój pełny potencjał',
+  proFeats:[['♾️','Nieograniczone trackery'],['🏆','Certyfikaty'],['📊','Statystyki'],['🔥','Serie'],['✉️','Listy do przyszłości'],['🎨','Rozdziały']],
+  planM:'Miesiąc',planY:'Rok',planSave:'Oszczędź 50%',btnUpgrade:'✦ Zdobądź Pro',
+  capTitle:'List do Przyszłości',capDesc:'Napisz do siebie. Pojawi się lata później.',
+  lCapMsg:'Twój list',lCapCustom:'Własny termin (lat):',
+  lNote:'Notatka tygodnia',lMood:'Nastrój',
+  revTitle:'Podsumowanie tygodnia',rql1:'Jak minął tydzień?',rql2:'Co było najlepsze?',rql3:'Co zrobisz inaczej?',
+  revBannerText:'Nowy tydzień — czas na refleksję.',btnReview:'Podsumowanie →',
+  lChName:'Nazwa rozdziału',lChColor:'Kolor',toolbarPaint:'Rozdziały:',toolbarAddCh:'+ Rozdział',toolbarErase:'Wymaż',
+  twWeek:(n,p,q)=>`Tydzień #${n} — ${p}% ukończony. ${q}`,
+  twQ:['Co osiągnąłeś dzisiaj?','Ten tydzień nie wróci.','Każda godzina jest cenna.','Zrób przynajmniej jedną ważną rzecz.'],
+  months:['Sty','Lut','Mar','Kwi','Maj','Cze','Lip','Sie','Wrz','Paź','Lis','Gru'],
+  capOpened:'✉️ List z przeszłości',capFrom:'Napisano',capTo:'Otwarto',
+  authTitle:'Witamy',authSubtitle:'Zaloguj się aby zapisać swoje dane',
+  authEmail:'Email',authPass:'Hasło',authLogin:'Zaloguj się',authRegister:'Zarejestruj się',
+  authLogout:'Wyloguj się',authProfile:'Profil',authSaved:'Dane zapisane w chmurze',
+  dayView:'↓ Rok · Dzień →',dayLbl:'Dzień',dayHint:'Klik aby zaznaczyć dzień',
+}};
+
+// ══════════════════════════════════════
+//  CONSTANTS
+// ══════════════════════════════════════
+const COLORS=['#a07830','#5848c0','#2a7848','#1858a8','#b85818','#a03878','#187870','#586820','#704060','#204870'];
+const CHAPTER_COLORS=['#e8a040','#6870e0','#48b878','#4898d8','#e85050','#d060a8','#38b8b0','#a0c040','#c878e8','#e88040'];
+const PERIOD_U={weeks:{'none':52,'3mo':13,'1yr':52,'2yr':104,'5yr':260,'10yr':520},days:{'none':365,'3mo':91,'1yr':365,'2yr':730,'5yr':1825,'10yr':3650},years:{'none':1,'3mo':0,'1yr':1,'2yr':2,'5yr':5,'10yr':10},none:{'none':0,'3mo':0,'1yr':0,'2yr':0,'5yr':0,'10yr':0}};
+const FREE_LIMIT=5;
+
+// ══════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════
+let S={
+  lang:'uk',theme:'light',
+  birth:null,lifespan:90,lived:0,total:0,
+  markedWeeks:{},
+  markedDays:{},
+  weekNotes:{},
+  dayNotes:{},
+  timeCapsules:{},
+  chapters:[],
+  chapterMap:{},
+  trackers:[],
+  trNotes:{},
+  reviews:{},
+  filterCat:'all',
+  editingTr:null,
+  isPro:false,
+  activeChapter:null,
+  capsuleYrs:1,
+  capsuleMonths:12,
+  capsuleYrs:5,
+};
+
+const t=k=>(T[S.lang]||T.uk)[k]||k;
+function save(){localStorage.setItem('timebox',JSON.stringify({birth:S.birth,lifespan:S.lifespan,markedWeeks:S.markedWeeks,markedDays:S.markedDays||{},weekNotes:S.weekNotes,dayNotes:S.dayNotes||{},timeCapsules:S.timeCapsules,chapters:S.chapters,chapterMap:S.chapterMap,trackers:S.trackers,trNotes:S.trNotes,reviews:S.reviews,isPro:S.isPro,lang:S.lang,capsuleYrs:S.capsuleYrs,capsuleMonths:S.capsuleMonths,spheres:S.spheres,customCats:S.customCats||{}}))}
+function loadSaved(){try{const d=JSON.parse(localStorage.getItem('timebox')||localStorage.getItem('mv7'));if(d?.birth){Object.assign(S,d);if(!S.trNotes)S.trNotes={};if(!S.markedDays)S.markedDays={};if(!S.dayNotes)S.dayNotes={};if(!S.capsuleMonths)S.capsuleMonths=12;if(!S.capsuleYrs)S.capsuleYrs=1;if(!S.spheres)S.spheres={fin:0,sport:0,learn:0};if(!S.customCats)S.customCats={};return true}}catch(e){}return false}
+function uid(){return Math.random().toString(36).slice(2,9)}
+function getWeekOfYear(d){const s=new Date(d.getFullYear(),0,1);return Math.ceil(((d-s)/86400000+s.getDay()+1)/7)}
+function getDayOfYear(d){return Math.ceil((d-new Date(d.getFullYear(),0,1))/86400000)+1}
+function weekKey(y,w){return`${y}_${w}`}
+
+// ══════════════════════════════════════
+//  THEME
+// ══════════════════════════════════════
+function setTheme(theme,btn){
+  S.theme=theme;
+  document.documentElement.setAttribute('data-theme',theme);
+  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  else document.querySelector(`.tbtn-${theme}`)?.classList.add('on');
+  save();
+}
+
+// ══════════════════════════════════════
+//  LANG
+// ══════════════════════════════════════
+function setLang(lang,btn){
+  S.lang=lang;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  const sel=document.getElementById('navLang');if(sel)sel.value=lang;
+  applyLang();save();
+}
+function toggleLang(){/* use select */}
+
+function applyLang(){
+  const ids=['iLogo','iSub','lBirth','lLife','btnStart','ntHome','ntLife','ntTr',
+    'hTagline','hTrLbl','prevLbl','prevCta','editLnk','gridLbl','gridHint','btnNewTr',
+    'sl0','sl1','sl2','sl3','ll1','ll2','ll3','ll4','ll5',
+    'trl-name','trl-cat','trl-period','trl-unit','trl-goal','trl-color',
+    'proSub','planM','planY','planSave','btnUpgrade','proDismiss',
+    'certEyebrow','certTitleText','certPresents',
+    'capsuleTitle','capsuleDesc','lCapMsg',
+    'lNote','lMood','reviewTitle','rql1','rql2','rql3','rqn1','rqn2','rqn3',
+    'lChName','lChColor'];
+  ids.forEach(id=>{const el=document.getElementById(id);if(!el)return;const v=t(id);el.innerHTML!==undefined?el.innerHTML=v:el.textContent=v;});
+  document.getElementById('iTitle').innerHTML=t('iTitle');
+  document.getElementById('hTitle').innerHTML=t('hTitle');
+  document.getElementById('hDesc').textContent=t('hDesc');
+  document.getElementById('lifePT').innerHTML=t('lifePT');
+  document.getElementById('trPT').innerHTML=t('trPT');
+
+  // Days tab
+  const ntDays=document.getElementById('ntDays');
+  if(ntDays){const dayTabLabels={uk:'Дні',en:'Days',de:'Tage',es:'Días',fr:'Jours',pt:'Dias',pl:'Dni'};ntDays.textContent=dayTabLabels[S.lang]||'Days';}
+  const daysPT=document.getElementById('daysPT');
+  if(daysPT){const dp={uk:'Мій<br><em>Рік у Днях</em>',en:'My<br><em>Year in Days</em>',de:'Mein<br><em>Jahr in Tagen</em>',es:'Mi<br><em>Año en Días</em>',fr:'Mon<br><em>Année en Jours</em>',pt:'Meu<br><em>Ano em Dias</em>',pl:'Mój<br><em>Rok w Dniach</em>'};daysPT.innerHTML=dp[S.lang]||dp.uk;}
+
+  // Auth UI
+  const authBtnText=document.getElementById('authBtnText');
+  if(authBtnText){const al={uk:'Увійти',en:'Sign in',de:'Anmelden',es:'Iniciar sesión',fr:'Se connecter',pt:'Entrar',pl:'Zaloguj się'};authBtnText.textContent=al[S.lang]||al.uk;}
+  const atLogin=document.getElementById('atLogin');if(atLogin){const al={uk:'Увійти',en:'Sign in',de:'Anmelden',es:'Iniciar sesión',fr:'Se connecter',pt:'Entrar',pl:'Zaloguj się'};atLogin.textContent=al[S.lang]||al.uk;}
+  const atReg=document.getElementById('atReg');if(atReg){const al={uk:'Реєстрація',en:'Register',de:'Registrieren',es:'Registrarse',fr:"S'inscrire",pt:'Registar',pl:'Rejestracja'};atReg.textContent=al[S.lang]||al.uk;}
+  const authSubtitle=document.getElementById('authSubtitle');if(authSubtitle){const al={uk:'Увійди щоб зберігати дані в хмарі',en:'Sign in to save your data in the cloud',de:'Anmelden zum Speichern in der Cloud',es:'Inicia sesión para guardar datos',fr:'Connecte-toi pour sauvegarder',pt:'Entra para guardar dados',pl:'Zaloguj się aby zapisać dane'};authSubtitle.textContent=al[S.lang]||al.uk;}
+  const authSkip=document.getElementById('authSkip');if(authSkip){const al={uk:'Продовжити без акаунту →',en:'Continue without account →',de:'Ohne Konto fortfahren →',es:'Continuar sin cuenta →',fr:'Continuer sans compte →',pt:'Continuar sem conta →',pl:'Kontynuuj bez konta →'};authSkip.textContent=al[S.lang]||al.uk;}
+
+  // Selects
+  const cats=t('cats');const icons=t('catIcons');
+  document.getElementById('tCat').innerHTML=Object.entries(cats).map(([v,l])=>`<option value="${v}">${icons[v]} ${l}</option>`).join('')+`<option value="custom_input">✏️ ${S.lang==='uk'?'Свій варіант...':S.lang==='de'?'Eigene...':S.lang==='es'?'Personalizado...':S.lang==='fr'?'Personnalisé...':S.lang==='pt'?'Personalizado...':S.lang==='pl'?'Własna...':'Custom...'}</option>`;
+  document.getElementById('tPeriod').innerHTML=Object.entries(t('periods')).map(([v,l])=>`<option value="${v}"${v==='1yr'?' selected':''}>${l}</option>`).join('');
+  document.getElementById('tUnit').innerHTML=Object.entries(t('units')).map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+  // Pro features
+  document.getElementById('proFeats').innerHTML=t('proFeats').map(([ic,tx])=>`<div class="pro-feat"><span class="pro-feat-icon">${ic}</span><span>${tx}</span><span class="pro-feat-check">✓</span></div>`).join('');
+  // Hsl
+  ['hsl1','hsl2','hsl3','hsl4'].forEach(id=>{ const el=document.getElementById(id);if(el) el.textContent=t(id);});
+  if(S.birth){renderCatRow();renderTrackers();renderHomeTr();renderFreeBanner();renderChapterToolbar();renderReviewBanner();}
+}
+
+// ══════════════════════════════════════
+//  BOOT
+// ══════════════════════════════════════
+window.addEventListener('load',()=>{
+  const d=new Date();d.setFullYear(d.getFullYear()-26);
+  document.getElementById('birthIn').valueAsDate=d;
+  buildColorPicker();buildChapterColors();
+  if(loadSaved()){
+    const sel=document.getElementById('navLang');if(sel)sel.value=S.lang;
+    applyLang();launch();
+  } else {applyLang();}
+  // PWA push
+  if('serviceWorker' in navigator && 'Notification' in window) setupNotifications();
+  // Live tick
+  setInterval(updateTodayWidget,60000);
+});
+
+function startApp(){
+  const b=document.getElementById('birthIn').value;
+  const ls=parseInt(document.getElementById('lifeIn').value)||90;
+  if(!b){alert(S.lang==='uk'?'Введи дату народження!':'Enter your birth date!');return;}
+  S.birth=b;S.lifespan=ls;
+  if(!S.trackers.length) S.trackers=defaultTrackers();
+  save();launch();
+}
+function launch(){
+  calcStats();
+  document.getElementById('intro').classList.add('out');
+  document.getElementById('app').classList.add('on');
+  setTimeout(()=>{renderLifeGrid();renderHomePreview();renderHomeTr();renderCatRow();renderTrackers();renderFreeBanner();renderChapterToolbar();renderReviewBanner();updateTodayWidget();},300);
+}
+function resetApp(){document.getElementById('intro').classList.remove('out');document.getElementById('app').classList.remove('on');}
+
+function defaultTrackers(){return[
+  {id:uid(),name:S.lang==='uk'?'Фізична активність':'Physical activity',cat:'sport',color:'#1858a8',period:'1yr',unit:'weeks',goal:52,done:[]},
+  {id:uid(),name:S.lang==='uk'?'Особисті фінанси':'Personal finance',cat:'finance',color:'#2a7848',period:'1yr',unit:'weeks',goal:48,done:[]},
+  {id:uid(),name:S.lang==='uk'?'Медитація':'Meditation',cat:'discipline',color:'#5848c0',period:'3mo',unit:'days',goal:60,done:[]},
+];}
+
+// ══════════════════════════════════════
+//  TODAY WIDGET
+// ══════════════════════════════════════
+function updateTodayWidget(){
+  if(!S.birth) return;
+  const now=new Date();
+  const birth=new Date(S.birth);
+  const MS=7*24*60*60*1000;
+  const currentWeekNum=Math.floor((now-birth)/MS)+1;
+  // Day progress within the week (0-100)
+  const msIntoWeek=(now-birth)%MS;
+  const dayPct=Math.round((msIntoWeek/MS)*100);
+  const qs=t('twQ');
+  const q=qs[Math.floor(Math.random()*qs.length)];
+  const text=t('twWeek')(currentWeekNum,dayPct,q);
+
+  const circ=2*Math.PI*32;
+  const dash=circ*(dayPct/100);
+  document.getElementById('todayWidget').innerHTML=`
+    <div class="today-widget">
+      <div class="tw-left">
+        <div class="tw-quote">"${text}"</div>
+        <div class="tw-bar-wrap">
+          <div class="tw-bar-track"><div class="tw-bar-fill" style="width:${dayPct}%"></div></div>
+          <div class="tw-bar-label">ТИЖДЕНЬ №${currentWeekNum} · ${dayPct}% ЗАВЕРШЕНО</div>
+        </div>
+      </div>
+      <div class="tw-right">
+        <div class="tw-pct-wrap">
+          <svg class="tw-svg" width="80" height="80" viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="32" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="6"/>
+            <circle cx="40" cy="40" r="32" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="6"
+              stroke-dasharray="${dash} ${circ}" stroke-linecap="round"/>
+          </svg>
+          <div class="tw-pct-text">
+            <div class="tw-pct-num">${dayPct}%</div>
+            <div class="tw-pct-lbl">тижня</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════
+//  CALC STATS
+// ══════════════════════════════════════
+function calcStats(){
+  const birth=new Date(S.birth),now=new Date();
+  const end=new Date(birth);end.setFullYear(birth.getFullYear()+S.lifespan);
+  const MS=7*24*60*60*1000;
+  S.total=Math.floor((end-birth)/MS);
+  S.lived=Math.max(0,Math.floor((now-birth)/MS));
+  const age=Math.floor(S.lived/52);
+  const pct=((S.lived/S.total)*100).toFixed(1);
+  const rem=S.total-S.lived;
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('sn0',S.lived.toLocaleString());set('ss0',`≈ ${age} ${t('yr')} ${S.lived%52} ${t('wk')}.`);
+  set('sn1',rem.toLocaleString());set('ss1',`≈ ${Math.floor(rem/52)} ${t('yr')} ${rem%52} ${t('wk')}.`);
+  set('sn2',S.total.toLocaleString());set('sn3',pct+'%');
+  set('navAge',`${age} ${t('yr')}`);
+  set('hs1',S.lived.toLocaleString());set('hs2',rem.toLocaleString());
+  set('hs3',`${age} ${t('yr')}`);set('hs4',pct+'%');
+  setTimeout(()=>[0,1,2,3].forEach(i=>document.getElementById('st'+i)?.classList.add('anim')),400);
+}
+
+// ══════════════════════════════════════
+//  HOME PREVIEW
+// ══════════════════════════════════════
+function renderHomePreview(){
+  const g=document.getElementById('previewGrid');g.innerHTML='';
+  for(let i=0;i<20*52;i++){
+    const y=Math.floor(i/52),w=i%52;
+    const key=weekKey(y,w);
+    const c=document.createElement('div');c.className='pcell';
+    if(S.chapterMap[key]){
+      const ch=S.chapters.find(x=>x.id===S.chapterMap[key]);
+      if(ch){c.style.background=ch.color;c.classList.add('chapter');c.style.opacity='.65';}
+    } else if(i<S.lived-1){c.classList.add('lived');}
+    else if(i===S.lived-1){c.classList.add('current');}
+    else{c.classList.add('future');}
+    g.appendChild(c);
+  }
+}
+
+// ══════════════════════════════════════
+//  WEEKLY REVIEW BANNER
+// ══════════════════════════════════════
+function renderReviewBanner(){
+  const banner=document.getElementById('reviewBanner');
+  const now=new Date();
+  const dow=now.getDay();// 0=Sun
+  if(dow!==0 && dow!==1) {banner.innerHTML='';return;}// Only show Sun/Mon
+  const birth=new Date(S.birth);
+  const MS=7*24*60*60*1000;
+  const curWeekIdx=Math.floor((now-birth)/MS);
+  const y=Math.floor(curWeekIdx/52),w=curWeekIdx%52;
+  const key=weekKey(y,w);
+  if(S.reviews[key]){banner.innerHTML='';return;}
+  banner.innerHTML=`<div class="review-banner">
+    <div class="review-banner-text"><strong>${t('reviewBannerText')}</strong></div>
+    <button class="btn-review" onclick="openReview()">${t('btnReview')}</button>
+  </div>`;
+}
+
+// ══════════════════════════════════════
+//  CHAPTER TOOLBAR
+// ══════════════════════════════════════
+function renderChapterToolbar(){
+  const tb=document.getElementById('chapterToolbar');tb.innerHTML='';
+  const span=document.createElement('span');span.className='toolbar-label';span.textContent=t('toolbarPaint');tb.appendChild(span);
+  S.chapters.forEach(ch=>{
+    const btn=document.createElement('div');btn.className='chapter-chip'+(S.activeChapter===ch.id?' on':'');
+    if(S.activeChapter===ch.id) btn.style.background=ch.color;
+    btn.style.borderColor=ch.color;btn.style.color=S.activeChapter===ch.id?'#fff':ch.color;
+    btn.innerHTML=`<span class="chip-dot" style="background:${ch.color}"></span>${ch.name}<span class="chip-del" onclick="deleteChapter('${ch.id}',event)" style="margin-left:6px;opacity:.5;font-size:12px;line-height:1;cursor:pointer;transition:opacity .15s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.5">×</span>`;
+    btn.onclick=(e)=>{if(e.target.classList.contains('chip-del'))return;S.activeChapter=S.activeChapter===ch.id?null:ch.id;renderChapterToolbar();};
+    tb.appendChild(btn);
+  });
+  const addBtn=document.createElement('div');addBtn.className='chapter-chip chapter-chip-add';addBtn.textContent=t('toolbarAddCh');addBtn.onclick=openChapterModal;tb.appendChild(addBtn);
+  if(S.chapters.length>0){
+    const er=document.createElement('button');er.className='chapter-erase';er.textContent=t('toolbarErase');
+    er.onclick=()=>{S.activeChapter=S.activeChapter==='ERASE'?null:'ERASE';renderChapterToolbar();};
+    if(S.activeChapter==='ERASE') er.style.cssText='border-color:var(--red);color:var(--red)';
+    tb.appendChild(er);
+  }
+}
+function deleteChapter(id,e){
+  e.stopPropagation();
+  if(!confirm(S.lang==='uk'?'Видалити розділ?':'Delete chapter?'))return;
+  S.chapters=S.chapters.filter(x=>x.id!==id);
+  Object.keys(S.chapterMap).forEach(k=>{if(S.chapterMap[k]===id)delete S.chapterMap[k];});
+  if(S.activeChapter===id)S.activeChapter=null;
+  save();renderChapterToolbar();renderLifeGrid();renderHomePreview();
+}
+
+// ══════════════════════════════════════
+//  LIFE GRID
+// ══════════════════════════════════════
+function renderLifeGrid(){
+  const grid=document.getElementById('gridRows');grid.innerHTML='';
+  const birth=new Date(S.birth);
+  for(let y=0;y<S.lifespan;y++){
+    const row=document.createElement('div');row.className='grow';
+    const lbl=document.createElement('div');lbl.className='rlbl';lbl.textContent=(y%5===0)?y:'';row.appendChild(lbl);
+    const cells=document.createElement('div');cells.className='rcells';
+    for(let w=0;w<52;w++){
+      const abs=y*52+w;const key=weekKey(y,w);
+      const c=document.createElement('div');c.className='wc';
+      applyWeekCellStyle(c,key,abs);
+      c.addEventListener('mouseenter',e=>{
+        const wd=new Date(birth.getTime()+abs*7*24*60*60*1000);
+        const ds=wd.toLocaleDateString(S.lang==='uk'?'uk-UA':'en-GB',{day:'numeric',month:'short',year:'numeric'});
+        const note=S.weekNotes[key];
+        const caps=S.timeCapsules[key];
+        let sub=ds;
+        if(note?.mood) sub=note.mood+' '+sub;
+        if(caps) sub='✉️ '+sub;
+        tip(e,`${t('yrLbl')} ${y} · ${t('wkLbl')} ${w+1}`,sub);
+      });
+      c.addEventListener('mousemove',moveTip);c.addEventListener('mouseleave',hideTip);
+      c.addEventListener('click',()=>handleCellClick(key,c,abs,y,w));
+      c.addEventListener('contextmenu',e=>{e.preventDefault();showCtx(e,key,c,abs,y,w);});
+      cells.appendChild(c);
+    }
+    row.appendChild(cells);grid.appendChild(row);
+  }
+}
+
+function applyWeekCellStyle(c,key,abs){
+  c.className='wc';
+  c.style.background='';c.style.outline='';
+  // Remove any existing emoji overlay
+  const existingIcon=c.querySelector('.cap-icon');if(existingIcon)existingIcon.remove();
+
+  const note=S.weekNotes[key];
+  const caps=S.timeCapsules[key];
+
+  if(S.chapterMap[key]){
+    const ch=S.chapters.find(x=>x.id===S.chapterMap[key]);
+    if(ch){c.style.background=ch.color;c.style.opacity='.6';c.classList.add('chapter-painted');}
+  } else if(S.markedWeeks[key]){c.classList.add('marked');}
+  else if(abs<S.lived-1){c.classList.add('lived');}
+  else if(abs===S.lived-1){c.classList.add('current');}
+  else{c.classList.add('future');}
+
+  if(caps){
+    c.classList.add('has-capsule');
+    // Add ✉ icon overlay
+    const icon=document.createElement('span');
+    icon.className='cap-icon';
+    icon.style.cssText='position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;font-size:6px;pointer-events:none;z-index:2';
+    icon.textContent='✉';
+    c.style.position='relative';
+    c.appendChild(icon);
+  } else if(note?.text){c.classList.add('has-note');}
+
+  // Also mark the cell where the capsule OPENS (open date week)
+  const birth=new Date(S.birth);
+  Object.values(S.timeCapsules).forEach(cap=>{
+    if(!cap.openDate)return;
+    const openDate=new Date(cap.openDate);
+    const MS=7*24*60*60*1000;
+    const openAbs=Math.floor((openDate-birth)/MS);
+    if(openAbs===abs&&!caps){
+      // This cell is the target opening cell for some capsule
+      const icon2=document.createElement('span');
+      icon2.className='cap-icon';
+      icon2.style.cssText='position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;font-size:6px;pointer-events:none;z-index:2;opacity:.6';
+      icon2.textContent='📬';
+      c.style.position='relative';
+      c.appendChild(icon2);
+      if(!c.classList.contains('has-capsule'))c.style.outline='1px dashed var(--amber)';
+    }
+  });
+}
+
+function handleCellClick(key,c,abs,y,w){
+  if(S.activeChapter==='ERASE'){
+    delete S.chapterMap[key];applyWeekCellStyle(c,key,abs);save();renderHomePreview();return;
+  }
+  if(S.activeChapter){
+    S.chapterMap[key]=S.activeChapter;applyWeekCellStyle(c,key,abs);save();renderHomePreview();return;
+  }
+  // Check if capsule exists and it's reveal time
+  const caps=S.timeCapsules[key];
+  if(caps){const now=new Date();const open=new Date(caps.openDate);if(now>=open){openCapsuleRead(key,caps,y,w);return;}}
+  // Toggle mark
+  if(S.markedWeeks[key]){delete S.markedWeeks[key];}else{S.markedWeeks[key]=true;}
+  applyWeekCellStyle(c,key,abs);save();
+}
+
+// ══════════════════════════════════════
+//  CONTEXT MENU
+// ══════════════════════════════════════
+let ctxData=null;
+function showCtx(e,key,el,abs,yr,wk){
+  ctxData={key,el,abs,yr,wk};
+  const marked=S.markedWeeks[key];
+  const ci=document.getElementById('ctxMark');ci.textContent=marked?t('ctxUnmark'):t('ctxMark');ci.className='ctx-item '+(marked?'r':'g');
+  document.getElementById('ctxInfo').textContent=`${t('yrLbl')} ${yr} · ${t('wkLbl')} ${wk+1}`;
+  const ctx=document.getElementById('ctx');ctx.style.left=e.clientX+'px';ctx.style.top=e.clientY+'px';ctx.style.display='block';
+}
+document.getElementById('ctxMark').onclick=()=>{if(ctxData){handleCellClick(ctxData.key,ctxData.el,ctxData.abs,ctxData.yr,ctxData.wk);}document.getElementById('ctx').style.display='none';};
+document.getElementById('ctxNote').onclick=()=>{if(ctxData)openNote(ctxData.key,ctxData.yr,ctxData.wk);document.getElementById('ctx').style.display='none';};
+document.getElementById('ctxCapsule').onclick=()=>{if(ctxData)openCapsule(ctxData.key,ctxData.yr,ctxData.wk);document.getElementById('ctx').style.display='none';};
+document.getElementById('ctxChapter').onclick=()=>{if(ctxData){if(!S.activeChapter){openChapterModal();} else {S.chapterMap[ctxData.key]=S.activeChapter;applyWeekCellStyle(ctxData.el,ctxData.key,ctxData.abs);save();renderHomePreview();}}document.getElementById('ctx').style.display='none';};
+document.getElementById('ctxClear').onclick=()=>{if(ctxData){const k=ctxData.key;delete S.markedWeeks[k];delete S.weekNotes[k];delete S.chapterMap[k];applyWeekCellStyle(ctxData.el,k,ctxData.abs);save();}document.getElementById('ctx').style.display='none';};
+document.addEventListener('click',()=>document.getElementById('ctx').style.display='none');
+
+// ══════════════════════════════════════
+//  NOTE MODAL
+// ══════════════════════════════════════
+let noteKey=null;
+function openNote(key,yr,wk){
+  noteKey=key;
+  const birth=new Date(S.birth);
+  const abs=yr*52+wk;
+  const wd=new Date(birth.getTime()+abs*7*24*60*60*1000);
+  const ds=wd.toLocaleDateString(S.lang==='uk'?'uk-UA':'en-GB',{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('noteTitleWeek').textContent=`${t('yrLbl')} ${yr} · ${t('wkLbl')} ${wk+1}`;
+  document.getElementById('noteWeekInfo').textContent=ds;
+  document.getElementById('capsuleReadView').style.display='none';
+  document.getElementById('noteInputWrap').style.display='block';
+  document.getElementById('moodWrap').style.display='block';
+  const existing=S.weekNotes[key]||{};
+  document.getElementById('noteText').value=existing.text||'';
+  document.querySelectorAll('#moodRow .mood-btn').forEach(b=>b.classList.toggle('on',b.dataset.mood===existing.mood));
+  document.getElementById('noteOverlay').classList.add('open');
+}
+function openCapsuleRead(key,caps,yr,wk){
+  noteKey=key;
+  document.getElementById('noteTitleWeek').textContent=t('capOpened');
+  document.getElementById('noteWeekInfo').textContent='';
+  document.getElementById('noteInputWrap').style.display='none';
+  document.getElementById('moodWrap').style.display='none';
+  const readDiv=document.getElementById('capsuleReadView');
+  const wDate=new Date(caps.writtenDate).toLocaleDateString(S.lang==='uk'?'uk-UA':'en-GB',{day:'numeric',month:'long',year:'numeric'});
+  const oDate=new Date(caps.openDate).toLocaleDateString(S.lang==='uk'?'uk-UA':'en-GB',{day:'numeric',month:'long',year:'numeric'});
+  readDiv.innerHTML=`
+    <div style="background:var(--goldl);border:1px solid var(--b1);padding:16px 20px;border-radius:3px;margin-bottom:16px">
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:4px">${t('capFrom')}: ${wDate} → ${t('capTo')}: ${oDate}</div>
+      <div style="font-size:14px;color:var(--text);line-height:1.7;font-style:italic">"${caps.msg}"</div>
+    </div>`;
+  readDiv.style.display='block';
+  document.getElementById('noteOverlay').classList.add('open');
+}
+function closeNote(){document.getElementById('noteOverlay').classList.remove('open');}
+function selectMood(btn){document.querySelectorAll('#moodRow .mood-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+function saveNote(){
+  const text=document.getElementById('noteText').value.trim();
+  const mood=document.querySelector('#moodRow .mood-btn.on')?.dataset.mood||'';
+  if(text||mood){S.weekNotes[noteKey]={text,mood};}else{delete S.weekNotes[noteKey];}
+  // refresh cell
+  const [y,w]=noteKey.split('_').map(Number);
+  const abs=y*52+w;
+  const cells=document.querySelectorAll('.rcells');
+  const rowIdx=y;
+  if(cells[rowIdx]){const cell=cells[rowIdx].children[w];if(cell)applyWeekCellStyle(cell,noteKey,abs);}
+  save();closeNote();
+}
+
+// ══════════════════════════════════════
+//  TIME CAPSULE
+// ══════════════════════════════════════
+let capsuleKey=null;
+function openCapsule(key,yr,wk){
+  capsuleKey=key;
+  S.capsuleMonths=12; // default 1 year in months
+  document.getElementById('capsuleMsg').value='';
+  const ci=document.getElementById('capCustomYr');if(ci)ci.value='';
+  _clearCapBtns();
+  const b1=document.getElementById('cap1');if(b1)b1.classList.add('on');
+  updateCapsuleLabels();
+  document.getElementById('capsuleOverlay').classList.add('open');
+}
+function _clearCapBtns(){
+  ['cap1mo','cap3mo','cap6mo','cap12mo','cap1','cap5','cap10'].forEach(id=>{
+    const b=document.getElementById(id);if(b)b.classList.remove('on');
+  });
+}
+function selectCapMo(months,btn){
+  S.capsuleMonths=months;
+  const ci=document.getElementById('capCustomYr');if(ci)ci.value='';
+  _clearCapBtns();btn.classList.add('on');
+  updateCapsuleLabels();
+}
+function selectCapYr(yrs,btn){
+  S.capsuleMonths=yrs*12;
+  const ci=document.getElementById('capCustomYr');if(ci)ci.value='';
+  _clearCapBtns();btn.classList.add('on');
+  updateCapsuleLabels();
+}
+function selectCapMoCustom(val){
+  if(val>0){S.capsuleMonths=val;_clearCapBtns();updateCapsuleLabels();}
+}
+function selectCapYrCustom(val){selectCapMoCustom(val);}
+function updateCapsuleLabels(){
+  const now=new Date();
+  // Month buttons
+  [1,3,6,12].forEach(m=>{
+    const el=document.getElementById('cap'+m+'mo');if(!el)return;
+    const sm=el.querySelector('small');
+    if(sm){const d=new Date(now);d.setMonth(d.getMonth()+m);sm.textContent=`→ ${d.toLocaleDateString(S.lang==='uk'?'uk-UA':'en-GB',{month:'short',year:'numeric'})}`;}
+  });
+  // Year buttons
+  [1,5,10].forEach(y=>{
+    const el=document.getElementById('cap'+y);if(!el)return;
+    const sm=el.querySelector('small');
+    if(sm)sm.textContent=`→ ${now.getFullYear()+y}`;
+  });
+  const openDate=new Date(now);openDate.setMonth(openDate.getMonth()+(S.capsuleMonths||12));
+  const ds=openDate.toLocaleDateString(S.lang==='uk'?'uk-UA':'en-GB',{day:'numeric',month:'long',year:'numeric'});
+  const prev=document.getElementById('capsulePreview');
+  if(prev)prev.textContent=`✉️ ${S.lang==='uk'?`Відкриється ${ds}`:`Opens ${ds}`}`;
+}
+function closeCapsule(){document.getElementById('capsuleOverlay').classList.remove('open');}
+function saveCapsule(){
+  const msg=document.getElementById('capsuleMsg').value.trim();
+  if(!msg)return;
+  const now=new Date();
+  const openDate=new Date(now);
+  openDate.setMonth(openDate.getMonth()+(S.capsuleMonths||12));
+  S.timeCapsules[capsuleKey]={msg,writtenDate:now.toISOString(),openDate:openDate.toISOString()};
+  const [y,w]=capsuleKey.split('_').map(Number);
+  const abs=y*52+w;
+  const rows=document.querySelectorAll('.grows .grow');
+  if(rows[y]){const cell=rows[y].querySelectorAll('.wc')[w];if(cell)applyWeekCellStyle(cell,capsuleKey,abs);}
+  save();closeCapsule();
+}
+
+// ══════════════════════════════════════
+//  WEEKLY REVIEW MODAL
+// ══════════════════════════════════════
+let reviewMood='';
+function openReview(){document.getElementById('reviewOverlay').classList.add('open');document.getElementById('reviewDate').textContent=new Date().toLocaleDateString(S.lang==='uk'?'uk-UA':'en-GB',{weekday:'long',day:'numeric',month:'long'});reviewMood='';}
+function closeReview(){document.getElementById('reviewOverlay').classList.remove('open');}
+function selectReviewMood(btn){document.querySelectorAll('#reviewOverlay .mood-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');reviewMood=btn.dataset.mood;document.getElementById('reviewProg').style.width='66%';}
+function saveReview(){
+  const best=document.getElementById('reviewBest').value.trim();
+  const next=document.getElementById('reviewNext').value.trim();
+  const now=new Date();const birth=new Date(S.birth);const MS=7*24*60*60*1000;
+  const cur=Math.floor((now-birth)/MS);const y=Math.floor(cur/52),w=cur%52;
+  S.reviews[weekKey(y,w)]={mood:reviewMood,best,next,date:now.toISOString()};
+  document.getElementById('reviewProg').style.width='100%';
+  save();setTimeout(closeReview,400);renderReviewBanner();
+}
+
+// ══════════════════════════════════════
+//  CHAPTER MODAL
+// ══════════════════════════════════════
+function openChapterModal(){document.getElementById('chName').value='';document.getElementById('chapterOverlay').classList.add('open');}
+function closeChapterModal(){document.getElementById('chapterOverlay').classList.remove('open');}
+function saveChapter(){
+  const name=document.getElementById('chName').value.trim();
+  if(!name) return;
+  const color=document.querySelector('.ch-color.on')?.dataset.color||CHAPTER_COLORS[0];
+  const ch={id:uid(),name,color};S.chapters.push(ch);S.activeChapter=ch.id;
+  save();closeChapterModal();renderChapterToolbar();
+}
+function buildChapterColors(){
+  const row=document.getElementById('chColorRow');
+  CHAPTER_COLORS.forEach((c,i)=>{
+    const el=document.createElement('div');el.className='ch-color'+(i===0?' on':'');el.style.background=c;el.dataset.color=c;
+    el.onclick=()=>{document.querySelectorAll('.ch-color').forEach(x=>x.classList.remove('on'));el.classList.add('on');};row.appendChild(el);
+  });
+}
+
+// ══════════════════════════════════════
+//  HOME TRACKERS
+// ══════════════════════════════════════
+function renderHomeTr(){
+  const grid=document.getElementById('homeTrGrid');grid.innerHTML='';
+  const icons=t('catIcons');const cats=t('cats');
+  S.trackers.forEach(tr=>{
+    const done=tr.done.length;const pct=Math.min(100,Math.round((done/tr.goal)*100));
+    const streak=calcStreak(tr);
+    const div=document.createElement('div');div.className='htcard';
+    div.innerHTML=`<div class="htcard-top" style="background:${tr.color}"></div>
+      <div class="htcard-name">${tr.name}</div>
+      <div class="htcard-sub">${cats[tr.cat]||''} · ${t('periods')[tr.period]||''}</div>
+      <div class="htcard-bar"><div class="htcard-fill" style="width:${pct}%;background:${tr.color}"></div></div>
+      <div class="htcard-bottom">
+        <span style="font-size:10px;color:var(--muted);font-weight:700">${done} ${t('unitShort')[tr.unit]||''} ${t('doneLbl')}</span>
+        <span class="htcard-pct" style="color:${tr.color}">${pct}%</span>
+        ${streak>1?`<span class="htcard-streak">🔥 ${streak}</span>`:''}
+      </div>`;
+    div.onclick=()=>showPage('trackers',document.getElementById('ntTr'));grid.appendChild(div);
+  });
+  const add=document.createElement('button');add.className='home-add-btn';add.textContent=t('homeAddBtn');
+  add.onclick=()=>{showPage('trackers',document.getElementById('ntTr'));setTimeout(tryAdd,200);};grid.appendChild(add);
+}
+
+// ══════════════════════════════════════
+//  TRACKER CARDS
+// ══════════════════════════════════════
+function calcStreak(tr){if(!tr.done?.length)return 0;const s=[...tr.done].sort((a,b)=>a-b);let st=1,mx=1;for(let i=1;i<s.length;i++){if(s[i]===s[i-1]+1){st++;mx=Math.max(mx,st);}else st=1;}return mx;}
+function getTotalUnits(tr){
+  const p=tr.period||'1yr';const u=tr.unit||'weeks';
+  if(u==='none'||p==='none') return 0;
+  return PERIOD_U[u]?.[p]||52;
+}
+function getStartIdx(tr){return tr.unit==='years'?new Date(S.birth).getFullYear():1;}
+function getCurIdx(tr){const now=new Date();if(tr.unit==='weeks')return getWeekOfYear(now);if(tr.unit==='days')return getDayOfYear(now);return now.getFullYear();}
+
+function renderCatRow(){
+  const row=document.getElementById('catRow');row.innerHTML='';
+  const cats=t('cats');const icons=t('catIcons');
+  const ab=document.createElement('button');ab.className='cpill'+(S.filterCat==='all'?' on':'');ab.textContent=t('catAll');ab.onclick=()=>{S.filterCat='all';renderCatRow();renderTrackers();};row.appendChild(ab);
+  Object.entries(cats).forEach(([k,v])=>{const b=document.createElement('button');b.className='cpill'+(S.filterCat===k?' on':'');b.textContent=`${icons[k]} ${v}`;b.onclick=()=>{S.filterCat=k;renderCatRow();renderTrackers();};row.appendChild(b);});
+}
+function renderTrackers(){
+  const list=document.getElementById('tList');list.innerHTML='';
+  const filtered=S.filterCat==='all'?S.trackers:S.trackers.filter(x=>x.cat===S.filterCat);
+  if(!filtered.length){list.innerHTML=`<div style="color:var(--muted);font-size:11px;letter-spacing:2px;padding:48px 0;text-align:center;font-weight:700;text-transform:uppercase">${t('noTrackers')}</div>`;return;}
+  filtered.forEach(tr=>list.appendChild(buildTrCard(tr)));
+  document.querySelectorAll('.tcell').forEach(cell=>{
+    cell.addEventListener('click',()=>toggleTrUnit(cell.dataset.tid,parseInt(cell.dataset.idx),cell));
+    cell.addEventListener('mouseenter',e=>{const done=cell.classList.contains('done');tip(e,cell.dataset.label||'',done?'✓ '+t('doneLbl'):'○');});
+    cell.addEventListener('mousemove',moveTip);cell.addEventListener('mouseleave',hideTip);
+  });
+}
+
+function buildTrCard(tr){
+  const color=tr.color||'#a07830';
+  const icons=t('catIcons');const cats=t('cats');
+  const catLabel=cats[tr.cat]||(S.customCats&&S.customCats[tr.cat])||tr.cat||'';
+  const catIcon=icons[tr.cat]||'⚡';
+  const total=getTotalUnits(tr);const done=tr.done.length;
+  const pct=Math.min(100,Math.round((done/tr.goal)*100));
+  const streak=calcStreak(tr);const periodLabel=t('periods')[tr.period]||tr.period;
+  const msHTML='';
+
+  const card=document.createElement('div');card.className='tcard';
+  const isNoneUnit = tr.unit==='none' || tr.period==='none' || total===0;
+  const gridHTML = isNoneUnit
+    ? `<div style="display:flex;align-items:center;gap:16px;padding:8px 0">
+        <button onclick="manualTrDec('${tr.id}')" style="background:none;border:1px solid var(--b2);color:var(--muted);width:32px;height:32px;cursor:pointer;font-size:18px;line-height:1;transition:all .2s" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--b2)';this.style.color='var(--muted)'">−</button>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:600;color:${color}">${done}</div>
+        <button onclick="manualTrInc('${tr.id}')" style="background:none;border:1px solid var(--b2);color:var(--muted);width:32px;height:32px;cursor:pointer;font-size:18px;line-height:1;transition:all .2s" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--b2)';this.style.color='var(--muted)'">+</button>
+        <span style="font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase">${t('goalLbl')}: ${tr.goal}</span>
+      </div>`
+    : buildTrGridHTML(tr,color,total);
+  const chartHTML='';
+
+  card.innerHTML=`
+    <div class="tcard-accent" style="background:${color}"></div>
+    <div class="tcard-head">
+      <div class="tcard-left">
+        <div class="tcard-icon">${catIcon}</div>
+        <div>
+          <div class="tcard-name">${tr.name}</div>
+          <div class="tcard-meta">${catLabel} · ${periodLabel} · ${t('units')[tr.unit]||tr.unit}</div>
+        </div>
+      </div>
+      <div class="tcard-acts">
+        ${streak>1?`<div class="streak-badge">🔥 ${streak} ${t('streakLbl')}</div>`:''}
+        <button class="tact" style="border-color:var(--blue);color:var(--blue)" onclick="toggleTrNotes('${tr.id}')">📝 ${(S.trNotes[tr.id]||[]).length>0?`(${(S.trNotes[tr.id]||[]).length})`:''}</button>
+        <button class="tact" onclick="editTr('${tr.id}')">✎</button>
+        <button class="tact del" onclick="delTr('${tr.id}')">✕</button>
+      </div>
+    </div>
+    <div class="ms-row">${msHTML}</div>
+    <div class="tgrid-wrap">
+      ${!isNoneUnit?`<div class="tgrid-bar">
+        <div class="tgrid-lbl">${t('units')[tr.unit]||tr.unit} ${getCurIdx(tr)}</div>
+        <div class="tgrid-info">${total} ${t('unitShort')[tr.unit]||''} · ${t('goalLbl')}: ${tr.goal}</div>
+      </div>`:''}
+      ${gridHTML}
+    </div>
+    <div><div class="prog-row"><div class="pbar"><div class="pfill" style="width:${pct}%;background:${color}"></div></div><div class="ppct" style="color:${color}">${pct}%</div></div>
+    <div class="prog-counts"><span>✓ ${done} ${t('unitShort')[tr.unit]||''} ${t('doneLbl')}</span><span>${t('goalLbl')}: ${tr.goal}${!isNoneUnit&&total>0?' / '+total:''}</span></div></div>
+    ${chartHTML}
+    <div class="tr-notes-panel" id="trnotes-${tr.id}" style="display:none;border-top:1px solid var(--b1);padding-top:14px;margin-top:14px">
+      <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px">📝 ${S.lang==='uk'?'Нотатки трекера':'Tracker notes'}</div>
+      ${(S.trNotes[tr.id]||[]).map((n,i)=>`<div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--b1)"><div style="font-size:8px;color:var(--muted);letter-spacing:1px;white-space:nowrap;padding-top:1px">#${i+1}</div><div style="font-size:10px;color:var(--text2);line-height:1.6;flex:1">${n}</div><span onclick="delTrNote('${tr.id}',${i})" style="font-size:12px;color:var(--muted);cursor:pointer;flex-shrink:0;transition:color .15s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--muted)'">×</span></div>`).join('')}
+      <div style="display:flex;gap:6px;margin-top:10px">
+        <input type="text" id="trnote-inp-${tr.id}" placeholder="${S.lang==='uk'?'Додати нотатку...':'Add note...'}" onkeydown="if(event.key==='Enter')addTrNote('${tr.id}')" style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'DM Mono',monospace;font-size:10px;padding:7px 10px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'">
+        <button onclick="addTrNote('${tr.id}')" style="background:none;border:1px solid var(--b2);color:var(--muted);font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;padding:7px 12px;cursor:pointer;transition:all .2s;white-space:nowrap" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--b2)';this.style.color='var(--muted)'">${S.lang==='uk'?'Додати':'Add'}</button>
+      </div>
+    </div>`;
+  return card;
+}
+
+function buildTrGridHTML(tr,color,total){
+  const rowSize=52;const useMulti=total>rowSize;
+  const curIdx=getCurIdx(tr);const startIdx=getStartIdx(tr);
+  if(!useMulti){
+    let numRow=`<div class="tnum-row" style="grid-template-columns:repeat(${total},1fr)">`;
+    for(let i=1;i<=total;i++){const show=(i===1||i%Math.ceil(total/10)===0||i===total);numRow+=`<div class="tnum${show?' show':''}">${show?i:''}</div>`;}
+    numRow+='</div>';
+    let cells=`<div class="tgrid-single" style="grid-template-columns:repeat(${total},1fr);gap:2px">`;
+    for(let i=0;i<total;i++){const idx=startIdx+i;const done=tr.done.includes(idx);const isCur=idx===curIdx;const cls='tcell'+(done?' done':'')+(isCur&&!done?' today-mark':'');const style=done?`background:${color};border-color:${color}`:isCur?`border-color:${color}`:''
+;cells+=`<div class="${cls}" style="${style}" data-tid="${tr.id}" data-idx="${idx}" data-label="${t('units')[tr.unit]||''} ${idx}"></div>`;}
+    return numRow+cells+'</div>';
+  }
+  const numRows=Math.ceil(total/rowSize);let html='<div class="tgrid-rows">';
+  for(let r=0;r<numRows;r++){const cols=Math.min(rowSize,total-r*rowSize);html+=`<div class="tgrow"><div class="trow-lbl">${r===0?t('yr'):''}</div><div class="trow-cells" style="grid-template-columns:repeat(${cols},1fr)">`;
+    for(let c=0;c<cols;c++){const i=r*rowSize+c;const idx=startIdx+i;const done=tr.done.includes(idx);const isCur=idx===curIdx;const cls='tcell'+(done?' done':'')+(isCur&&!done?' today-mark':'');const style=done?`background:${color};border-color:${color}`:isCur?`border-color:${color}`:'';html+=`<div class="${cls}" style="${style}" data-tid="${tr.id}" data-idx="${idx}" data-label="${t('units')[tr.unit]||''} ${idx}"></div>`;}
+    html+='</div></div>';}
+  return html+'</div>';
+}
+
+function buildChartHTML(tr,color){
+  const months=t('months');const total=getTotalUnits(tr);const bucket=Math.max(1,Math.ceil(total/12));
+  const buckets=Array(12).fill(0);const start=getStartIdx(tr);
+  (tr.done||[]).forEach(idx=>{const b=Math.min(11,Math.floor((idx-start)/bucket));if(b>=0)buckets[b]++;});
+  const maxV=Math.max(1,...buckets);
+  const bars=buckets.map((v,i)=>{const h=Math.round((v/maxV)*100);return`<div class="cbar-wrap"><div class="cbar" style="height:48px"><div class="cbar-fill" style="height:${h}%;background:${color};opacity:${v>0?.8:.2}"></div></div><div class="cbar-lbl">${months[i].slice(0,1)}</div></div>`;}).join('');
+  return`<div class="chart-section"><div class="chart-title">${t('chartTitle')}</div><div class="chart-bars">${bars}</div></div>`;
+}
+
+function toggleTrUnit(tid,idx,cell){
+  const tr=S.trackers.find(x=>x.id===tid);if(!tr)return;
+  if(!tr.done)tr.done=[];
+  const pos=tr.done.indexOf(idx);const prevPct=Math.min(100,Math.round((tr.done.length/tr.goal)*100));
+  if(pos>=0){tr.done.splice(pos,1);cell.classList.remove('done');cell.style.background='';cell.style.borderColor='';if(idx===getCurIdx(tr)){cell.classList.add('today-mark');cell.style.borderColor=tr.color;}}
+  else{tr.done.push(idx);cell.classList.add('done');cell.classList.remove('today-mark');cell.style.background=tr.color;cell.style.borderColor=tr.color;}
+  save();
+  const newPct=Math.min(100,Math.round((tr.done.length/tr.goal)*100));
+  [25,50,75,100].forEach(m=>{if(prevPct<m&&newPct>=m){launchConfetti(tr.color);if(m===100)setTimeout(()=>showCert(tr),800);}});
+  // Update card stats
+  const card=cell.closest('.tcard');
+  if(card){const fill=card.querySelector('.pfill');if(fill)fill.style.width=newPct+'%';const pp=card.querySelector('.ppct');if(pp)pp.textContent=newPct+'%';const unitS=t('unitShort')[tr.unit]||'';const counts=card.querySelector('.prog-counts');if(counts)counts.innerHTML=`<span>✓ ${tr.done.length} ${unitS} ${t('doneLbl')}</span><span>${t('goalLbl')}: ${tr.goal} / ${getTotalUnits(tr)}</span>`;card.querySelectorAll('.ms').forEach((el,i)=>{const pcts=[25,50,75,100];el.classList.toggle('reached',newPct>=pcts[i]);el.style.color=newPct>=pcts[i]?tr.color:'var(--muted)';el.style.borderColor=newPct>=pcts[i]?tr.color:'var(--b1)';});}
+  renderHomeTr();
+}
+
+// ══════════════════════════════════════
+//  CONFETTI
+// ══════════════════════════════════════
+function launchConfetti(mainColor){
+  const c=document.getElementById('confetti');
+  const colors=[mainColor,'#a07830','#5848c0','#2a7848','#1858a8','#b85818'];
+  for(let i=0;i<80;i++){const p=document.createElement('div');p.className='cp';const col=colors[Math.floor(Math.random()*colors.length)];const x=Math.random()*100;const dur=1.5+Math.random()*2;const delay=Math.random()*.8;const size=5+Math.random()*8;const shape=Math.random()>.5?'50%':'2px';p.style.cssText=`left:${x}%;background:${col};width:${size}px;height:${size}px;border-radius:${shape};animation-duration:${dur}s;animation-delay:${delay}s;`;c.appendChild(p);setTimeout(()=>p.remove(),(dur+delay)*1000+200);}
+}
+
+// ══════════════════════════════════════
+//  CERTIFICATE
+// ══════════════════════════════════════
+function showCert(tr){
+  const icons=t('catIcons');const now=new Date();
+  const ds=now.toLocaleDateString(S.lang==='uk'?'uk-UA':'en-GB',{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('certEmoji').textContent=icons[tr.cat]||'🏆';
+  document.getElementById('certName').textContent=tr.name;
+  document.getElementById('certDesc').textContent=t('certDesc')(tr.name,t('periods')[tr.period]||tr.period);
+  document.getElementById('certDate').textContent=ds;
+  document.getElementById('certOverlay').classList.add('open');
+  launchConfetti(tr.color);
+}
+function closeCert(){document.getElementById('certOverlay').classList.remove('open');}
+
+// ══════════════════════════════════════
+//  FREEMIUM
+// ══════════════════════════════════════
+function renderFreeBanner(){
+  const b=document.getElementById('freeBanner');if(S.isPro){b.innerHTML='';return;}
+  const used=S.trackers.length;const left=Math.max(0,FREE_LIMIT-used);
+  b.innerHTML=`<div class="free-banner"><div><div class="free-text">${t('freeLbl')(used,FREE_LIMIT)}</div><div style="font-size:9px;color:var(--muted);font-weight:700;letter-spacing:1px;margin-top:3px;text-transform:uppercase">${t('freeUpgrade')}</div></div><div style="display:flex;align-items:center;gap:16px"><div class="free-count">${left}<span> / ${FREE_LIMIT}</span></div><button class="btn-pro" onclick="openPro()">✦ PRO</button></div></div>`;
+}
+function tryAdd(){if(!S.isPro&&S.trackers.length>=FREE_LIMIT){openPro();return;}openTrModal();}
+
+// ══════════════════════════════════════
+//  TRACKER MODAL
+// ══════════════════════════════════════
+function toggleCustomCat(val){
+  const inp=document.getElementById('tCatCustom');
+  if(!inp) return;
+  inp.style.display=val==='custom_input'?'block':'none';
+  if(val==='custom_input') inp.focus();
+}
+function openTrModal(){
+  S.editingTr=null;
+  document.getElementById('trMTitle').textContent=t('trMTitle');
+  document.getElementById('tName').value='';
+  document.getElementById('tCat').value='sport';
+  toggleCustomCat('sport');
+  document.getElementById('tPeriod').value='1yr';
+  document.getElementById('tUnit').value='weeks';
+  document.getElementById('tGoal').value='52';
+  selectColor(COLORS[0]);
+  document.getElementById('trOverlay').classList.add('open');
+}
+function closeTrModal(){document.getElementById('trOverlay').classList.remove('open');}
+function editTr(id){const tr=S.trackers.find(x=>x.id===id);if(!tr)return;S.editingTr=id;document.getElementById('trMTitle').textContent=t('trMTitleE');document.getElementById('tName').value=tr.name;document.getElementById('tCat').value=tr.cat;document.getElementById('tPeriod').value=tr.period||'1yr';document.getElementById('tUnit').value=tr.unit||'weeks';document.getElementById('tGoal').value=tr.goal||52;selectColor(tr.color||COLORS[0]);document.getElementById('trOverlay').classList.add('open');}
+function delTr(id){if(!confirm(S.lang==='uk'?'Видалити трекер?':'Delete tracker?'))return;S.trackers=S.trackers.filter(x=>x.id!==id);save();renderTrackers();renderHomeTr();renderFreeBanner();}
+function toggleTrNotes(tid){const el=document.getElementById('trnotes-'+tid);if(el)el.style.display=el.style.display==='none'?'block':'none';}
+function addTrNote(tid){const inp=document.getElementById('trnote-inp-'+tid);if(!inp)return;const text=inp.value.trim();if(!text)return;if(!S.trNotes[tid])S.trNotes[tid]=[];S.trNotes[tid].push(text);inp.value='';save();renderTrackers();}
+function delTrNote(tid,idx){if(!S.trNotes[tid])return;S.trNotes[tid].splice(idx,1);save();renderTrackers();}
+function manualTrInc(tid){
+  const tr=S.trackers.find(x=>x.id===tid);if(!tr)return;
+  if(!tr.done)tr.done=[];
+  const prevPct=Math.min(100,Math.round((tr.done.length/Math.max(1,tr.goal))*100));
+  tr.done.push(Date.now());
+  const newPct=Math.min(100,Math.round((tr.done.length/Math.max(1,tr.goal))*100));
+  save();[25,50,75,100].forEach(m=>{if(prevPct<m&&newPct>=m){launchConfetti(tr.color);if(m===100)setTimeout(()=>showCertificate(tr),800);}});
+  renderTrackers();renderHomeTr();
+}
+function manualTrDec(tid){
+  const tr=S.trackers.find(x=>x.id===tid);if(!tr||!tr.done?.length)return;
+  tr.done.pop();save();renderTrackers();renderHomeTr();
+}
+function saveTr(){
+  const name=document.getElementById('tName').value.trim();if(!name)return;
+  let cat=document.getElementById('tCat').value;
+  if(cat==='custom_input'){
+    const customVal=document.getElementById('tCatCustom').value.trim();
+    cat=customVal?'custom_'+customVal.toLowerCase().replace(/\s+/g,'_'):'custom';
+    // Store custom label
+    if(customVal) S.customCats=S.customCats||{};
+    if(customVal) S.customCats[cat]=customVal;
+  }
+  const period=document.getElementById('tPeriod').value,unit=document.getElementById('tUnit').value;
+  const goal=parseInt(document.getElementById('tGoal').value)||52;
+  const color=document.querySelector('.cswatch.on')?.dataset.color||COLORS[0];
+  if(S.editingTr){const tr=S.trackers.find(x=>x.id===S.editingTr);if(tr){tr.name=name;tr.cat=cat;tr.period=period;tr.unit=unit;tr.goal=goal;tr.color=color;}}
+  else{S.trackers.push({id:uid(),name,cat,color,period,unit,goal,done:[]});}
+  save();closeTrModal();renderCatRow();renderTrackers();renderHomeTr();renderFreeBanner();
+}
+function buildColorPicker(){const w=document.getElementById('cSwatches');COLORS.forEach((c,i)=>{const s=document.createElement('div');s.className='cswatch'+(i===0?' on':'');s.style.background=c;s.dataset.color=c;s.onclick=()=>selectColor(c);w.appendChild(s);});}
+function selectColor(c){document.querySelectorAll('.cswatch').forEach(s=>s.classList.toggle('on',s.dataset.color===c));}
+document.getElementById('tPeriod').addEventListener('change',()=>{const p=document.getElementById('tPeriod').value,u=document.getElementById('tUnit').value;document.getElementById('tGoal').value=PERIOD_U[u]?.[p]||52;});
+document.getElementById('tUnit').addEventListener('change',()=>{const p=document.getElementById('tPeriod').value,u=document.getElementById('tUnit').value;document.getElementById('tGoal').value=PERIOD_U[u]?.[p]||52;});
+
+// ══════════════════════════════════════
+//  PRO
+// ══════════════════════════════════════
+function openPro(){document.getElementById('proOverlay').classList.add('open');}
+function closePro(){document.getElementById('proOverlay').classList.remove('open');}
+function selPlan(el,p){document.querySelectorAll('.pro-plan').forEach(x=>x.classList.remove('on'));el.classList.add('on');}
+function doPro(){S.isPro=true;save();closePro();renderFreeBanner();renderTrackers();launchConfetti('#a07830');setTimeout(()=>alert(S.lang==='uk'?'Вітаємо у Pro! 🎉':'Welcome to Pro! 🎉'),300);}
+
+// ══════════════════════════════════════
+//  PWA NOTIFICATIONS
+// ══════════════════════════════════════
+function setupNotifications(){
+  if(Notification.permission==='default'){
+    setTimeout(()=>{
+      if(confirm(S.lang==='uk'?'Дозволити щотижневі нагадування про підсумок тижня?':'Allow weekly reminders for your weekly review?')){
+        Notification.requestPermission();
+      }
+    },5000);
+  }
+}
+
+// ══════════════════════════════════════
+//  NAV
+// ══════════════════════════════════════
+function showPage(name,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('page-'+name).classList.add('on');
+  if(btn)btn.classList.add('on');
+  if(name==='trackers'){renderCatRow();renderTrackers();renderFreeBanner();}
+  if(name==='home'){renderHomeTr();updateTodayWidget();}
+  if(name==='life'){renderChapterToolbar();renderReviewBanner();}
+  if(name==='days'){renderDaysGrid();}
+}
+
+// ══════════════════════════════════════
+//  DAYS GRID
+// ══════════════════════════════════════
+function renderDaysGrid(){
+  if(!S.birth) return;
+  const birth=new Date(S.birth);
+  const now=new Date();
+  const MS=24*60*60*1000;
+  const totalDays=Math.floor(((new Date(birth)).setFullYear(birth.getFullYear()+S.lifespan)-birth)/MS);
+  const livedDays=Math.max(0,Math.floor((now-birth)/MS));
+  const dayOfYear=getDayOfYear(now);
+  const curYear=now.getFullYear();
+
+  // Update stats
+  const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  s('dsn0',livedDays.toLocaleString());
+  s('dss0',`≈ ${Math.floor(livedDays/365)} ${t('yr')} ${livedDays%365} ${S.lang==='uk'?'дн.':'days'}`);
+  s('dsn1',(totalDays-livedDays).toLocaleString());
+  s('dss1',`≈ ${Math.floor((totalDays-livedDays)/365)} ${t('yr')}`);
+  s('dsn2',dayOfYear);
+  s('dss2',S.lang==='uk'?'з 365':'of 365');
+
+  // Update nav labels
+  const dayLabels={
+    ntDays:{uk:'Дні',en:'Days',de:'Tage',es:'Días',fr:'Jours',pt:'Dias',pl:'Dni'},
+  };
+  const ntDays=document.getElementById('ntDays');
+  if(ntDays) ntDays.textContent=(dayLabels.ntDays[S.lang]||'Дні');
+
+  const grid=document.getElementById('daysGrid');
+  grid.innerHTML='';
+
+  const DAYS_PER_ROW=73; // ~5 rows per year (365/5)
+  const yearsToShow=Math.min(S.lifespan,90);
+
+  for(let y=0;y<yearsToShow;y++){
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;gap:2px;margin-bottom:2px';
+
+    const lbl=document.createElement('div');
+    lbl.style.cssText='width:24px;font-size:7px;color:var(--muted2);text-align:right;flex-shrink:0';
+    lbl.textContent=(y%5===0)?y:'';
+    row.appendChild(lbl);
+
+    const cells=document.createElement('div');
+    cells.style.cssText=`display:grid;grid-template-columns:repeat(${DAYS_PER_ROW},1fr);gap:1px;flex:1`;
+
+    for(let d=0;d<DAYS_PER_ROW;d++){
+      const absDay=y*DAYS_PER_ROW+d;
+      const dayKey=`d_${y}_${d}`;
+      const cell=document.createElement('div');
+      cell.style.cssText='aspect-ratio:1;cursor:pointer;transition:transform .1s;position:relative';
+
+      // Determine state
+      if(S.markedDays&&S.markedDays[dayKey]){
+        cell.style.background='var(--gold)';cell.style.opacity='.9';
+      } else if(absDay<livedDays-1){
+        cell.style.background='var(--stone)';cell.style.opacity='.5';
+      } else if(absDay===livedDays-1){
+        cell.style.background='var(--gold)';cell.style.opacity='1';
+        cell.style.animation='pulse 3s infinite';
+        cell.style.color='var(--gold)';
+      } else {
+        cell.style.background='var(--muted2)';cell.style.opacity='.2';
+      }
+
+      // Note indicator
+      if(S.dayNotes&&S.dayNotes[dayKey]){
+        cell.style.outline='1px solid var(--blue)';cell.style.outlineOffset='-1px';
+      }
+
+      cell.addEventListener('mouseenter',e=>{
+        const bd=new Date(birth.getTime()+absDay*MS);
+        const ds=bd.toLocaleDateString(S.lang==='uk'?'uk-UA':'en-GB',{day:'numeric',month:'short',year:'numeric'});
+        tip(e,`${t('yrLbl')} ${y} · ${S.lang==='uk'?'День':'Day'} ${d+1}`,ds);
+        cell.style.transform='scale(2.2)';cell.style.zIndex='20';
+      });
+      cell.addEventListener('mousemove',moveTip);
+      cell.addEventListener('mouseleave',()=>{hideTip();cell.style.transform='';cell.style.zIndex='';});
+      cell.addEventListener('click',()=>toggleDay(dayKey,cell,absDay,livedDays));
+      cell.addEventListener('contextmenu',e=>{e.preventDefault();openDayNote(dayKey,y,d,birth,absDay);});
+      cells.appendChild(cell);
+    }
+    row.appendChild(cells);
+    grid.appendChild(row);
+  }
+}
+
+function toggleDay(key,cell,abs,lived){
+  if(!S.markedDays)S.markedDays={};
+  if(S.markedDays[key]){
+    delete S.markedDays[key];
+    // restore
+    if(abs<lived-1){cell.style.background='var(--stone)';cell.style.opacity='.5';}
+    else if(abs===lived-1){cell.style.background='var(--gold)';cell.style.opacity='1';}
+    else{cell.style.background='var(--muted2)';cell.style.opacity='.2';}
+  } else {
+    S.markedDays[key]=true;
+    cell.style.background='var(--gold)';cell.style.opacity='.9';
+  }
+  save();
+}
+
+let dayNoteKey=null;
+function openDayNote(key,yr,d,birth,abs){
+  dayNoteKey=key;
+  const bd=new Date(birth.getTime()+abs*24*60*60*1000);
+  const ds=bd.toLocaleDateString(S.lang==='uk'?'uk-UA':'en-GB',{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('noteTitleWeek').textContent=ds;
+  document.getElementById('noteWeekInfo').textContent=`${t('yrLbl')} ${yr} · ${S.lang==='uk'?'День':'Day'} ${d+1}`;
+  const existing=S.dayNotes&&S.dayNotes[key]||{};
+  document.getElementById('noteText').value=existing.text||'';
+  document.querySelectorAll('#moodRow .mood-btn').forEach(b=>b.classList.toggle('on',b.dataset.mood===existing.mood));
+  // Override save to save day note
+  document.querySelector('#noteOverlay .mbtn-ok').onclick=saveDayNote;
+  document.getElementById('noteOverlay').classList.add('open');
+}
+function saveDayNote(){
+  const text=document.getElementById('noteText').value.trim();
+  const mood=document.querySelector('#moodRow .mood-btn.on')?.dataset.mood||'';
+  if(!S.dayNotes)S.dayNotes={};
+  if(text||mood)S.dayNotes[dayNoteKey]={text,mood};else delete S.dayNotes[dayNoteKey];
+  save();
+  document.getElementById('noteOverlay').classList.remove('open');
+  // Restore normal note save
+  document.querySelector('#noteOverlay .mbtn-ok').onclick=saveNote;
+  renderDaysGrid();
+}
+
+// ══════════════════════════════════════
+//  TOOLTIP
+// ══════════════════════════════════════
+function tip(e,main,sub){document.getElementById('tipM').textContent=main;document.getElementById('tipS').textContent=sub||'';document.getElementById('tip').style.display='block';moveTip(e);}
+function moveTip(e){const el=document.getElementById('tip');el.style.left=(e.clientX+14)+'px';el.style.top=(e.clientY-44)+'px';}
+function hideTip(){document.getElementById('tip').style.display='none';}
+
+// ══ VALUE OF TIME ══
+function calcVot(){
+  const goal=document.getElementById('votGoal').value.trim();
+  const cost=parseFloat(document.getElementById('votCost').value)||0;
+  const income=parseFloat(document.getElementById('votIncome').value)||1;
+  if(!goal||cost<=0) return;
+  const months=Math.ceil(cost/income);
+  const weeks=Math.ceil(months*4.33);
+  const pct=S.total>0?((weeks/S.total)*100).toFixed(1):'?';
+  const res=document.getElementById('votResult');res.style.display='block';
+  const uk=S.lang==='uk';
+  document.getElementById('votMain').textContent=uk
+    ?`"${goal}" коштуватиме ${weeks} тижнів (${months} місяців) твого часу. Це ${pct}% залишку.`
+    :`"${goal}" will cost you ${weeks} weeks (${months} months). That's ${pct}% of your remaining time.`;
+  document.getElementById('votSubResult').textContent=uk
+    ?`Чи варта ця ціль ${weeks} квадратів твого життя?`
+    :`Is this goal worth ${weeks} squares of your life?`;
+  const vis=document.getElementById('votVis');vis.innerHTML='';
+  const show=Math.min(weeks,120);
+  for(let i=0;i<show;i++){
+    const sq=document.createElement('div');
+    sq.style.cssText=`width:9px;height:9px;background:${i<5?'var(--gold)':'var(--stone)'};opacity:${i<weeks?.7:.2}`;
+    vis.appendChild(sq);
+  }
+  if(weeks>120){const m=document.createElement('span');m.style.cssText='font-size:9px;color:var(--muted);letter-spacing:1px;align-self:center;margin-left:6px';m.textContent=`+${weeks-120} ${uk?'тиж.':'wks'}...`;vis.appendChild(m);}
+}
+
+// ══ SPHERES ══
+function renderSpheres(){
+  const grid=document.getElementById('spheresGrid');if(!grid)return;
+  grid.innerHTML='';
+  const uk=S.lang==='uk';
+  const defs=[
+    {key:'fin',icon:'💰',color:'var(--gold)',name:uk?'Фінанси':'Finance',sub:uk?'Фінансова незалежність':'Financial independence',lbl:uk?'Капітал ($)':'Capital ($)',max:50000,unit:'$'},
+    {key:'sport',icon:'🏃',color:'var(--green)',name:uk?'Спорт':'Sport',sub:uk?'Фізична активність':'Physical activity',lbl:uk?'Активних тижнів':'Active weeks',max:52,unit:uk?'тиж.':'wks'},
+    {key:'learn',icon:'📚',color:'var(--blue)',name:uk?'Навчання':'Learning',sub:uk?'Скіли та знання':'Skills & knowledge',lbl:uk?'Годин навчання':'Learning hours',max:500,unit:'h'},
+  ];
+  if(!S.spheres)S.spheres={fin:0,sport:0,learn:0};
+  defs.forEach(sp=>{
+    const val=S.spheres[sp.key]||0;
+    const pct=Math.min(100,Math.round((val/sp.max)*100));
+    const card=document.createElement('div');
+    card.style.cssText='border:1px solid var(--b1);background:var(--s1);padding:22px 24px;position:relative;overflow:hidden';
+    card.innerHTML=`
+      <div style="position:absolute;top:0;left:0;right:0;height:1px;background:${sp.color};opacity:.5"></div>
+      <div style="font-size:20px;margin-bottom:8px">${sp.icon}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--text);margin-bottom:2px">${sp.name}</div>
+      <div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px">${sp.sub}</div>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
+        <input type="number" placeholder="${sp.lbl}" value="${val||''}" min="0"
+          style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:12px;padding:7px 10px;outline:none;transition:border-color .2s"
+          oninput="updateSphere('${sp.key}',+this.value,${sp.max})"
+          onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'">
+        <span style="font-size:9px;color:var(--muted);letter-spacing:1px;white-space:nowrap">${sp.unit}</span>
+      </div>
+      <div style="height:2px;background:var(--b2);margin-bottom:8px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:${sp.color};transition:width .9s cubic-bezier(.16,1,.3,1)"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between">
+        <span style="font-size:9px;color:var(--muted);letter-spacing:1px">${val} ${sp.unit}</span>
+        <span style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:${sp.color}">${pct}%</span>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+function updateSphere(key,val,max){
+  if(!S.spheres)S.spheres={};
+  S.spheres[key]=val||0;save();
+  // update bar inline without full re-render
+  renderSpheres();
+}
+
+// Close handlers
+['noteOverlay','capsuleOverlay','reviewOverlay','chapterOverlay','trOverlay','proOverlay'].forEach(id=>{document.getElementById(id).addEventListener('click',e=>{if(e.target===document.getElementById(id))document.getElementById(id).classList.remove('open');});});
+document.getElementById('certOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('certOverlay'))closeCert();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){['noteOverlay','capsuleOverlay','reviewOverlay','chapterOverlay','trOverlay','proOverlay'].forEach(id=>document.getElementById(id).classList.remove('open'));closeCert();document.getElementById('ctx').style.display='none';}});
+</script>
+<!-- AUTH MODAL -->
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-box">
+    <div class="auth-logo">Timebox</div>
+    <div class="auth-subtitle" id="authSubtitle">Увійди щоб зберігати дані в хмарі</div>
+    <div class="auth-tabs">
+      <button class="auth-tab on" id="authTabLogin" onclick="switchAuthTab('login')"><span id="atLogin">Увійти</span></button>
+      <button class="auth-tab" id="authTabReg" onclick="switchAuthTab('register')"><span id="atReg">Реєстрація</span></button>
+    </div>
+    <div class="auth-field"><label id="alEmail">Email</label><input type="email" id="authEmail" placeholder="you@example.com" autocomplete="email"></div>
+    <div class="auth-field"><label id="alPass">Пароль</label><input type="password" id="authPass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')submitAuth()"></div>
+    <div class="auth-error" id="authError"></div>
+    <button class="auth-btn" onclick="submitAuth()"><span id="authSubmitLbl">Увійти</span></button>
+    <div class="auth-sep" id="authSepOr">або</div>
+    <button class="auth-google" onclick="signInWithGoogle()">
+      <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      <span id="authGoogleLbl">Продовжити з Google</span>
+    </button>
+    <span class="auth-skip" onclick="closeAuth()" id="authSkip">Продовжити без акаунту →</span>
+    <div style="text-align:center;margin-top:16px;border-top:1px solid var(--b1);padding-top:14px">
+      <a href="/privacy.html" target="_blank" style="font-size:8px;color:var(--muted);letter-spacing:2px;text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--muted)'">Privacy Policy</a>
+      <span style="color:var(--muted2);margin:0 8px">·</span>
+      <a href="mailto:hello@timebox-app.app" style="font-size:8px;color:var(--muted);letter-spacing:2px;text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--muted)'">Contact</a>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+//  FIREBASE CONFIG — замінити на свій проєкт!
+// ══════════════════════════════════════
+const FB_CONFIG={
+  apiKey:"AIzaSyAx91Hodz362nuoYvWf9_o3hVOKvIpiK7Y",
+  authDomain:"timebox-90834.firebaseapp.com",
+  projectId:"timebox-90834",
+  storageBucket:"timebox-90834.firebasestorage.app",
+  messagingSenderId:"679182536830",
+  appId:"1:679182536830:web:7afde325bd1239aa64482f",
+  measurementId:"G-TW2RPL0486"
+};
+
+let fbApp=null,fbAuth=null,fbDb=null,currentUser=null;
+let authMode='login';
+
+function initFirebase(){
+  try{
+    if(!firebase?.apps?.length) fbApp=firebase.initializeApp(FB_CONFIG);
+    else fbApp=firebase.apps[0];
+    fbAuth=firebase.auth();
+    fbDb=firebase.firestore();
+    fbAuth.onAuthStateChanged(user=>{
+      currentUser=user;
+      updateAuthUI();
+      if(user) loadFromCloud();
+    });
+  }catch(e){console.log('Firebase not configured:',e.message);}
+}
+
+function updateAuthUI(){
+  const loginBtn=document.getElementById('authOpenBtn');
+  const profileBtn=document.getElementById('profileBtn');
+  const avatar=document.getElementById('profileAvatar');
+  const emailDisplay=document.getElementById('profileEmailDisplay');
+  if(currentUser){
+    if(loginBtn) loginBtn.style.display='none';
+    if(profileBtn) profileBtn.style.display='flex';
+    const initials=(currentUser.displayName||currentUser.email||'?').charAt(0).toUpperCase();
+    if(avatar) avatar.textContent=initials;
+    if(emailDisplay) emailDisplay.textContent=currentUser.email||'';
+  } else {
+    if(loginBtn) loginBtn.style.display='block';
+    if(profileBtn) profileBtn.style.display='none';
+  }
+}
+
+function openAuth(){document.getElementById('authOverlay').classList.add('open');document.getElementById('authError').textContent='';}
+function closeAuth(){document.getElementById('authOverlay').classList.remove('open');}
+function switchAuthTab(mode){
+  authMode=mode;
+  document.getElementById('authTabLogin').classList.toggle('on',mode==='login');
+  document.getElementById('authTabReg').classList.toggle('on',mode==='register');
+  const lbl=document.getElementById('authSubmitLbl');
+  const uk=S.lang==='uk';
+  if(lbl)lbl.textContent=mode==='login'?(uk?'Увійти':'Sign in'):(uk?'Зареєструватись':'Create account');
+  document.getElementById('authError').textContent='';
+}
+
+async function submitAuth(){
+  const email=document.getElementById('authEmail').value.trim();
+  const pass=document.getElementById('authPass').value;
+  const errEl=document.getElementById('authError');
+  if(!email||!pass){errEl.textContent=S.lang==='uk'?'Заповни всі поля':'Fill all fields';return;}
+  if(!fbAuth){errEl.textContent='Firebase not configured';return;}
+  try{
+    if(authMode==='login'){
+      await fbAuth.signInWithEmailAndPassword(email,pass);
+    } else {
+      await fbAuth.createUserWithEmailAndPassword(email,pass);
+    }
+    closeAuth();
+  }catch(e){
+    const msgs={
+      'auth/user-not-found':S.lang==='uk'?'Користувача не знайдено':'User not found',
+      'auth/wrong-password':S.lang==='uk'?'Невірний пароль':'Wrong password',
+      'auth/email-already-in-use':S.lang==='uk'?'Email вже використовується':'Email already in use',
+      'auth/weak-password':S.lang==='uk'?'Пароль занадто слабкий (мін. 6 символів)':'Password too weak (min 6 chars)',
+      'auth/invalid-email':S.lang==='uk'?'Невірний формат email':'Invalid email format',
+    };
+    errEl.textContent=msgs[e.code]||e.message;
+  }
+}
+
+async function signInWithGoogle(){
+  if(!fbAuth){document.getElementById('authError').textContent='Firebase not configured';return;}
+  try{
+    const provider=new firebase.auth.GoogleAuthProvider();
+    await fbAuth.signInWithPopup(provider);
+    closeAuth();
+  }catch(e){document.getElementById('authError').textContent=e.message;}
+}
+
+async function signOut(){
+  if(!fbAuth)return;
+  try{await fbAuth.signOut();currentUser=null;updateAuthUI();toggleProfileMenu();}catch(e){}
+}
+
+function toggleProfileMenu(){
+  document.getElementById('profileMenu').classList.toggle('open');
+}
+document.addEventListener('click',e=>{
+  const menu=document.getElementById('profileMenu');
+  const btn=document.getElementById('profileBtn');
+  if(menu&&!menu.contains(e.target)&&!btn?.contains(e.target)) menu.classList.remove('open');
+});
+
+// ── CLOUD SYNC ──
+async function syncToCloud(){
+  if(!currentUser||!fbDb){
+    document.getElementById('syncStatus').textContent=S.lang==='uk'?'Потрібна авторизація':'Login required';
+    return;
+  }
+  try{
+    const data={birth:S.birth,lifespan:S.lifespan,markedWeeks:S.markedWeeks,weekNotes:S.weekNotes,timeCapsules:S.timeCapsules,chapters:S.chapters,chapterMap:S.chapterMap,trackers:S.trackers,trNotes:S.trNotes,reviews:S.reviews,isPro:S.isPro,lang:S.lang,capsuleMonths:S.capsuleMonths,spheres:S.spheres,updatedAt:new Date().toISOString()};
+    await fbDb.collection('timebox_users').doc(currentUser.uid).set(data,{merge:true});
+    document.getElementById('syncStatus').textContent=S.lang==='uk'?'✓ Збережено':'✓ Saved';
+    setTimeout(()=>{const el=document.getElementById('syncStatus');if(el)el.textContent=S.lang==='uk'?'Синхронізовано':'Synced';},2000);
+  }catch(e){document.getElementById('syncStatus').textContent='Error: '+e.message;}
+}
+
+async function loadFromCloud(){
+  if(!currentUser||!fbDb)return;
+  try{
+    const doc=await fbDb.collection('timebox_users').doc(currentUser.uid).get();
+    if(doc.exists){
+      const data=doc.data();
+      // Merge cloud data — cloud wins for most fields
+      Object.assign(S,data);
+      if(!S.trNotes)S.trNotes={};
+      if(!S.spheres)S.spheres={fin:0,sport:0,learn:0};
+      calcStats();
+      if(S.birth){renderLifeGrid();renderHomePreview();renderHomeTr();renderCatRow();renderTrackers();renderFreeBanner();renderChapterToolbar();renderReviewBanner();updateTodayWidget();}
+    }
+  }catch(e){console.log('Cloud load error:',e);}
+}
+
+// Auto-sync every 2 minutes if logged in
+setInterval(()=>{if(currentUser)syncToCloud();},120000);
+
+// Init Firebase on load
+window.addEventListener('load',()=>{
+  initFirebase();
+  // Register Service Worker
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg=>{
+        console.log('SW registered:', reg.scope);
+        // Listen for messages from SW
+        navigator.serviceWorker.addEventListener('message', e=>{
+          if(e.data?.type==='SYNC_REQUIRED' && typeof syncToCloud==='function') syncToCloud();
+        });
+      })
+      .catch(err=>console.log('SW registration failed:', err));
+  }
+},false);
+</script>
+</body>
+</html>
