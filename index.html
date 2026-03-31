@@ -581,6 +581,9 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
 
   /* DIARY GRID */
   #diaryGrid{grid-template-columns:repeat(2,1fr)!important}
+  /* VISION BOARD */
+  #visionBoard{columns:2!important}
+  #visionCatGrid{grid-template-columns:repeat(2,1fr)!important}
 
   /* LIFE HEAD */
   .life-head{flex-direction:column;gap:8px;align-items:flex-start}
@@ -600,6 +603,20 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <style>
+/* VISION BOARD */
+.vcard{break-inside:avoid;margin-bottom:8px;position:relative;cursor:pointer;overflow:hidden;background:var(--s1)}
+.vcard img{width:100%;display:block;transition:transform .3s}
+.vcard:hover img{transform:scale(1.03)}
+.vcard-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.8));padding:10px 12px;transform:translateY(100%);transition:transform .3s}
+.vcard:hover .vcard-overlay{transform:translateY(0)}
+.vcard-name{font-family:'Cormorant Garamond',serif;font-size:15px;color:#fff;font-style:italic}
+.vcard-cat{font-size:8px;letter-spacing:2px;color:rgba(255,255,255,.6);margin-bottom:3px}
+.vcard-done-badge{position:absolute;top:8px;right:8px;background:var(--gold);color:var(--bg);font-size:8px;letter-spacing:2px;padding:3px 8px;font-weight:700}
+.vcard-done-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center}
+.vcard-done-overlay span{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold);border:1px solid var(--gold);padding:6px 16px}
+.vcat-btn{background:var(--s2);border:1px solid var(--b2);color:var(--muted);font-size:8px;padding:6px 4px;cursor:pointer;transition:all .2s;text-align:center}
+.vcat-btn.on{border-color:var(--gold);color:var(--gold);background:var(--goldl)}
+.vcat-btn:hover{border-color:var(--b3);color:var(--text2)}
 /* AUTH */
 .auth-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:800;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
 .auth-overlay.open{display:flex}
@@ -675,6 +692,7 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
       <button class="ntab" id="ntLife" onclick="showPage('life',this)">Моє Життя</button>
       <button class="ntab" id="ntTr" onclick="showPage('trackers',this)">Мої Трекери</button>
       <button class="ntab" id="ntDays" onclick="showPage('days',this)">Щоденник</button>
+      <button class="ntab" id="ntVision" onclick="showPage('vision',this)">Мрії</button>
     </div>
     <div class="nav-right">
       <span class="nav-age" id="navAge"></span>
@@ -822,6 +840,66 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
       </div>
       <div id="diaryGrid" style="margin-top:20px"></div>
       <div id="diaryEntries" style="margin-top:32px"></div>
+    </div>
+  </div>
+
+  <!-- VISION BOARD PAGE -->
+  <div class="page" id="page-vision">
+    <div class="inner">
+      <div class="life-head">
+        <div class="ptitle">Мої<br><em>Мрії</em></div>
+        <button onclick="openAddDream()" style="background:none;border:1px solid var(--gold);color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;padding:8px 18px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='var(--gold)';this.style.color='var(--bg)'" onmouseout="this.style.background='none';this.style.color='var(--gold)'">+ ДОДАТИ</button>
+      </div>
+      <div id="visionBoard" style="columns:2;column-gap:8px;margin-top:20px"></div>
+      <div id="visionEmpty" style="text-align:center;padding:60px 20px;display:none">
+        <div style="font-size:48px;margin-bottom:16px">✨</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--text2);margin-bottom:8px">Твоя дошка мрій порожня</div>
+        <div style="font-size:10px;color:var(--muted);letter-spacing:2px">Додай перше фото своєї мрії</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VISION BOARD MODAL -->
+<div class="overlay" id="visionOverlay">
+  <div class="modal" style="width:480px">
+    <div class="modal-title" style="margin-bottom:20px"><em id="visionModalTitle">Нова мрія</em></div>
+
+    <!-- Photo upload -->
+    <div id="visionImgPreview" style="width:100%;height:200px;background:var(--s2);border:1px dashed var(--b2);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;cursor:pointer;margin-bottom:16px;overflow:hidden;position:relative" onclick="document.getElementById('visionFileInput').click()">
+      <span style="font-size:32px">📸</span>
+      <span style="font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase">Натисни щоб вибрати фото</span>
+      <input type="file" id="visionFileInput" accept="image/*" style="display:none" onchange="handleVisionImg(this)">
+    </div>
+
+    <div class="mf">
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Назва мрії</label>
+      <input id="visionName" type="text" placeholder="Наприклад: Власна квартира" style="width:100%;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'">
+    </div>
+
+    <div class="mf">
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Категорія</label>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px" id="visionCatGrid">
+        <button class="vcat-btn on" data-cat="🌍 Подорожі" onclick="selVisionCat(this)">🌍 Подорожі</button>
+        <button class="vcat-btn" data-cat="🏠 Дім" onclick="selVisionCat(this)">🏠 Дім</button>
+        <button class="vcat-btn" data-cat="💰 Фінанси" onclick="selVisionCat(this)">💰 Фінанси</button>
+        <button class="vcat-btn" data-cat="💪 Здоров'я" onclick="selVisionCat(this)">💪 Здоров'я</button>
+        <button class="vcat-btn" data-cat="❤️ Стосунки" onclick="selVisionCat(this)">❤️ Стосунки</button>
+        <button class="vcat-btn" data-cat="🚗 Авто" onclick="selVisionCat(this)">🚗 Авто</button>
+        <button class="vcat-btn" data-cat="📚 Освіта" onclick="selVisionCat(this)">📚 Освіта</button>
+        <button class="vcat-btn" data-cat="✨ Інше" onclick="selVisionCat(this)">✨ Інше</button>
+      </div>
+    </div>
+
+    <div class="mf">
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Дедлайн (рік)</label>
+      <input id="visionDeadline" type="number" min="2025" max="2050" placeholder="2026" style="width:100%;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'">
+    </div>
+
+    <div class="mbtns">
+      <button class="mbtn-c" onclick="closeVisionModal()" id="visionDeleteBtn" style="color:var(--red);border-color:var(--red)">🗑 Видалити</button>
+      <button class="mbtn-c" onclick="closeVisionModal()">Скасувати</button>
+      <button class="mbtn-ok" onclick="saveVisionDream()"><span>Зберегти →</span></button>
     </div>
   </div>
 </div>
@@ -1490,7 +1568,7 @@ const FREE_LIMIT=5;
 //  STATE
 // ══════════════════════════════════════
 let S={
-  lang:'uk',theme:'dark',profileName:'',notifEnabled:false,notifTime:'20:00',
+  lang:'uk',theme:'dark',profileName:'',notifEnabled:false,notifTime:'20:00',dreams:[],
   birth:null,lifespan:90,lived:0,total:0,
   markedWeeks:{},
   markedDays:{},
@@ -1514,7 +1592,7 @@ let S={
 const t=k=>(T[S.lang]||T.uk)[k]||k;
 function save(){localStorage.setItem('timebox',JSON.stringify({birth:S.birth,lifespan:S.lifespan,markedWeeks:S.markedWeeks,markedDays:S.markedDays||{},weekNotes:S.weekNotes,dayNotes:S.dayNotes||{},diary:S.diary||{},timeCapsules:S.timeCapsules,chapters:S.chapters,chapterMap:S.chapterMap,trackers:S.trackers,trNotes:S.trNotes,reviews:S.reviews,isPro:S.isPro,lang:S.lang,capsuleYrs:S.capsuleYrs,capsuleMonths:S.capsuleMonths,spheres:S.spheres,customCats:S.customCats||{},theme:S.theme||'dark'}))}
 
-function loadSaved(){try{const d=JSON.parse(localStorage.getItem('timebox')||localStorage.getItem('mv7'));if(d?.birth){Object.assign(S,d);if(!S.trNotes)S.trNotes={};if(!S.markedDays)S.markedDays={};if(!S.dayNotes)S.dayNotes={};if(!S.capsuleMonths)S.capsuleMonths=12;if(!S.capsuleYrs)S.capsuleYrs=1;if(!S.spheres)S.spheres={fin:0,sport:0,learn:0};if(!S.customCats)S.customCats={};if(!S.diary)S.diary={};return true}}catch(e){}return false}
+function loadSaved(){try{const d=JSON.parse(localStorage.getItem('timebox')||localStorage.getItem('mv7'));if(d?.birth){Object.assign(S,d);if(!S.trNotes)S.trNotes={};if(!S.markedDays)S.markedDays={};if(!S.dayNotes)S.dayNotes={};if(!S.capsuleMonths)S.capsuleMonths=12;if(!S.capsuleYrs)S.capsuleYrs=1;if(!S.spheres)S.spheres={fin:0,sport:0,learn:0};if(!S.customCats)S.customCats={};if(!S.diary)S.diary={};if(!S.dreams)S.dreams=[];return true}}catch(e){}return false}
 function uid(){return Math.random().toString(36).slice(2,9)}
 function getWeekOfYear(d){const s=new Date(d.getFullYear(),0,1);return Math.ceil(((d-s)/86400000+s.getDay()+1)/7)}
 function getDayOfYear(d){return Math.ceil((d-new Date(d.getFullYear(),0,1))/86400000)+1}
@@ -1556,7 +1634,7 @@ function applyLang(){
     'lChName','lChColor'];
   ids.forEach(id=>{const el=document.getElementById(id);if(!el)return;const v=t(id);el.innerHTML!==undefined?el.innerHTML=v:el.textContent=v;});
   // Nav tabs with correct translation keys
-  [{id:'ntHome',key:'navHome'},{id:'ntLife',key:'navLife'},{id:'ntTr',key:'navTr'}].forEach(({id,key})=>{const el=document.getElementById(id);if(el)el.textContent=t(key);});
+  [{id:'ntHome',key:'navHome'},{id:'ntLife',key:'navLife'},{id:'ntTr',key:'navTr'},{id:'ntVision',key:'navVision'}].forEach(({id,key})=>{const el=document.getElementById(id);if(el)el.textContent=t(key);});
   const _diaryTab=document.getElementById('ntDays');
   if(_diaryTab){const _dl={uk:'Щоденник',en:'Diary',de:'Tagebuch',es:'Diario',fr:'Journal',pt:'Diário',pl:'Pamiętnik'};_diaryTab.textContent=t('navDays')||_dl[S.lang]||'Diary';}
   document.getElementById('iTitle').innerHTML=t('iTitle');
@@ -2377,6 +2455,110 @@ function scheduleNotif(){
   }
 }
 function openPro(){document.getElementById('proOverlay').classList.add('open');}
+// ══════════════════════════════════════
+//  VISION BOARD
+// ══════════════════════════════════════
+let visionEditId=null;
+let visionImgData=null;
+
+function renderVisionBoard(){
+  const board=document.getElementById('visionBoard');
+  const empty=document.getElementById('visionEmpty');
+  if(!board)return;
+  const dreams=S.dreams||[];
+  if(!dreams.length){board.innerHTML='';if(empty)empty.style.display='block';return;}
+  if(empty)empty.style.display='none';
+  board.innerHTML='';
+  dreams.forEach(d=>{
+    const card=document.createElement('div');
+    card.className='vcard'+(d.done?' vcard-completed':'');
+    card.onclick=()=>openEditDream(d.id);
+    card.innerHTML=`
+      ${d.img?`<img src="${d.img}" alt="${d.name||''}" loading="lazy">`:`<div style="height:160px;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:48px">${(d.cat||'✨').split(' ')[0]}</div>`}
+      ${d.done?'<div class="vcard-done-overlay"><span>✓ ВИКОНАНО</span></div>':''}
+      <div class="vcard-overlay">
+        <div class="vcard-cat">${d.cat||''} ${d.deadline?'· '+d.deadline:''}</div>
+        <div class="vcard-name">${d.name||''}</div>
+      </div>`;
+    board.appendChild(card);
+  });
+}
+
+function openAddDream(){
+  visionEditId=null;visionImgData=null;
+  document.getElementById('visionName').value='';
+  document.getElementById('visionDeadline').value='';
+  document.getElementById('visionFileInput').value='';
+  document.getElementById('visionModalTitle').textContent='Нова мрія';
+  const prev=document.getElementById('visionImgPreview');
+  prev.innerHTML=`<span style="font-size:32px">📸</span><span style="font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase">Натисни щоб вибрати фото</span><input type="file" id="visionFileInput" accept="image/*" style="display:none" onchange="handleVisionImg(this)">`;
+  prev.onclick=()=>document.getElementById('visionFileInput').click();
+  document.querySelectorAll('.vcat-btn').forEach((b,i)=>b.classList.toggle('on',i===0));
+  const delBtn=document.getElementById('visionDeleteBtn');
+  if(delBtn)delBtn.style.display='none';
+  document.getElementById('visionOverlay').classList.add('open');
+}
+
+function openEditDream(id){
+  const d=(S.dreams||[]).find(x=>x.id===id);if(!d)return;
+  visionEditId=id;visionImgData=d.img||null;
+  document.getElementById('visionModalTitle').textContent='Редагувати мрію';
+  document.getElementById('visionName').value=d.name||'';
+  document.getElementById('visionDeadline').value=d.deadline||'';
+  const prev=document.getElementById('visionImgPreview');
+  if(d.img){
+    prev.innerHTML=`<img src="${d.img}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0"><div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);text-align:center;padding:6px;font-size:9px;letter-spacing:2px;color:#fff">ЗМІНИТИ ФОТО</div><input type="file" id="visionFileInput" accept="image/*" style="display:none" onchange="handleVisionImg(this)">`;
+    prev.style.position='relative';
+  } else {
+    prev.innerHTML=`<span style="font-size:32px">📸</span><span style="font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase">Натисни щоб вибрати фото</span><input type="file" id="visionFileInput" accept="image/*" style="display:none" onchange="handleVisionImg(this)">`;
+  }
+  prev.onclick=()=>document.getElementById('visionFileInput').click();
+  document.querySelectorAll('.vcat-btn').forEach(b=>b.classList.toggle('on',b.dataset.cat===d.cat));
+  const delBtn=document.getElementById('visionDeleteBtn');
+  if(delBtn){delBtn.style.display='block';delBtn.onclick=()=>deleteVisionDream(id);}
+  document.getElementById('visionOverlay').classList.add('open');
+}
+
+function handleVisionImg(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    visionImgData=e.target.result;
+    const prev=document.getElementById('visionImgPreview');
+    prev.innerHTML=`<img src="${visionImgData}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0"><div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);text-align:center;padding:6px;font-size:9px;letter-spacing:2px;color:#fff">ЗМІНИТИ ФОТО</div><input type="file" id="visionFileInput" accept="image/*" style="display:none" onchange="handleVisionImg(this)">`;
+    prev.style.position='relative';
+    prev.onclick=()=>document.getElementById('visionFileInput').click();
+  };
+  reader.readAsDataURL(file);
+}
+
+function selVisionCat(btn){
+  document.querySelectorAll('.vcat-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+function saveVisionDream(){
+  const name=document.getElementById('visionName').value.trim();
+  const cat=document.querySelector('.vcat-btn.on')?.dataset.cat||'✨ Інше';
+  const deadline=document.getElementById('visionDeadline').value;
+  if(!S.dreams)S.dreams=[];
+  if(visionEditId){
+    const d=S.dreams.find(x=>x.id===visionEditId);
+    if(d){d.name=name;d.cat=cat;d.deadline=deadline;if(visionImgData)d.img=visionImgData;}
+  } else {
+    S.dreams.push({id:uid(),name,cat,deadline,img:visionImgData||null,done:false,created:new Date().toISOString()});
+  }
+  save();closeVisionModal();renderVisionBoard();
+}
+
+function deleteVisionDream(id){
+  if(!confirm('Видалити цю мрію?'))return;
+  S.dreams=(S.dreams||[]).filter(x=>x.id!==id);
+  save();closeVisionModal();renderVisionBoard();
+}
+
+function closeVisionModal(){document.getElementById('visionOverlay').classList.remove('open');}
+
 // ══ THEME TOGGLE ══
 function toggleTheme(){
   S.theme=S.theme==='light'?'dark':'light';
@@ -2408,6 +2590,7 @@ function setupNotifications(){
 //  NAV
 // ══════════════════════════════════════
 function showPage(name,btn){
+  if(name==='vision') setTimeout(renderVisionBoard,50);
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('on'));
   document.getElementById('page-'+name).classList.add('on');
@@ -2670,9 +2853,9 @@ function updateSphere(key,val,max){
 }
 
 // Close handlers
-['noteOverlay','capsuleOverlay','reviewOverlay','chapterOverlay','trOverlay','proOverlay','diaryOverlay','profileOverlay'].forEach(id=>{document.getElementById(id).addEventListener('click',e=>{if(e.target===document.getElementById(id))document.getElementById(id).classList.remove('open');});});
+['noteOverlay','capsuleOverlay','reviewOverlay','chapterOverlay','trOverlay','proOverlay','diaryOverlay','profileOverlay','visionOverlay'].forEach(id=>{document.getElementById(id).addEventListener('click',e=>{if(e.target===document.getElementById(id))document.getElementById(id).classList.remove('open');});});
 document.getElementById('certOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('certOverlay'))closeCert();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){['noteOverlay','capsuleOverlay','reviewOverlay','chapterOverlay','trOverlay','proOverlay','diaryOverlay','profileOverlay'].forEach(id=>document.getElementById(id).classList.remove('open'));closeCert();document.getElementById('ctx').style.display='none';}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){['noteOverlay','capsuleOverlay','reviewOverlay','chapterOverlay','trOverlay','proOverlay','diaryOverlay','profileOverlay','visionOverlay'].forEach(id=>document.getElementById(id).classList.remove('open'));closeCert();document.getElementById('ctx').style.display='none';}});
 </script>
 <!-- AUTH MODAL -->
 <div class="auth-overlay" id="authOverlay">
