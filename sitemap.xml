@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Головна сторінка -->
+  <url>
+    <loc>https://mytimebox.app/</loc>
+    <lastmod>2025-03-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mytimebox.app/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mytimebox.app/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://mytimebox.app/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://mytimebox.app/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://mytimebox.app/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://mytimebox.app/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mytimebox.app/"/>
+  </url>
+
+  <!-- Privacy Policy -->
+  <url>
+    <loc>https://mytimebox.app/privacy.html</loc>
+    <lastmod>2025-03-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+</urlset>

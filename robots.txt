@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://mytimebox.app/sitemap.xml
+
+# Disallow admin areas (none yet)
+# Disallow: /admin/
