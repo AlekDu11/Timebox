@@ -54,6 +54,17 @@
   --shadow2:rgba(0,0,0,.3);
 }
 
+/* ══ LIGHT THEME ══ */
+[data-theme="light"]:root, :root[data-theme="light"] {
+  --bg:#f5f0e8;--bg2:#ede7db;--s1:#ffffff;--s2:#faf7f0;
+  --b1:#e0d8c8;--b2:#c8bea8;--b3:#b0a490;
+  --text:#1c1a16;--text2:#4a4438;--muted:#8c8070;--muted2:#c8bca8;
+  --gold:#9a6c28;--gold2:#b88030;--goldd:#7a5420;--goldl:rgba(154,108,40,.12);
+  --stone:#a89880;--green:#2a7040;--greenl:rgba(42,112,64,.1);
+  --red:#a03030;--redl:rgba(160,48,48,.1);--blue:#2050a0;--bluel:rgba(32,80,160,.1);
+  --amber:#a06018;--amberl:rgba(160,96,24,.1);--shadow:rgba(0,0,0,.15);--shadow2:rgba(0,0,0,.08);
+}
+
 /* Stone texture overlay */
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.038'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
 
@@ -110,8 +121,10 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
 
 /* NAV */
 .nav{position:sticky;top:0;z-index:200;background:rgba(247,243,236,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--b1);padding:0 48px;display:flex;align-items:center;justify-content:space-between;height:58px;transition:background .4s}
-[data-theme="dark"] .nav,[data-theme="cosmos"] .nav{background:rgba(12,11,16,.92)}
-[data-theme="paper"] .nav{background:rgba(240,235,224,.92)}
+[data-theme="dark"] .nav{background:rgba(12,11,16,.95)}
+[data-theme="light"] .nav{background:rgba(245,240,232,.95)}
+[data-theme="light"] #intro{background:var(--bg)}
+[data-theme="light"] body::before{opacity:.02}
 .nav-logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--gold);letter-spacing:1px;cursor:pointer;transition:opacity .2s}
 .nav-logo:hover{opacity:.8}
 .nav-tabs{display:flex}
@@ -308,12 +321,12 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
 .tnum-row{display:grid;gap:2px;margin-bottom:3px}
 .tnum{font-size:6px;color:transparent;text-align:center;font-weight:700}
 .tnum.show{color:var(--muted2)}
-.tgrid-single{display:grid;gap:2px}
+.tgrid-single{display:grid;gap:2px} .tgrid-single .tcell{height:auto;aspect-ratio:1;min-width:0}
 .tgrid-rows{}
 .tgrow{display:flex;align-items:center;gap:3px;margin-bottom:2px}
 .trow-lbl{font-size:7px;color:var(--muted2);text-align:right;flex-shrink:0;width:20px;font-weight:700}
 .trow-cells{display:grid;gap:2px;flex:1}
-.tcell{aspect-ratio:1;border:1px solid var(--b1);cursor:pointer;transition:transform .1s,background .15s;border-radius:1px}
+.tcell{height:10px;min-width:4px;border:1px solid var(--b1);cursor:pointer;transition:transform .1s,background .15s;border-radius:1px}
 .tcell:hover{transform:scale(1.7);z-index:8;border-color:var(--gold)!important}
 .tcell.done{opacity:.85}
 .tcell.today-mark{border-style:dashed!important;animation:pulse 2s infinite}
@@ -562,8 +575,8 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
     <div class="nav-tabs">
       <button class="ntab on" id="ntHome" onclick="showPage('home',this)">Головна</button>
       <button class="ntab" id="ntLife" onclick="showPage('life',this)">Моє Життя</button>
-      <button class="ntab" id="ntTr" onclick="showPage('trackers',this)">Трекери</button>
-      <button class="ntab" id="ntDays" onclick="showPage('days',this)">Дні</button>
+      <button class="ntab" id="ntTr" onclick="showPage('trackers',this)">Мої Трекери</button>
+      <button class="ntab" id="ntDays" onclick="showPage('days',this)">Щоденник</button>
     </div>
     <div class="nav-right">
       <span class="nav-age" id="navAge"></span>
@@ -594,6 +607,7 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
         <option value="pt">🇵🇹 PT</option>
         <option value="pl">🇵🇱 PL</option>
       </select>
+      <button id="themeBtn" onclick="toggleTheme()" title="Toggle theme" style="background:none;border:1px solid var(--b2);color:var(--muted);font-size:14px;width:28px;height:28px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--b2)';this.style.color='var(--muted)'">☀️</button>
     </div>
   </nav>
 
@@ -675,31 +689,56 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
     </div>
   </div>
 
-  <!-- DAYS PAGE -->
+  <!-- DIARY PAGE -->
   <div class="page" id="page-days">
     <div class="inner">
       <div class="life-head">
-        <div class="ptitle" id="daysPT">Мій<br><em>Рік у Днях</em></div>
-        <span class="edit-link" onclick="showPage('life',document.getElementById('ntLife'))">← Тижні</span>
+        <div class="ptitle" id="daysPT">Мій<br><em>Щоденник</em></div>
+        <select id="diaryYearSel" onchange="renderDiaryGrid()" style="background:var(--s1);border:1px solid var(--b2);color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:6px 10px;outline:none;cursor:pointer"></select>
       </div>
       <div class="stats-strip" style="grid-template-columns:repeat(3,1fr)">
-        <div class="stile"><div class="sl" id="dsl0">Прожито днів</div><div class="sn" id="dsn0" style="color:var(--gold)">—</div><div class="ss" id="dss0">—</div></div>
-        <div class="stile"><div class="sl" id="dsl1">Залишилось</div><div class="sn" id="dsn1">—</div><div class="ss" id="dss1">—</div></div>
-        <div class="stile"><div class="sl" id="dsl2">Поточний день року</div><div class="sn" id="dsn2">—</div><div class="ss" id="dss2">з 365</div></div>
+        <div class="stile"><div class="sl" id="dsl0">Записів</div><div class="sn" id="dsn0" style="color:var(--gold)">—</div><div class="ss" id="dss0">у році</div></div>
+        <div class="stile"><div class="sl" id="dsl1">День року</div><div class="sn" id="dsn1">—</div><div class="ss" id="dss1">з 365</div></div>
+        <div class="stile"><div class="sl" id="dsl2">Залишилось</div><div class="sn" id="dsn2">—</div><div class="ss" id="dss2">днів</div></div>
       </div>
-      <div class="grid-topbar">
-        <div class="grid-lbl" id="daysGridLbl">↓ Рік · День →</div>
-        <div class="legend">
-          <div class="leg"><div class="lsq l"></div><span id="dll1">прожито</span></div>
-          <div class="leg"><div class="lsq m"></div><span id="dll2">відмічено</span></div>
-          <div class="leg"><div class="lsq c"></div><span id="dll3">сьогодні</span></div>
-          <div class="leg"><div class="lsq f"></div><span id="dll4">майбутнє</span></div>
-        </div>
+      <div id="diaryGrid" style="margin-top:20px"></div>
+      <div id="diaryEntries" style="margin-top:32px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- DIARY MODAL -->
+<div class="overlay" id="diaryOverlay">
+  <div class="modal" style="width:520px;max-height:90vh;overflow-y:auto">
+    <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px" id="diaryModalDate"></div>
+    <div class="modal-title" style="margin-bottom:16px"><em>Запис дня</em></div>
+    <div class="mf">
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px">Настрій</label>
+      <div class="mood-row" id="diaryMoodRow">
+        <button class="mood-btn" data-mood="😊" onclick="selDiaryMood(this)">😊</button>
+        <button class="mood-btn" data-mood="😐" onclick="selDiaryMood(this)">😐</button>
+        <button class="mood-btn" data-mood="😔" onclick="selDiaryMood(this)">😔</button>
+        <button class="mood-btn" data-mood="🔥" onclick="selDiaryMood(this)">🔥</button>
+        <button class="mood-btn" data-mood="😴" onclick="selDiaryMood(this)">😴</button>
+        <button class="mood-btn" data-mood="🎉" onclick="selDiaryMood(this)">🎉</button>
+        <button class="mood-btn" data-mood="💪" onclick="selDiaryMood(this)">💪</button>
+        <button class="mood-btn" data-mood="🤔" onclick="selDiaryMood(this)">🤔</button>
       </div>
-      <div class="grid-hint" id="daysHint">Клік — відмітити · Правий клік — нотатка</div>
-      <div class="gscroll">
-        <div id="daysGrid" style="min-width:900px"></div>
+    </div>
+    <div class="mf">
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px">Запис дня</label>
+      <textarea id="diaryText" rows="6" style="width:100%;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:12px;padding:10px 12px;outline:none;resize:vertical;line-height:1.7;transition:border-color .2s" placeholder="Сьогодні я..." onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'"></textarea>
+    </div>
+    <div class="mf">
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px">Оцінка дня (1-10)</label>
+      <div style="display:flex;align-items:center;gap:12px">
+        <input type="range" id="diaryRating" min="1" max="10" value="7" oninput="document.getElementById('diaryRatingVal').textContent=this.value" style="flex:1;accent-color:var(--gold)">
+        <span id="diaryRatingVal" style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--gold);min-width:36px;text-align:center">7</span>
       </div>
+    </div>
+    <div class="mbtns">
+      <button class="mbtn-c" onclick="closeDiaryModal()">Скасувати</button>
+      <button class="mbtn-ok" onclick="saveDiaryEntry()"><span>Зберегти →</span></button>
     </div>
   </div>
 </div>
@@ -902,7 +941,7 @@ uk:{
   iSub:'4680 тижнів · 90 років · кожен має значення',
   lBirth:'Дата народження',lLife:'Тривалість (років)',
   btnStart:'Почати →',
-  navHome:'Головна',navLife:'Моє Життя',navTr:'Трекери',navLang:'EN',
+  navHome:'Головна',navLife:'Моє Життя',navTr:'Мої Трекери',navDays:'Щоденник',navLang:'EN',
   hTagline:'Твій особистий дашборд',
   hTitle:'Твоє<br><em>Життя</em>',
   hDesc:'Візуалізуй своє життя у тижнях. Відстежуй прогрес у спорті, фінансах, навчанні та будь-яких цілях. Пиши нотатки до кожного тижня. Залишай листи собі в майбутнє.',
@@ -967,7 +1006,7 @@ en:{
   iSub:'4680 weeks · 90 years · each one matters',
   lBirth:'Date of birth',lLife:'Lifespan (years)',
   btnStart:'Start →',
-  navHome:'Home',navLife:'My Life',navTr:'Trackers',navLang:'УКР',
+  navHome:'Home',navLife:'My Life',navTr:'My Trackers',navDays:'Diary',navLang:'УКР',
   hTagline:'Your personal dashboard',
   hTitle:'Your<br><em>Life</em>',
   hDesc:'Visualize your life in weeks. Track progress in sport, finance, learning, and any goal. Write notes for each week. Leave letters to your future self.',
@@ -1029,7 +1068,7 @@ en:{
 de:{
   iTitle:'Dein<br>Leben in <em>Wochen</em>',iSub:'4680 Wochen · 90 Jahre · jede zählt',
   lBirth:'Geburtsdatum',lLife:'Lebenserwartung (Jahre)',btnStart:'Starten →',
-  navHome:'Startseite',navLife:'Mein Leben',navTr:'Tracker',navLang:'DE',
+  navHome:'Startseite',navLife:'Mein Leben',navTr:'Meine Tracker',navDays:'Tagebuch',navLang:'DE',
   hTagline:'Dein persönliches Dashboard',hTitle:'Dein<br><em>Leben</em>',
   hDesc:'Visualisiere dein Leben in Wochen. Verfolge Fortschritte in Sport, Finanzen und Lernen.',
   hsl1:'Gelebte Wochen',hsl2:'Verbleibend',hsl3:'Alter',hsl4:'% gelebt',
@@ -1074,7 +1113,7 @@ de:{
 es:{
   iTitle:'Tu<br>Vida en <em>Semanas</em>',iSub:'4680 semanas · 90 años · cada una importa',
   lBirth:'Fecha de nacimiento',lLife:'Esperanza de vida (años)',btnStart:'Comenzar →',
-  navHome:'Inicio',navLife:'Mi Vida',navTr:'Seguimiento',navLang:'ES',
+  navHome:'Inicio',navLife:'Mi Vida',navTr:'Mis Trackers',navDays:'Diario',navLang:'ES',
   hTagline:'Tu panel personal',hTitle:'Tu<br><em>Vida</em>',
   hDesc:'Visualiza tu vida en semanas. Sigue el progreso en deporte, finanzas y aprendizaje.',
   hsl1:'Semanas vividas',hsl2:'Restantes',hsl3:'Edad',hsl4:'% vivido',
@@ -1119,7 +1158,7 @@ es:{
 fr:{
   iTitle:'Ta<br>Vie en <em>Semaines</em>',iSub:'4680 semaines · 90 ans · chacune compte',
   lBirth:'Date de naissance',lLife:'Espérance de vie (ans)',btnStart:'Commencer →',
-  navHome:'Accueil',navLife:'Ma Vie',navTr:'Suivi',navLang:'FR',
+  navHome:'Accueil',navLife:'Ma Vie',navTr:'Mes Trackers',navDays:'Journal',navLang:'FR',
   hTagline:'Ton tableau de bord personnel',hTitle:'Ta<br><em>Vie</em>',
   hDesc:'Visualise ta vie en semaines. Suis tes progrès en sport, finances et apprentissage.',
   hsl1:'Semaines vécues',hsl2:'Restantes',hsl3:'Âge',hsl4:'% vécu',
@@ -1164,7 +1203,7 @@ fr:{
 pt:{
   iTitle:'A Tua<br>Vida em <em>Semanas</em>',iSub:'4680 semanas · 90 anos · cada uma importa',
   lBirth:'Data de nascimento',lLife:'Esperança de vida (anos)',btnStart:'Começar →',
-  navHome:'Início',navLife:'Minha Vida',navTr:'Rastreadores',navLang:'PT',
+  navHome:'Início',navLife:'Minha Vida',navTr:'Meus Rastreadores',navDays:'Diário',navLang:'PT',
   hTagline:'O teu painel pessoal',hTitle:'A Tua<br><em>Vida</em>',
   hDesc:'Visualiza a tua vida em semanas. Acompanha progressos em desporto, finanças e aprendizagem.',
   hsl1:'Semanas vividas',hsl2:'Restantes',hsl3:'Idade',hsl4:'% vivido',
@@ -1209,7 +1248,7 @@ pt:{
 pl:{
   iTitle:'Twoje<br>Życie w <em>Tygodniach</em>',iSub:'4680 tygodni · 90 lat · każdy ma znaczenie',
   lBirth:'Data urodzenia',lLife:'Oczekiwana długość życia (lat)',btnStart:'Rozpocznij →',
-  navHome:'Strona główna',navLife:'Moje Życie',navTr:'Trackery',navLang:'PL',
+  navHome:'Strona główna',navLife:'Moje Życie',navTr:'Moje Trackery',navDays:'Pamiętnik',navLang:'PL',
   hTagline:'Twój osobisty pulpit',hTitle:'Twoje<br><em>Życie</em>',
   hDesc:'Wizualizuj swoje życie w tygodniach. Śledź postępy w sporcie, finansach i nauce.',
   hsl1:'Przeżytych tygodni',hsl2:'Pozostało',hsl3:'Wiek',hsl4:'% przeżytego',
@@ -1255,8 +1294,8 @@ pl:{
 // ══════════════════════════════════════
 //  CONSTANTS
 // ══════════════════════════════════════
-const COLORS=['#a07830','#5848c0','#2a7848','#1858a8','#b85818','#a03878','#187870','#586820','#704060','#204870'];
-const CHAPTER_COLORS=['#e8a040','#6870e0','#48b878','#4898d8','#e85050','#d060a8','#38b8b0','#a0c040','#c878e8','#e88040'];
+const COLORS=['#a07830','#5848c0','#2a7848','#1858a8','#b85818','#a03878','#187870','#586820','#704060','#204870','#c8a050','#e05030','#2878c0','#70a030','#c030c0'];
+const CHAPTER_COLORS=['#e8a040','#6870e0','#48b878','#4898d8','#e85050','#d060a8','#38b8b0','#a0c040','#c878e8','#e88040','#f0c040','#40d0b0','#e06090','#60b0e0','#b0e040'];
 const PERIOD_U={weeks:{'none':52,'3mo':13,'1yr':52,'2yr':104,'5yr':260,'10yr':520},days:{'none':365,'3mo':91,'1yr':365,'2yr':730,'5yr':1825,'10yr':3650},years:{'none':1,'3mo':0,'1yr':1,'2yr':2,'5yr':5,'10yr':10},none:{'none':0,'3mo':0,'1yr':0,'2yr':0,'5yr':0,'10yr':0}};
 const FREE_LIMIT=5;
 
@@ -1264,7 +1303,7 @@ const FREE_LIMIT=5;
 //  STATE
 // ══════════════════════════════════════
 let S={
-  lang:'uk',theme:'light',
+  lang:'uk',theme:'dark',
   birth:null,lifespan:90,lived:0,total:0,
   markedWeeks:{},
   markedDays:{},
@@ -1286,8 +1325,9 @@ let S={
 };
 
 const t=k=>(T[S.lang]||T.uk)[k]||k;
-function save(){localStorage.setItem('timebox',JSON.stringify({birth:S.birth,lifespan:S.lifespan,markedWeeks:S.markedWeeks,markedDays:S.markedDays||{},weekNotes:S.weekNotes,dayNotes:S.dayNotes||{},timeCapsules:S.timeCapsules,chapters:S.chapters,chapterMap:S.chapterMap,trackers:S.trackers,trNotes:S.trNotes,reviews:S.reviews,isPro:S.isPro,lang:S.lang,capsuleYrs:S.capsuleYrs,capsuleMonths:S.capsuleMonths,spheres:S.spheres,customCats:S.customCats||{}}))}
-function loadSaved(){try{const d=JSON.parse(localStorage.getItem('timebox')||localStorage.getItem('mv7'));if(d?.birth){Object.assign(S,d);if(!S.trNotes)S.trNotes={};if(!S.markedDays)S.markedDays={};if(!S.dayNotes)S.dayNotes={};if(!S.capsuleMonths)S.capsuleMonths=12;if(!S.capsuleYrs)S.capsuleYrs=1;if(!S.spheres)S.spheres={fin:0,sport:0,learn:0};if(!S.customCats)S.customCats={};return true}}catch(e){}return false}
+function save(){localStorage.setItem('timebox',JSON.stringify({birth:S.birth,lifespan:S.lifespan,markedWeeks:S.markedWeeks,markedDays:S.markedDays||{},weekNotes:S.weekNotes,dayNotes:S.dayNotes||{},diary:S.diary||{},timeCapsules:S.timeCapsules,chapters:S.chapters,chapterMap:S.chapterMap,trackers:S.trackers,trNotes:S.trNotes,reviews:S.reviews,isPro:S.isPro,lang:S.lang,capsuleYrs:S.capsuleYrs,capsuleMonths:S.capsuleMonths,spheres:S.spheres,customCats:S.customCats||{},theme:S.theme||'dark'}))}
+
+function loadSaved(){try{const d=JSON.parse(localStorage.getItem('timebox')||localStorage.getItem('mv7'));if(d?.birth){Object.assign(S,d);if(!S.trNotes)S.trNotes={};if(!S.markedDays)S.markedDays={};if(!S.dayNotes)S.dayNotes={};if(!S.capsuleMonths)S.capsuleMonths=12;if(!S.capsuleYrs)S.capsuleYrs=1;if(!S.spheres)S.spheres={fin:0,sport:0,learn:0};if(!S.customCats)S.customCats={};if(!S.diary)S.diary={};return true}}catch(e){}return false}
 function uid(){return Math.random().toString(36).slice(2,9)}
 function getWeekOfYear(d){const s=new Date(d.getFullYear(),0,1);return Math.ceil(((d-s)/86400000+s.getDay()+1)/7)}
 function getDayOfYear(d){return Math.ceil((d-new Date(d.getFullYear(),0,1))/86400000)+1}
@@ -1318,7 +1358,7 @@ function setLang(lang,btn){
 function toggleLang(){/* use select */}
 
 function applyLang(){
-  const ids=['iLogo','iSub','lBirth','lLife','btnStart','ntHome','ntLife','ntTr',
+  const ids=['iLogo','iSub','lBirth','lLife','btnStart',
     'hTagline','hTrLbl','prevLbl','prevCta','editLnk','gridLbl','gridHint','btnNewTr',
     'sl0','sl1','sl2','sl3','ll1','ll2','ll3','ll4','ll5',
     'trl-name','trl-cat','trl-period','trl-unit','trl-goal','trl-color',
@@ -1328,17 +1368,18 @@ function applyLang(){
     'lNote','lMood','reviewTitle','rql1','rql2','rql3','rqn1','rqn2','rqn3',
     'lChName','lChColor'];
   ids.forEach(id=>{const el=document.getElementById(id);if(!el)return;const v=t(id);el.innerHTML!==undefined?el.innerHTML=v:el.textContent=v;});
+  // Nav tabs with correct translation keys
+  [{id:'ntHome',key:'navHome'},{id:'ntLife',key:'navLife'},{id:'ntTr',key:'navTr'}].forEach(({id,key})=>{const el=document.getElementById(id);if(el)el.textContent=t(key);});
+  const _diaryTab=document.getElementById('ntDays');
+  if(_diaryTab){const _dl={uk:'Щоденник',en:'Diary',de:'Tagebuch',es:'Diario',fr:'Journal',pt:'Diário',pl:'Pamiętnik'};_diaryTab.textContent=t('navDays')||_dl[S.lang]||'Diary';}
   document.getElementById('iTitle').innerHTML=t('iTitle');
   document.getElementById('hTitle').innerHTML=t('hTitle');
   document.getElementById('hDesc').textContent=t('hDesc');
   document.getElementById('lifePT').innerHTML=t('lifePT');
   document.getElementById('trPT').innerHTML=t('trPT');
 
-  // Days tab
-  const ntDays=document.getElementById('ntDays');
-  if(ntDays){const dayTabLabels={uk:'Дні',en:'Days',de:'Tage',es:'Días',fr:'Jours',pt:'Dias',pl:'Dni'};ntDays.textContent=dayTabLabels[S.lang]||'Days';}
   const daysPT=document.getElementById('daysPT');
-  if(daysPT){const dp={uk:'Мій<br><em>Рік у Днях</em>',en:'My<br><em>Year in Days</em>',de:'Mein<br><em>Jahr in Tagen</em>',es:'Mi<br><em>Año en Días</em>',fr:'Mon<br><em>Année en Jours</em>',pt:'Meu<br><em>Ano em Dias</em>',pl:'Mój<br><em>Rok w Dniach</em>'};daysPT.innerHTML=dp[S.lang]||dp.uk;}
+  if(daysPT){const dp={uk:'Мій<br><em>Щоденник</em>',en:'My<br><em>Diary</em>',de:'Mein<br><em>Tagebuch</em>',es:'Mi<br><em>Diario</em>',fr:'Mon<br><em>Journal</em>',pt:'Meu<br><em>Diário</em>',pl:'Mój<br><em>Pamiętnik</em>'};daysPT.innerHTML=dp[S.lang]||dp.uk;}
 
   // Auth UI
   const authBtnText=document.getElementById('authBtnText');
@@ -1369,6 +1410,7 @@ window.addEventListener('load',()=>{
   buildColorPicker();buildChapterColors();
   if(loadSaved()){
     const sel=document.getElementById('navLang');if(sel)sel.value=S.lang;
+    applyTheme();
     applyLang();launch();
   } else {applyLang();}
   // PWA push
@@ -1394,9 +1436,9 @@ function launch(){
 function resetApp(){document.getElementById('intro').classList.remove('out');document.getElementById('app').classList.remove('on');}
 
 function defaultTrackers(){return[
-  {id:uid(),name:S.lang==='uk'?'Фізична активність':'Physical activity',cat:'sport',color:'#1858a8',period:'1yr',unit:'weeks',goal:52,done:[]},
-  {id:uid(),name:S.lang==='uk'?'Особисті фінанси':'Personal finance',cat:'finance',color:'#2a7848',period:'1yr',unit:'weeks',goal:48,done:[]},
-  {id:uid(),name:S.lang==='uk'?'Медитація':'Meditation',cat:'discipline',color:'#5848c0',period:'3mo',unit:'days',goal:60,done:[]},
+  {id:uid(),name:t('cats').sport? t('cats').sport+' '+t('cats').health : 'Physical activity',cat:'sport',color:'#1858a8',period:'1yr',unit:'weeks',goal:52,done:[]},
+  {id:uid(),name:t('cats').finance||'Personal finance',cat:'finance',color:'#2a7848',period:'1yr',unit:'weeks',goal:48,done:[]},
+  {id:uid(),name:t('cats').discipline||'Meditation',cat:'discipline',color:'#5848c0',period:'3mo',unit:'days',goal:60,done:[]},
 ];}
 
 // ══════════════════════════════════════
@@ -2065,6 +2107,16 @@ document.getElementById('tUnit').addEventListener('change',()=>{const p=document
 //  PRO
 // ══════════════════════════════════════
 function openPro(){document.getElementById('proOverlay').classList.add('open');}
+// ══ THEME TOGGLE ══
+function toggleTheme(){
+  S.theme=S.theme==='light'?'dark':'light';
+  applyTheme();save();
+}
+function applyTheme(){
+  document.documentElement.setAttribute('data-theme',S.theme||'dark');
+  const btn=document.getElementById('themeBtn');
+  if(btn)btn.textContent=S.theme==='light'?'🌙':'☀️';
+}
 function closePro(){document.getElementById('proOverlay').classList.remove('open');}
 function selPlan(el,p){document.querySelectorAll('.pro-plan').forEach(x=>x.classList.remove('on'));el.classList.add('on');}
 function doPro(){S.isPro=true;save();closePro();renderFreeBanner();renderTrackers();launchConfetti('#a07830');setTimeout(()=>alert(S.lang==='uk'?'Вітаємо у Pro! 🎉':'Welcome to Pro! 🎉'),300);}
@@ -2099,131 +2151,174 @@ function showPage(name,btn){
 // ══════════════════════════════════════
 //  DAYS GRID
 // ══════════════════════════════════════
+// ══════════════════════════════════════
+//  DIARY SYSTEM
+// ══════════════════════════════════════
+const MN_UK=['Січень','Лютий','Березень','Квітень','Травень','Червень','Липень','Серпень','Вересень','Жовтень','Листопад','Грудень'];
+const MN_EN=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DN_UK=['Нд','Пн','Вт','Ср','Чт','Пт','Сб'];
+const DN_EN=['Su','Mo','Tu','We','Th','Fr','Sa'];
+let diaryCurrentKey=null;
+
 function renderDaysGrid(){
-  if(!S.birth) return;
-  const birth=new Date(S.birth);
+  // Init year selector
+  const sel=document.getElementById('diaryYearSel');
+  if(sel&&!sel.options.length){
+    const ny=new Date().getFullYear();
+    for(let y=ny-3;y<=ny+1;y++){const o=document.createElement('option');o.value=y;o.textContent=y;if(y===ny)o.selected=true;sel.appendChild(o);}
+  }
+  renderDiaryGrid();
+}
+
+function renderDiaryGrid(){
   const now=new Date();
-  const MS=24*60*60*1000;
-  const totalDays=Math.floor(((new Date(birth)).setFullYear(birth.getFullYear()+S.lifespan)-birth)/MS);
-  const livedDays=Math.max(0,Math.floor((now-birth)/MS));
-  const dayOfYear=getDayOfYear(now);
-  const curYear=now.getFullYear();
+  const sel=document.getElementById('diaryYearSel');
+  const year=sel?+sel.value:now.getFullYear();
+  const isLeap=(year%4===0&&year%100!==0)||(year%400===0);
+  const totalDays=isLeap?366:365;
+  const doy=getDayOfYear(now);
+  const entries=Object.keys(S.diary||{}).filter(k=>k.startsWith(year+'_')).length;
 
-  // Update stats
-  const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  s('dsn0',livedDays.toLocaleString());
-  s('dss0',`≈ ${Math.floor(livedDays/365)} ${t('yr')} ${livedDays%365} ${S.lang==='uk'?'дн.':'days'}`);
-  s('dsn1',(totalDays-livedDays).toLocaleString());
-  s('dss1',`≈ ${Math.floor((totalDays-livedDays)/365)} ${t('yr')}`);
-  s('dsn2',dayOfYear);
-  s('dss2',S.lang==='uk'?'з 365':'of 365');
+  const sv=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  sv('dsn0',entries);sv('dss0',S.lang==='uk'?'нотаток':'notes');
+  sv('dsn1',doy);sv('dss1',S.lang==='uk'?'з 365':'of 365');
+  sv('dsn2',totalDays-doy);sv('dss2',S.lang==='uk'?'днів':'days');
 
-  // Update nav labels
-  const dayLabels={
-    ntDays:{uk:'Дні',en:'Days',de:'Tage',es:'Días',fr:'Jours',pt:'Dias',pl:'Dni'},
-  };
-  const ntDays=document.getElementById('ntDays');
-  if(ntDays) ntDays.textContent=(dayLabels.ntDays[S.lang]||'Дні');
-
-  const grid=document.getElementById('daysGrid');
+  const grid=document.getElementById('diaryGrid');if(!grid)return;
   grid.innerHTML='';
+  grid.style.cssText='display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px';
 
-  const DAYS_PER_ROW=73; // ~5 rows per year (365/5)
-  const yearsToShow=Math.min(S.lifespan,90);
+  const mn=S.lang==='uk'?MN_UK:MN_EN;
+  const dn=S.lang==='uk'?DN_UK:DN_EN;
 
-  for(let y=0;y<yearsToShow;y++){
-    const row=document.createElement('div');
-    row.style.cssText='display:flex;align-items:center;gap:2px;margin-bottom:2px';
+  for(let m=0;m<12;m++){
+    const card=document.createElement('div');
+    card.style.cssText='background:var(--s1);border:1px solid var(--b1);padding:14px 12px';
 
-    const lbl=document.createElement('div');
-    lbl.style.cssText='width:24px;font-size:7px;color:var(--muted2);text-align:right;flex-shrink:0';
-    lbl.textContent=(y%5===0)?y:'';
-    row.appendChild(lbl);
+    const hdr=document.createElement('div');
+    hdr.style.cssText='font-family:"Cormorant Garamond",serif;font-size:15px;font-weight:600;color:var(--gold);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center';
+    const mEntries=Object.keys(S.diary||{}).filter(k=>k.startsWith(year+'_'+m+'_')).length;
+    hdr.innerHTML=mn[m]+(mEntries?`<span style="font-size:9px;color:var(--muted);letter-spacing:1px">${mEntries} ${S.lang==='uk'?'зап.':'ent.'}</span>`:'');
+    card.appendChild(hdr);
 
-    const cells=document.createElement('div');
-    cells.style.cssText=`display:grid;grid-template-columns:repeat(${DAYS_PER_ROW},1fr);gap:1px;flex:1`;
+    // Day names
+    const dnRow=document.createElement('div');
+    dnRow.style.cssText='display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:3px';
+    dn.forEach(d=>{const el=document.createElement('div');el.style.cssText='font-size:6px;letter-spacing:.5px;color:var(--muted);text-align:center';el.textContent=d;dnRow.appendChild(el);});
+    card.appendChild(dnRow);
 
-    for(let d=0;d<DAYS_PER_ROW;d++){
-      const absDay=y*DAYS_PER_ROW+d;
-      const dayKey=`d_${y}_${d}`;
+    const dGrid=document.createElement('div');
+    dGrid.style.cssText='display:grid;grid-template-columns:repeat(7,1fr);gap:2px';
+
+    const firstDay=new Date(year,m,1).getDay();
+    for(let i=0;i<firstDay;i++){dGrid.appendChild(document.createElement('div'));}
+
+    const dim=new Date(year,m+1,0).getDate();
+    for(let d=1;d<=dim;d++){
+      const key=diaryKey(year,m,d);
+      const entry=S.diary&&S.diary[key];
+      const cd=new Date(year,m,d);
+      const isToday=year===now.getFullYear()&&m===now.getMonth()&&d===now.getDate();
+      const isPast=cd<new Date(now.getFullYear(),now.getMonth(),now.getDate());
+
       const cell=document.createElement('div');
-      cell.style.cssText='aspect-ratio:1;cursor:pointer;transition:transform .1s;position:relative';
+      cell.style.cssText='aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:9px;cursor:pointer;position:relative;transition:all .15s;border-radius:2px;font-family:"IBM Plex Mono",monospace';
+      cell.textContent=d;
 
-      // Determine state
-      if(S.markedDays&&S.markedDays[dayKey]){
-        cell.style.background='var(--gold)';cell.style.opacity='.9';
-      } else if(absDay<livedDays-1){
-        cell.style.background='var(--stone)';cell.style.opacity='.5';
-      } else if(absDay===livedDays-1){
-        cell.style.background='var(--gold)';cell.style.opacity='1';
-        cell.style.animation='pulse 3s infinite';
-        cell.style.color='var(--gold)';
+      if(entry&&entry.text){
+        cell.style.cssText+=';background:var(--gold);color:var(--bg);font-weight:700';
+      } else if(isToday){
+        cell.style.cssText+=';background:var(--goldd);color:var(--gold);font-weight:700;outline:1px solid var(--gold)';
+      } else if(isPast){
+        cell.style.cssText+=';background:var(--stone);color:var(--text2);opacity:.45';
       } else {
-        cell.style.background='var(--muted2)';cell.style.opacity='.2';
+        cell.style.cssText+=';color:var(--muted2);border:1px solid var(--b1)';
       }
 
-      // Note indicator
-      if(S.dayNotes&&S.dayNotes[dayKey]){
-        cell.style.outline='1px solid var(--blue)';cell.style.outlineOffset='-1px';
+      if(entry&&entry.mood){
+        const em=document.createElement('span');
+        em.style.cssText='position:absolute;top:-3px;right:-3px;font-size:7px;line-height:1;pointer-events:none';
+        em.textContent=entry.mood;cell.appendChild(em);
       }
 
       cell.addEventListener('mouseenter',e=>{
-        const bd=new Date(birth.getTime()+absDay*MS);
-        const ds=bd.toLocaleDateString(S.lang==='uk'?'uk-UA':'en-GB',{day:'numeric',month:'short',year:'numeric'});
-        tip(e,`${t('yrLbl')} ${y} · ${S.lang==='uk'?'День':'Day'} ${d+1}`,ds);
-        cell.style.transform='scale(2.2)';cell.style.zIndex='20';
+        cell.style.transform='scale(1.4)';cell.style.zIndex='10';
+        const ds=cd.toLocaleDateString(S.lang==='uk'?'uk-UA':'en-GB',{day:'numeric',month:'short'});
+        tip(e,ds,entry?(entry.mood||'')+' '+(entry.text||'').slice(0,40):'');
       });
       cell.addEventListener('mousemove',moveTip);
       cell.addEventListener('mouseleave',()=>{hideTip();cell.style.transform='';cell.style.zIndex='';});
-      cell.addEventListener('click',()=>toggleDay(dayKey,cell,absDay,livedDays));
-      cell.addEventListener('contextmenu',e=>{e.preventDefault();openDayNote(dayKey,y,d,birth,absDay);});
-      cells.appendChild(cell);
+      cell.addEventListener('click',()=>openDiaryModal(key,cd));
+      dGrid.appendChild(cell);
     }
-    row.appendChild(cells);
-    grid.appendChild(row);
+    card.appendChild(dGrid);
+    grid.appendChild(card);
   }
+  renderDiaryEntries(year);
 }
 
-function toggleDay(key,cell,abs,lived){
-  if(!S.markedDays)S.markedDays={};
-  if(S.markedDays[key]){
-    delete S.markedDays[key];
-    // restore
-    if(abs<lived-1){cell.style.background='var(--stone)';cell.style.opacity='.5';}
-    else if(abs===lived-1){cell.style.background='var(--gold)';cell.style.opacity='1';}
-    else{cell.style.background='var(--muted2)';cell.style.opacity='.2';}
-  } else {
-    S.markedDays[key]=true;
-    cell.style.background='var(--gold)';cell.style.opacity='.9';
+function diaryKey(year,month,day){return`${year}_${month}_${day}`;}
+
+function renderDiaryEntries(year){
+  const c=document.getElementById('diaryEntries');if(!c)return;
+  c.innerHTML='';
+  if(!S.diary)return;
+  const entries=Object.entries(S.diary).filter(([k])=>k.startsWith(year+'_')).sort((a,b)=>b[0].localeCompare(a[0]));
+  if(!entries.length){
+    c.innerHTML=`<div style="font-size:9px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;text-align:center;padding:32px 0">${S.lang==='uk'?'Записів поки немає':'No entries yet'}</div>`;
+    return;
   }
-  save();
+  const title=document.createElement('div');
+  title.style.cssText='font-size:8px;letter-spacing:5px;text-transform:uppercase;color:var(--muted);margin-bottom:20px;padding-top:8px;border-top:1px solid var(--b1)';
+  title.textContent=S.lang==='uk'?`Всі записи ${year}`:`All entries ${year}`;
+  c.appendChild(title);
+  entries.forEach(([key,entry])=>{
+    const [y,m,d]=key.split('_').map(Number);
+    const date=new Date(y,m,d);
+    const ds=date.toLocaleDateString(S.lang==='uk'?'uk-UA':'en-GB',{weekday:'long',day:'numeric',month:'long'});
+    const item=document.createElement('div');
+    item.style.cssText='border:1px solid var(--b1);background:var(--s1);padding:16px 20px;margin-bottom:8px;cursor:pointer;transition:border-color .2s';
+    item.onmouseover=()=>item.style.borderColor='var(--b2)';
+    item.onmouseout=()=>item.style.borderColor='var(--b1)';
+    item.onclick=()=>openDiaryModal(key,date);
+    item.innerHTML=`
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:${entry.text?'8px':'0'}">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">${ds}</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          ${entry.mood?`<span style="font-size:20px">${entry.mood}</span>`:''}
+          ${entry.rating?`<span style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--gold)">${entry.rating}/10</span>`:''}
+        </div>
+      </div>
+      ${entry.text?`<div style="font-size:11px;color:var(--text2);line-height:1.7">${entry.text.slice(0,200)}${entry.text.length>200?'...':''}  </div>`:''}`;
+    c.appendChild(item);
+  });
 }
 
-let dayNoteKey=null;
-function openDayNote(key,yr,d,birth,abs){
-  dayNoteKey=key;
-  const bd=new Date(birth.getTime()+abs*24*60*60*1000);
-  const ds=bd.toLocaleDateString(S.lang==='uk'?'uk-UA':'en-GB',{day:'numeric',month:'long',year:'numeric'});
-  document.getElementById('noteTitleWeek').textContent=ds;
-  document.getElementById('noteWeekInfo').textContent=`${t('yrLbl')} ${yr} · ${S.lang==='uk'?'День':'Day'} ${d+1}`;
-  const existing=S.dayNotes&&S.dayNotes[key]||{};
-  document.getElementById('noteText').value=existing.text||'';
-  document.querySelectorAll('#moodRow .mood-btn').forEach(b=>b.classList.toggle('on',b.dataset.mood===existing.mood));
-  // Override save to save day note
-  document.querySelector('#noteOverlay .mbtn-ok').onclick=saveDayNote;
-  document.getElementById('noteOverlay').classList.add('open');
+function openDiaryModal(key,date){
+  diaryCurrentKey=key;
+  const ds=date.toLocaleDateString(S.lang==='uk'?'uk-UA':'en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('diaryModalDate').textContent=ds;
+  const entry=S.diary&&S.diary[key]||{};
+  document.getElementById('diaryText').value=entry.text||'';
+  const rv=document.getElementById('diaryRating');if(rv)rv.value=entry.rating||7;
+  const rvv=document.getElementById('diaryRatingVal');if(rvv)rvv.textContent=entry.rating||7;
+  document.querySelectorAll('#diaryMoodRow .mood-btn').forEach(b=>b.classList.toggle('on',b.dataset.mood===entry.mood));
+  document.getElementById('diaryOverlay').classList.add('open');
 }
-function saveDayNote(){
-  const text=document.getElementById('noteText').value.trim();
-  const mood=document.querySelector('#moodRow .mood-btn.on')?.dataset.mood||'';
-  if(!S.dayNotes)S.dayNotes={};
-  if(text||mood)S.dayNotes[dayNoteKey]={text,mood};else delete S.dayNotes[dayNoteKey];
-  save();
-  document.getElementById('noteOverlay').classList.remove('open');
-  // Restore normal note save
-  document.querySelector('#noteOverlay .mbtn-ok').onclick=saveNote;
-  renderDaysGrid();
+function closeDiaryModal(){document.getElementById('diaryOverlay').classList.remove('open');}
+function selDiaryMood(btn){document.querySelectorAll('#diaryMoodRow .mood-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+function saveDiaryEntry(){
+  const text=document.getElementById('diaryText').value.trim();
+  const mood=document.querySelector('#diaryMoodRow .mood-btn.on')?.dataset.mood||'';
+  const rating=parseInt(document.getElementById('diaryRating').value)||7;
+  if(!S.diary)S.diary={};
+  if(text||mood){S.diary[diaryCurrentKey]={text,mood,rating,saved:new Date().toISOString()};}
+  else{delete S.diary[diaryCurrentKey];}
+  save();closeDiaryModal();renderDiaryGrid();
 }
+function toggleDay(){}
+function openDayNote(){}
+function saveDayNote(){}
 
 // ══════════════════════════════════════
 //  TOOLTIP
@@ -2305,9 +2400,9 @@ function updateSphere(key,val,max){
 }
 
 // Close handlers
-['noteOverlay','capsuleOverlay','reviewOverlay','chapterOverlay','trOverlay','proOverlay'].forEach(id=>{document.getElementById(id).addEventListener('click',e=>{if(e.target===document.getElementById(id))document.getElementById(id).classList.remove('open');});});
+['noteOverlay','capsuleOverlay','reviewOverlay','chapterOverlay','trOverlay','proOverlay','diaryOverlay'].forEach(id=>{document.getElementById(id).addEventListener('click',e=>{if(e.target===document.getElementById(id))document.getElementById(id).classList.remove('open');});});
 document.getElementById('certOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('certOverlay'))closeCert();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){['noteOverlay','capsuleOverlay','reviewOverlay','chapterOverlay','trOverlay','proOverlay'].forEach(id=>document.getElementById(id).classList.remove('open'));closeCert();document.getElementById('ctx').style.display='none';}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){['noteOverlay','capsuleOverlay','reviewOverlay','chapterOverlay','trOverlay','proOverlay','diaryOverlay'].forEach(id=>document.getElementById(id).classList.remove('open'));closeCert();document.getElementById('ctx').style.display='none';}});
 </script>
 <!-- AUTH MODAL -->
 <div class="auth-overlay" id="authOverlay">
@@ -2359,6 +2454,10 @@ function initFirebase(){
     else fbApp=firebase.apps[0];
     fbAuth=firebase.auth();
     fbDb=firebase.firestore();
+    // Handle redirect result (for mobile Google sign-in)
+    fbAuth.getRedirectResult().then(result=>{
+      if(result?.user) closeAuth();
+    }).catch(e=>console.log('Redirect result:',e));
     fbAuth.onAuthStateChanged(user=>{
       currentUser=user;
       updateAuthUI();
@@ -2423,11 +2522,26 @@ async function submitAuth(){
 
 async function signInWithGoogle(){
   if(!fbAuth){document.getElementById('authError').textContent='Firebase not configured';return;}
+  const errEl=document.getElementById('authError');
   try{
     const provider=new firebase.auth.GoogleAuthProvider();
-    await fbAuth.signInWithPopup(provider);
-    closeAuth();
-  }catch(e){document.getElementById('authError').textContent=e.message;}
+    provider.addScope('email');
+    provider.addScope('profile');
+    try{
+      const result=await fbAuth.signInWithPopup(provider);
+      if(result?.user) closeAuth();
+    }catch(popupErr){
+      if(popupErr.code==='auth/popup-blocked'||popupErr.code==='auth/popup-closed-by-user'){
+        await fbAuth.signInWithRedirect(provider);
+      } else if(popupErr.code==='auth/unauthorized-domain'){
+        if(errEl)errEl.textContent='⚠️ Додай mytimebox.app у Firebase → Authentication → Settings → Authorized domains';
+      } else {
+        throw popupErr;
+      }
+    }
+  }catch(e){
+    if(errEl)errEl.textContent=e.message;
+  }
 }
 
 async function signOut(){
