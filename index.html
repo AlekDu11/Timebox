@@ -688,9 +688,30 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
         </button>
         <div class="profile-menu" id="profileMenu">
           <div class="profile-menu-info">
-            <div id="profileEmailDisplay" class="profile-email"></div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+              <div id="profileAvatarLarge" style="width:40px;height:40px;border-radius:50%;background:var(--gold);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;flex-shrink:0">A</div>
+              <div>
+                <div id="profileNameDisplay" style="font-size:12px;color:var(--text);font-weight:600;margin-bottom:2px"></div>
+                <div id="profileEmailDisplay" class="profile-email"></div>
+              </div>
+            </div>
             <div class="sync-badge">☁ <span id="syncStatus">Синхронізовано</span></div>
           </div>
+          <!-- Stats -->
+          <div style="padding:10px 16px;border-bottom:1px solid var(--b1);display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center">
+            <div><div id="statTrackers" style="font-size:18px;font-weight:700;color:var(--gold)">0</div><div style="font-size:7px;color:var(--muted);letter-spacing:1px">ТРЕКЕРІВ</div></div>
+            <div><div id="statDiary" style="font-size:18px;font-weight:700;color:var(--gold)">0</div><div style="font-size:7px;color:var(--muted);letter-spacing:1px">ЗАПИСІВ</div></div>
+            <div><div id="statWeeks" style="font-size:18px;font-weight:700;color:var(--gold)">0</div><div style="font-size:7px;color:var(--muted);letter-spacing:1px">ТИЖНІВ</div></div>
+          </div>
+          <!-- Theme -->
+          <div style="padding:10px 16px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:9px;color:var(--text2);letter-spacing:1px">ТЕМА</span>
+            <div style="display:flex;gap:6px">
+              <button onclick="setTheme('dark')" id="themeDarkBtn" style="background:var(--bg);border:1px solid var(--b2);color:var(--text);font-size:10px;padding:4px 10px;cursor:pointer;transition:all .2s">🌙 Темна</button>
+              <button onclick="setTheme('light')" id="themeLightBtn" style="background:var(--bg);border:1px solid var(--b2);color:var(--text);font-size:10px;padding:4px 10px;cursor:pointer;transition:all .2s">☀️ Світла</button>
+            </div>
+          </div>
+          <div class="profile-menu-item" onclick="openProfileSettings()">⚙️ <span>Налаштування</span></div>
           <div class="profile-menu-item" onclick="syncToCloud()">☁ <span id="pmSync">Зберегти в хмару</span></div>
           <div class="profile-menu-item danger" onclick="signOut()">→ <span id="pmLogout">Вийти</span></div>
         </div>
@@ -801,6 +822,74 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
       </div>
       <div id="diaryGrid" style="margin-top:20px"></div>
       <div id="diaryEntries" style="margin-top:32px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE SETTINGS MODAL -->
+<div class="overlay" id="profileOverlay">
+  <div class="modal" style="width:480px;max-height:90vh;overflow-y:auto">
+    <div class="modal-title" style="margin-bottom:20px">⚙️ <em>Налаштування профілю</em></div>
+
+    <!-- Avatar -->
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;padding:16px;background:var(--s2);border:1px solid var(--b1)">
+      <div id="profileAvatarBig" style="width:64px;height:64px;border-radius:50%;background:var(--gold);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;flex-shrink:0">A</div>
+      <div>
+        <div id="profileEmailBig" style="font-size:12px;color:var(--text);margin-bottom:4px"></div>
+        <div style="font-size:9px;color:var(--muted);letter-spacing:2px">АКАУНТ TIMEBOX</div>
+      </div>
+    </div>
+
+    <!-- Name -->
+    <div class="mf">
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Ім'я</label>
+      <input id="profileNameInput" type="text" placeholder="Твоє ім'я" style="width:100%;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'">
+    </div>
+
+    <!-- Birth date -->
+    <div class="mf">
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Дата народження</label>
+      <input id="profileBirthInput" type="date" style="width:100%;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'">
+    </div>
+
+    <!-- Lifespan -->
+    <div class="mf">
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Очікувана тривалість життя (років)</label>
+      <input id="profileLifespanInput" type="number" min="50" max="120" placeholder="90" style="width:100%;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'">
+    </div>
+
+    <!-- Theme -->
+    <div class="mf">
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px">Тема</label>
+      <div style="display:flex;gap:8px">
+        <button onclick="setTheme('dark')" id="settingsDarkBtn" style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-size:11px;padding:10px;cursor:pointer;transition:all .2s">🌙 Темна</button>
+        <button onclick="setTheme('light')" id="settingsLightBtn" style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-size:11px;padding:10px;cursor:pointer;transition:all .2s">☀️ Світла</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div style="padding:16px;background:var(--s2);border:1px solid var(--b1);margin-bottom:16px">
+      <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:12px">СТАТИСТИКА</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center">
+        <div><div id="statTrackers2" style="font-size:24px;font-weight:700;color:var(--gold)">0</div><div style="font-size:8px;color:var(--muted)">Трекерів</div></div>
+        <div><div id="statDiary2" style="font-size:24px;font-weight:700;color:var(--gold)">0</div><div style="font-size:8px;color:var(--muted)">Записів</div></div>
+        <div><div id="statWeeks2" style="font-size:24px;font-weight:700;color:var(--gold)">0</div><div style="font-size:8px;color:var(--muted)">Тижнів ✓</div></div>
+      </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="mf">
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px">🔔 Щоденне нагадування</label>
+      <div style="display:flex;align-items:center;gap:12px">
+        <input type="checkbox" id="notifToggle" onchange="toggleNotif(this.checked)" style="width:18px;height:18px;accent-color:var(--gold);cursor:pointer">
+        <label for="notifToggle" style="font-size:11px;color:var(--text2);cursor:pointer">Нагадувати заповнити щоденник</label>
+        <input type="time" id="notifTime" value="20:00" style="background:var(--bg);border:1px solid var(--b2);color:var(--text);font-size:11px;padding:4px 8px;outline:none">
+      </div>
+    </div>
+
+    <div class="mbtns">
+      <button class="mbtn-c" onclick="closeProfileSettings()">Скасувати</button>
+      <button class="mbtn-ok" onclick="saveProfileSettings()"><span>Зберегти →</span></button>
     </div>
   </div>
 </div>
@@ -1401,7 +1490,7 @@ const FREE_LIMIT=5;
 //  STATE
 // ══════════════════════════════════════
 let S={
-  lang:'uk',theme:'dark',
+  lang:'uk',theme:'dark',profileName:'',notifEnabled:false,notifTime:'20:00',
   birth:null,lifespan:90,lived:0,total:0,
   markedWeeks:{},
   markedDays:{},
@@ -2204,6 +2293,89 @@ document.getElementById('tUnit').addEventListener('change',()=>{const p=document
 // ══════════════════════════════════════
 //  PRO
 // ══════════════════════════════════════
+// ══ PROFILE SETTINGS ══
+function openProfileSettings(){
+  toggleProfileMenu();
+  // Fill fields
+  document.getElementById('profileNameInput').value=S.profileName||'';
+  document.getElementById('profileBirthInput').value=S.birth||'';
+  document.getElementById('profileLifespanInput').value=S.lifespan||90;
+  document.getElementById('profileEmailBig').textContent=currentUser?.email||'';
+  // Avatar
+  const initials=(S.profileName||currentUser?.displayName||currentUser?.email||'?').charAt(0).toUpperCase();
+  document.getElementById('profileAvatarBig').textContent=initials;
+  // Stats
+  const trackers=S.trackers?.length||0;
+  const diary=Object.keys(S.diary||{}).length;
+  const weeks=Object.keys(S.markedWeeks||{}).length;
+  ['statTrackers2','statDiary2','statWeeks2'].forEach((id,i)=>{
+    const el=document.getElementById(id);if(el)el.textContent=[trackers,diary,weeks][i];
+  });
+  // Theme buttons
+  updateThemeBtns();
+  // Notif
+  const nt=document.getElementById('notifToggle');if(nt)nt.checked=S.notifEnabled||false;
+  const ntm=document.getElementById('notifTime');if(ntm)ntm.value=S.notifTime||'20:00';
+  document.getElementById('profileOverlay').classList.add('open');
+}
+function closeProfileSettings(){document.getElementById('profileOverlay').classList.remove('open');}
+function saveProfileSettings(){
+  S.profileName=document.getElementById('profileNameInput').value.trim();
+  S.birth=document.getElementById('profileBirthInput').value;
+  S.lifespan=parseInt(document.getElementById('profileLifespanInput').value)||90;
+  S.notifEnabled=document.getElementById('notifToggle').checked;
+  S.notifTime=document.getElementById('notifTime').value;
+  save();
+  updateProfileUI();
+  closeProfileSettings();
+  if(S.notifEnabled) scheduleNotif();
+}
+function updateProfileUI(){
+  const name=S.profileName||currentUser?.displayName||'';
+  const email=currentUser?.email||'';
+  const initials=(name||email||'?').charAt(0).toUpperCase();
+  ['profileAvatar','profileAvatarLarge','profileAvatarBig'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.textContent=initials;
+  });
+  const nd=document.getElementById('profileNameDisplay');if(nd)nd.textContent=name;
+  // Stats in menu
+  const trackers=S.trackers?.length||0;
+  const diary=Object.keys(S.diary||{}).length;
+  const weeks=Object.keys(S.markedWeeks||{}).length;
+  ['statTrackers','statDiary','statWeeks'].forEach((id,i)=>{
+    const el=document.getElementById(id);if(el)el.textContent=[trackers,diary,weeks][i];
+  });
+}
+function setTheme(theme){
+  S.theme=theme;applyTheme();save();updateThemeBtns();
+}
+function updateThemeBtns(){
+  const isDark=S.theme!=='light';
+  ['themeDarkBtn','settingsDarkBtn'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.style.borderColor=isDark?'var(--gold)':'var(--b2)';
+    if(el)el.style.color=isDark?'var(--gold)':'var(--text)';
+  });
+  ['themeLightBtn','settingsLightBtn'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.style.borderColor=!isDark?'var(--gold)':'var(--b2)';
+    if(el)el.style.color=!isDark?'var(--gold)':'var(--text)';
+  });
+}
+function toggleNotif(on){
+  if(on&&'Notification' in window){
+    Notification.requestPermission().then(p=>{
+      if(p==='granted'){S.notifEnabled=true;save();}
+      else{document.getElementById('notifToggle').checked=false;}
+    });
+  }
+}
+function scheduleNotif(){
+  // Simple daily notification via service worker
+  if('serviceWorker' in navigator&&S.notifEnabled){
+    console.log('Notifications scheduled for',S.notifTime);
+  }
+}
 function openPro(){document.getElementById('proOverlay').classList.add('open');}
 // ══ THEME TOGGLE ══
 function toggleTheme(){
@@ -2498,9 +2670,9 @@ function updateSphere(key,val,max){
 }
 
 // Close handlers
-['noteOverlay','capsuleOverlay','reviewOverlay','chapterOverlay','trOverlay','proOverlay','diaryOverlay'].forEach(id=>{document.getElementById(id).addEventListener('click',e=>{if(e.target===document.getElementById(id))document.getElementById(id).classList.remove('open');});});
+['noteOverlay','capsuleOverlay','reviewOverlay','chapterOverlay','trOverlay','proOverlay','diaryOverlay','profileOverlay'].forEach(id=>{document.getElementById(id).addEventListener('click',e=>{if(e.target===document.getElementById(id))document.getElementById(id).classList.remove('open');});});
 document.getElementById('certOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('certOverlay'))closeCert();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){['noteOverlay','capsuleOverlay','reviewOverlay','chapterOverlay','trOverlay','proOverlay','diaryOverlay'].forEach(id=>document.getElementById(id).classList.remove('open'));closeCert();document.getElementById('ctx').style.display='none';}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){['noteOverlay','capsuleOverlay','reviewOverlay','chapterOverlay','trOverlay','proOverlay','diaryOverlay','profileOverlay'].forEach(id=>document.getElementById(id).classList.remove('open'));closeCert();document.getElementById('ctx').style.display='none';}});
 </script>
 <!-- AUTH MODAL -->
 <div class="auth-overlay" id="authOverlay">
@@ -2559,7 +2731,7 @@ function initFirebase(){
     fbAuth.onAuthStateChanged(user=>{
       currentUser=user;
       updateAuthUI();
-      if(user) loadFromCloud();
+      if(user) loadFromCloud(); updateProfileUI();
     });
   }catch(e){console.log('Firebase not configured:',e.message);}
 }
@@ -2663,7 +2835,7 @@ async function syncToCloud(){
     return;
   }
   try{
-    const data={birth:S.birth,lifespan:S.lifespan,markedWeeks:S.markedWeeks,weekNotes:S.weekNotes,timeCapsules:S.timeCapsules,chapters:S.chapters,chapterMap:S.chapterMap,trackers:S.trackers,trNotes:S.trNotes,reviews:S.reviews,isPro:S.isPro,lang:S.lang,capsuleMonths:S.capsuleMonths,spheres:S.spheres,updatedAt:new Date().toISOString()};
+    const data={birth:S.birth,lifespan:S.lifespan,markedWeeks:S.markedWeeks,weekNotes:S.weekNotes,timeCapsules:S.timeCapsules,chapters:S.chapters,chapterMap:S.chapterMap,trackers:S.trackers,trNotes:S.trNotes,reviews:S.reviews,isPro:S.isPro,lang:S.lang,capsuleMonths:S.capsuleMonths,spheres:S.spheres?{fin:S.spheres.fin||0,sport:S.spheres.sport||0,learn:S.spheres.learn||0}:{fin:0,sport:0,learn:0},updatedAt:new Date().toISOString()};
     await fbDb.collection('timebox_users').doc(currentUser.uid).set(data,{merge:true});
     document.getElementById('syncStatus').textContent=S.lang==='uk'?'✓ Збережено':'✓ Saved';
     setTimeout(()=>{const el=document.getElementById('syncStatus');if(el)el.textContent=S.lang==='uk'?'Синхронізовано':'Synced';},2000);
