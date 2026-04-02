@@ -692,7 +692,9 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
       <button class="ntab" id="ntLife" onclick="showPage('life',this)">Моє Життя</button>
       <button class="ntab" id="ntTr" onclick="showPage('trackers',this)">Мої Трекери</button>
       <button class="ntab" id="ntDays" onclick="showPage('days',this)">Щоденник</button>
-      <button class="ntab" id="ntVision" onclick="showPage('vision',this)">Мрії</button>
+      <button class="ntab" id="ntVision" onclick="showPage('vision',this)">Мої Мрії</button>
+      <button class="ntab" id="ntPlan" onclick="showPage('plan',this)">Планер</button>
+      <button class="ntab" id="ntGrat" onclick="showPage('grat',this)">Вдячність</button>
     </div>
     <div class="nav-right">
       <span class="nav-age" id="navAge"></span>
@@ -734,7 +736,7 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
           <div class="profile-menu-item danger" onclick="signOut()">→ <span id="pmLogout">Вийти</span></div>
         </div>
       </div>
-      <button class="pro-nav" id="navProBtn" onclick="openPro()">✦ PRO</button>
+      
       <select id="navLang" onchange="setLang(this.value)" style="background:var(--s1);border:1px solid var(--b2);color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:9px;padding:4px 8px;outline:none;cursor:pointer;transition:all .2s">
         <option value="uk">🇺🇦 УКР</option>
         <option value="en">🇬🇧 EN</option>
@@ -856,6 +858,90 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
         <div style="font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--text2);margin-bottom:8px">Твоя дошка мрій порожня</div>
         <div style="font-size:10px;color:var(--muted);letter-spacing:2px">Додай перше фото своєї мрії</div>
       </div>
+    </div>
+  </div>
+
+  <!-- PLANNER PAGE -->
+  <div class="page" id="page-plan">
+    <div class="inner">
+      <div class="life-head">
+        <div class="ptitle">Мій<br><em>Планер</em></div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <select id="planYearSel" onchange="renderPlanner()" style="background:var(--s1);border:1px solid var(--b2);color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:6px 10px;outline:none;cursor:pointer"></select>
+        </div>
+      </div>
+      <div class="stats-strip" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px">
+        <div class="stile"><div class="sl">Задач сьогодні</div><div class="sn" id="planTodayTotal" style="color:var(--gold)">0</div><div class="ss" id="planTodayDone">виконано 0</div></div>
+        <div class="stile"><div class="sl">За місяць</div><div class="sn" id="planMonthTotal">0</div><div class="ss" id="planMonthDone">—</div></div>
+        <div class="stile"><div class="sl">Прогрес дня</div><div class="sn" id="planDayPct" style="color:var(--gold)">0%</div><div class="ss">виконання</div></div>
+      </div>
+      <div id="plannerGrid"></div>
+    </div>
+  </div>
+
+  <!-- GRATITUDE PAGE -->
+  <div class="page" id="page-grat">
+    <div class="inner">
+      <div class="life-head">
+        <div class="ptitle">Моя<br><em>Вдячність</em></div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <select id="gratYearSel" onchange="renderGratitude()" style="background:var(--s1);border:1px solid var(--b2);color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:6px 10px;outline:none;cursor:pointer"></select>
+        </div>
+      </div>
+      <div class="stats-strip" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px">
+        <div class="stile"><div class="sl">Записів сьогодні</div><div class="sn" id="gratTodayCount" style="color:var(--gold)">0</div><div class="ss">з 30</div></div>
+        <div class="stile"><div class="sl">Днів підряд</div><div class="sn" id="gratStreak">0</div><div class="ss">серія</div></div>
+        <div class="stile"><div class="sl">Всього записів</div><div class="sn" id="gratTotal">0</div><div class="ss">за рік</div></div>
+      </div>
+      <!-- Today's gratitude -->
+      <div style="background:var(--s1);border:1px solid var(--b1);padding:20px;margin-bottom:24px">
+        <div style="font-size:8px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-bottom:14px">СЬОГОДНІ Я ВДЯЧНИЙ(НА) ЗА...</div>
+        <div id="gratTodayList" style="margin-bottom:12px"></div>
+        <div style="display:flex;gap:8px">
+          <input id="gratInput" type="text" placeholder="Введи свою вдячність або вибери нижче..." style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:12px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'" onkeydown="if(event.key==='Enter')addGratitude()">
+          <button onclick="addGratitude()" style="background:var(--gold);border:none;color:var(--bg);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;padding:10px 16px;cursor:pointer;font-weight:700">+</button>
+        </div>
+        <!-- Suggestions -->
+        <div style="margin-top:12px">
+          <div style="font-size:7px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:8px">Підказки:</div>
+          <div id="gratSuggestions" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+        </div>
+        <!-- Progress bar -->
+        <div style="margin-top:14px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+            <span style="font-size:8px;letter-spacing:2px;color:var(--muted)">ПРОГРЕС ДНЯ</span>
+            <span id="gratPctLbl" style="font-size:8px;letter-spacing:2px;color:var(--gold)">0 / 30</span>
+          </div>
+          <div style="background:var(--s2);height:4px;border-radius:2px">
+            <div id="gratPctBar" style="height:100%;background:var(--gold);border-radius:2px;transition:width .3s;width:0%"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Calendar -->
+      <div id="gratCalendar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PLANNER TASK MODAL -->
+<div class="overlay" id="planOverlay">
+  <div class="modal" style="width:440px">
+    <div class="modal-title" style="margin-bottom:16px"><em id="planModalTitle">Нова задача</em></div>
+    <div class="mf">
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Задача</label>
+      <input id="planTaskText" type="text" placeholder="Що потрібно зробити?" style="width:100%;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'" onkeydown="if(event.key==='Enter')savePlanTask()">
+    </div>
+    <div class="mf">
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Пріоритет</label>
+      <div style="display:flex;gap:8px">
+        <button class="plan-pri-btn on" data-pri="normal" onclick="selPlanPri(this)" style="flex:1;background:var(--s2);border:1px solid var(--b2);color:var(--text2);font-size:10px;padding:8px;cursor:pointer;transition:all .2s">⚪ Звичайна</button>
+        <button class="plan-pri-btn" data-pri="high" onclick="selPlanPri(this)" style="flex:1;background:var(--s2);border:1px solid var(--b2);color:var(--text2);font-size:10px;padding:8px;cursor:pointer;transition:all .2s">🔴 Висока</button>
+        <button class="plan-pri-btn" data-pri="low" onclick="selPlanPri(this)" style="flex:1;background:var(--s2);border:1px solid var(--b2);color:var(--text2);font-size:10px;padding:8px;cursor:pointer;transition:all .2s">🔵 Низька</button>
+      </div>
+    </div>
+    <div class="mbtns">
+      <button class="mbtn-c" onclick="closePlanModal()">Скасувати</button>
+      <button class="mbtn-ok" onclick="savePlanTask()"><span>Зберегти →</span></button>
     </div>
   </div>
 </div>
@@ -1132,6 +1218,14 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
     <div class="mf"><label id="trl-period">Період</label><select id="tPeriod"></select></div>
     <div class="mf"><label id="trl-unit">Одиниця</label><select id="tUnit"></select></div>
     <div class="mf"><label id="trl-goal">Ціль</label><input type="number" id="tGoal" value="52" min="1"></div>
+    <div class="mf">
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px" id="trl-startdate">Дата старту</label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="date" id="tStartDate" style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:12px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'">
+        <button onclick="document.getElementById('tStartDate').value=new Date().toISOString().split('T')[0]" style="background:var(--s2);border:1px solid var(--b2);color:var(--muted);font-size:9px;letter-spacing:1px;padding:6px 10px;cursor:pointer;white-space:nowrap" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--b2)'">Сьогодні</button>
+      </div>
+      <div style="font-size:9px;color:var(--muted);margin-top:6px;letter-spacing:1px">Клітинки рахуються від цієї дати</div>
+    </div>
     <div class="mf"><label id="trl-color">Колір</label><div class="cswatches" id="cSwatches"></div></div>
     <div class="mbtns">
       <button class="mbtn-c" onclick="closeTrModal()">Скасувати</button>
@@ -1206,7 +1300,7 @@ uk:{
   iSub:'4680 тижнів · 90 років · кожен має значення',
   lBirth:'Дата народження',lLife:'Тривалість (років)',
   btnStart:'Почати →',
-  navHome:'Головна',navLife:'Моє Життя',navTr:'Мої Трекери',navDays:'Щоденник',navLang:'EN',
+  navHome:'Головна',navLife:'Моє Життя',navTr:'Мої Трекери',navDays:'Щоденник',navVision:'Мої Мрії',navPlan:'Планер',navGrat:'Вдячність',navLang:'EN',
   hTagline:'Твій особистий дашборд',
   hTitle:'Твоє<br><em>Життя</em>',
   hDesc:'Візуалізуй своє життя у тижнях. Відстежуй прогрес у спорті, фінансах, навчанні та будь-яких цілях. Пиши нотатки до кожного тижня. Залишай листи собі в майбутнє.',
@@ -1271,7 +1365,7 @@ en:{
   iSub:'4680 weeks · 90 years · each one matters',
   lBirth:'Date of birth',lLife:'Lifespan (years)',
   btnStart:'Start →',
-  navHome:'Home',navLife:'My Life',navTr:'My Trackers',navDays:'Diary',navLang:'УКР',
+  navHome:'Home',navLife:'My Life',navTr:'My Trackers',navDays:'Diary',navVision:'My Dreams',navPlan:'Planner',navGrat:'Gratitude',navLang:'УКР',
   hTagline:'Your personal dashboard',
   hTitle:'Your<br><em>Life</em>',
   hDesc:'Visualize your life in weeks. Track progress in sport, finance, learning, and any goal. Write notes for each week. Leave letters to your future self.',
@@ -1333,7 +1427,7 @@ en:{
 de:{
   iTitle:'Dein<br>Leben in <em>Wochen</em>',iSub:'4680 Wochen · 90 Jahre · jede zählt',
   lBirth:'Geburtsdatum',lLife:'Lebenserwartung (Jahre)',btnStart:'Starten →',
-  navHome:'Startseite',navLife:'Mein Leben',navTr:'Meine Tracker',navDays:'Tagebuch',navLang:'DE',
+  navHome:'Startseite',navLife:'Mein Leben',navTr:'Meine Tracker',navDays:'Tagebuch',navVision:'Meine Träume',navPlan:'Planer',navGrat:'Dankbarkeit',navLang:'DE',
   hTagline:'Dein persönliches Dashboard',hTitle:'Dein<br><em>Leben</em>',
   hDesc:'Visualisiere dein Leben in Wochen. Verfolge Fortschritte in Sport, Finanzen und Lernen.',
   hsl1:'Gelebte Wochen',hsl2:'Verbleibend',hsl3:'Alter',hsl4:'% gelebt',
@@ -1378,7 +1472,7 @@ de:{
 es:{
   iTitle:'Tu<br>Vida en <em>Semanas</em>',iSub:'4680 semanas · 90 años · cada una importa',
   lBirth:'Fecha de nacimiento',lLife:'Esperanza de vida (años)',btnStart:'Comenzar →',
-  navHome:'Inicio',navLife:'Mi Vida',navTr:'Mis Trackers',navDays:'Diario',navLang:'ES',
+  navHome:'Inicio',navLife:'Mi Vida',navTr:'Mis Trackers',navDays:'Diario',navVision:'Mis Sueños',navPlan:'Planificador',navGrat:'Gratitud',navLang:'ES',
   hTagline:'Tu panel personal',hTitle:'Tu<br><em>Vida</em>',
   hDesc:'Visualiza tu vida en semanas. Sigue el progreso en deporte, finanzas y aprendizaje.',
   hsl1:'Semanas vividas',hsl2:'Restantes',hsl3:'Edad',hsl4:'% vivido',
@@ -1423,7 +1517,7 @@ es:{
 fr:{
   iTitle:'Ta<br>Vie en <em>Semaines</em>',iSub:'4680 semaines · 90 ans · chacune compte',
   lBirth:'Date de naissance',lLife:'Espérance de vie (ans)',btnStart:'Commencer →',
-  navHome:'Accueil',navLife:'Ma Vie',navTr:'Mes Trackers',navDays:'Journal',navLang:'FR',
+  navHome:'Accueil',navLife:'Ma Vie',navTr:'Mes Trackers',navDays:'Journal',navVision:'Mes Rêves',navPlan:'Planificateur',navGrat:'Gratitude',navLang:'FR',
   hTagline:'Ton tableau de bord personnel',hTitle:'Ta<br><em>Vie</em>',
   hDesc:'Visualise ta vie en semaines. Suis tes progrès en sport, finances et apprentissage.',
   hsl1:'Semaines vécues',hsl2:'Restantes',hsl3:'Âge',hsl4:'% vécu',
@@ -1468,7 +1562,7 @@ fr:{
 pt:{
   iTitle:'A Tua<br>Vida em <em>Semanas</em>',iSub:'4680 semanas · 90 anos · cada uma importa',
   lBirth:'Data de nascimento',lLife:'Esperança de vida (anos)',btnStart:'Começar →',
-  navHome:'Início',navLife:'Minha Vida',navTr:'Meus Rastreadores',navDays:'Diário',navLang:'PT',
+  navHome:'Início',navLife:'Minha Vida',navTr:'Meus Rastreadores',navDays:'Diário',navVision:'Meus Sonhos',navPlan:'Planejador',navGrat:'Gratidão',navLang:'PT',
   hTagline:'O teu painel pessoal',hTitle:'A Tua<br><em>Vida</em>',
   hDesc:'Visualiza a tua vida em semanas. Acompanha progressos em desporto, finanças e aprendizagem.',
   hsl1:'Semanas vividas',hsl2:'Restantes',hsl3:'Idade',hsl4:'% vivido',
@@ -1513,7 +1607,7 @@ pt:{
 pl:{
   iTitle:'Twoje<br>Życie w <em>Tygodniach</em>',iSub:'4680 tygodni · 90 lat · każdy ma znaczenie',
   lBirth:'Data urodzenia',lLife:'Oczekiwana długość życia (lat)',btnStart:'Rozpocznij →',
-  navHome:'Strona główna',navLife:'Moje Życie',navTr:'Moje Trackery',navDays:'Pamiętnik',navLang:'PL',
+  navHome:'Strona główna',navLife:'Moje Życie',navTr:'Moje Trackery',navDays:'Pamiętnik',navVision:'Moje Marzenia',navPlan:'Planer',navGrat:'Wdzięczność',navLang:'PL',
   hTagline:'Twój osobisty pulpit',hTitle:'Twoje<br><em>Życie</em>',
   hDesc:'Wizualizuj swoje życie w tygodniach. Śledź postępy w sporcie, finansach i nauce.',
   hsl1:'Przeżytych tygodni',hsl2:'Pozostało',hsl3:'Wiek',hsl4:'% przeżytego',
@@ -1562,13 +1656,13 @@ pl:{
 const COLORS=['#a07830','#5848c0','#2a7848','#1858a8','#b85818','#a03878','#187870','#586820','#704060','#204870','#c8a050','#e05030','#2878c0','#70a030','#c030c0'];
 const CHAPTER_COLORS=['#e8a040','#6870e0','#48b878','#4898d8','#e85050','#d060a8','#38b8b0','#a0c040','#c878e8','#e88040','#f0c040','#40d0b0','#e06090','#60b0e0','#b0e040'];
 const PERIOD_U={weeks:{'none':52,'3mo':13,'1yr':52,'2yr':104,'5yr':260,'10yr':520},days:{'none':365,'3mo':91,'1yr':365,'2yr':730,'5yr':1825,'10yr':3650},years:{'none':1,'3mo':0,'1yr':1,'2yr':2,'5yr':5,'10yr':10},none:{'none':0,'3mo':0,'1yr':0,'2yr':0,'5yr':0,'10yr':0}};
-const FREE_LIMIT=5;
+const FREE_LIMIT=999;
 
 // ══════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════
 let S={
-  lang:'uk',theme:'dark',profileName:'',notifEnabled:false,notifTime:'20:00',dreams:[],
+  lang:'uk',theme:'dark',profileName:'',notifEnabled:false,notifTime:'20:00',dreams:[],tasks:{},gratitude:{},
   birth:null,lifespan:90,lived:0,total:0,
   markedWeeks:{},
   markedDays:{},
@@ -1592,7 +1686,7 @@ let S={
 const t=k=>(T[S.lang]||T.uk)[k]||k;
 function save(){localStorage.setItem('timebox',JSON.stringify({birth:S.birth,lifespan:S.lifespan,markedWeeks:S.markedWeeks,markedDays:S.markedDays||{},weekNotes:S.weekNotes,dayNotes:S.dayNotes||{},diary:S.diary||{},timeCapsules:S.timeCapsules,chapters:S.chapters,chapterMap:S.chapterMap,trackers:S.trackers,trNotes:S.trNotes,reviews:S.reviews,isPro:S.isPro,lang:S.lang,capsuleYrs:S.capsuleYrs,capsuleMonths:S.capsuleMonths,spheres:S.spheres,customCats:S.customCats||{},theme:S.theme||'dark'}))}
 
-function loadSaved(){try{const d=JSON.parse(localStorage.getItem('timebox')||localStorage.getItem('mv7'));if(d?.birth){Object.assign(S,d);if(!S.trNotes)S.trNotes={};if(!S.markedDays)S.markedDays={};if(!S.dayNotes)S.dayNotes={};if(!S.capsuleMonths)S.capsuleMonths=12;if(!S.capsuleYrs)S.capsuleYrs=1;if(!S.spheres)S.spheres={fin:0,sport:0,learn:0};if(!S.customCats)S.customCats={};if(!S.diary)S.diary={};if(!S.dreams)S.dreams=[];return true}}catch(e){}return false}
+function loadSaved(){try{const d=JSON.parse(localStorage.getItem('timebox')||localStorage.getItem('mv7'));if(d?.birth){Object.assign(S,d);if(!S.trNotes)S.trNotes={};if(!S.markedDays)S.markedDays={};if(!S.dayNotes)S.dayNotes={};if(!S.capsuleMonths)S.capsuleMonths=12;if(!S.capsuleYrs)S.capsuleYrs=1;if(!S.spheres)S.spheres={fin:0,sport:0,learn:0};if(!S.customCats)S.customCats={};if(!S.diary)S.diary={};if(!S.dreams)S.dreams=[];if(!S.tasks)S.tasks={};if(!S.gratitude)S.gratitude={};return true}}catch(e){}return false}
 function uid(){return Math.random().toString(36).slice(2,9)}
 function getWeekOfYear(d){const s=new Date(d.getFullYear(),0,1);return Math.ceil(((d-s)/86400000+s.getDay()+1)/7)}
 function getDayOfYear(d){return Math.ceil((d-new Date(d.getFullYear(),0,1))/86400000)+1}
@@ -1634,7 +1728,7 @@ function applyLang(){
     'lChName','lChColor'];
   ids.forEach(id=>{const el=document.getElementById(id);if(!el)return;const v=t(id);el.innerHTML!==undefined?el.innerHTML=v:el.textContent=v;});
   // Nav tabs with correct translation keys
-  [{id:'ntHome',key:'navHome'},{id:'ntLife',key:'navLife'},{id:'ntTr',key:'navTr'},{id:'ntVision',key:'navVision'}].forEach(({id,key})=>{const el=document.getElementById(id);if(el)el.textContent=t(key);});
+  [{id:'ntHome',key:'navHome',fb:'Головна'},{id:'ntLife',key:'navLife',fb:'Моє Життя'},{id:'ntTr',key:'navTr',fb:'Мої Трекери'},{id:'ntVision',key:'navVision',fb:'Мої Мрії'},{id:'ntPlan',key:'navPlan',fb:'Планер'},{id:'ntGrat',key:'navGrat',fb:'Вдячність'}].forEach(({id,key,fb})=>{const el=document.getElementById(id);if(el){const v=t(key);el.textContent=(v&&v!==key)?v:fb;}});
   const _diaryTab=document.getElementById('ntDays');
   if(_diaryTab){const _dl={uk:'Щоденник',en:'Diary',de:'Tagebuch',es:'Diario',fr:'Journal',pt:'Diário',pl:'Pamiętnik'};_diaryTab.textContent=t('navDays')||_dl[S.lang]||'Diary';}
   document.getElementById('iTitle').innerHTML=t('iTitle');
@@ -2121,6 +2215,7 @@ function renderHomeTr(){
   const icons=t('catIcons');const cats=t('cats');
   S.trackers.forEach(tr=>{
     const done=tr.done.length;const pct=Math.min(100,Math.round((done/tr.goal)*100));
+  const startDateStr=tr.startDate?new Date(tr.startDate).toLocaleDateString(S.lang==='uk'?'uk-UA':'en-GB',{day:'numeric',month:'short',year:'numeric'}):'';
     const streak=calcStreak(tr);
     const div=document.createElement('div');div.className='htcard';
     div.innerHTML=`<div class="htcard-top" style="background:${tr.color}"></div>
@@ -2147,8 +2242,44 @@ function getTotalUnits(tr){
   if(u==='none'||p==='none') return 0;
   return PERIOD_U[u]?.[p]||52;
 }
-function getStartIdx(tr){return tr.unit==='years'?new Date(S.birth).getFullYear():1;}
-function getCurIdx(tr){const now=new Date();if(tr.unit==='weeks')return getWeekOfYear(now);if(tr.unit==='days')return getDayOfYear(now);return now.getFullYear();}
+function getStartIdx(tr){
+  if(tr.startDate){
+    const start=new Date(tr.startDate);
+    if(tr.unit==='weeks') return getWeekOfYear(start);
+    if(tr.unit==='days') return getDayOfYear(start);
+    if(tr.unit==='years') return start.getFullYear();
+    return 1;
+  }
+  return tr.unit==='years'?new Date(S.birth).getFullYear():1;
+}
+function getCurIdx(tr){
+  const now=new Date();
+  if(tr.startDate){
+    const start=new Date(tr.startDate);
+    const diffMs=now-start;
+    const diffDays=Math.floor(diffMs/(1000*60*60*24));
+    if(tr.unit==='days') return diffDays+1;
+    if(tr.unit==='weeks') return Math.floor(diffDays/7)+1;
+    if(tr.unit==='months') return Math.floor(diffDays/30)+1;
+    if(tr.unit==='years') return Math.floor(diffDays/365)+1;
+    return diffDays+1;
+  }
+  if(tr.unit==='weeks') return getWeekOfYear(now);
+  if(tr.unit==='days') return getDayOfYear(now);
+  return now.getFullYear();
+}
+// Get date label for tracker cell
+function getTrCellDate(tr, idx){
+  if(tr.startDate){
+    const start=new Date(tr.startDate);
+    let d=new Date(start);
+    if(tr.unit==='days') d.setDate(d.getDate()+idx-1);
+    else if(tr.unit==='weeks') d.setDate(d.getDate()+(idx-1)*7);
+    else if(tr.unit==='months') d.setMonth(d.getMonth()+idx-1);
+    return d.toLocaleDateString(S.lang==='uk'?'uk-UA':'en-GB',{day:'numeric',month:'short',year:'numeric'});
+  }
+  return '';
+}
 
 function renderCatRow(){
   const row=document.getElementById('catRow');row.innerHTML='';
@@ -2175,6 +2306,7 @@ function buildTrCard(tr){
   const catIcon=icons[tr.cat]||'⚡';
   const total=getTotalUnits(tr);const done=tr.done.length;
   const pct=Math.min(100,Math.round((done/tr.goal)*100));
+  const startDateStr=tr.startDate?new Date(tr.startDate).toLocaleDateString(S.lang==='uk'?'uk-UA':'en-GB',{day:'numeric',month:'short',year:'numeric'}):'';
   const streak=calcStreak(tr);const periodLabel=t('periods')[tr.period]||tr.period;
   const msHTML='';
 
@@ -2220,7 +2352,7 @@ function buildTrCard(tr){
     ${chartHTML}
     <div class="tr-notes-panel" id="trnotes-${tr.id}" style="display:none;border-top:1px solid var(--b1);padding-top:14px;margin-top:14px">
       <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px">📝 ${S.lang==='uk'?'Нотатки трекера':'Tracker notes'}</div>
-      ${(S.trNotes[tr.id]||[]).map((n,i)=>`<div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--b1)"><div style="font-size:8px;color:var(--muted);letter-spacing:1px;white-space:nowrap;padding-top:1px">#${i+1}</div><div style="font-size:10px;color:var(--text2);line-height:1.6;flex:1">${n}</div><span onclick="delTrNote('${tr.id}',${i})" style="font-size:12px;color:var(--muted);cursor:pointer;flex-shrink:0;transition:color .15s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--muted)'">×</span></div>`).join('')}
+      ${(S.trNotes[tr.id]||[]).map((n,i)=>{const txt=typeof n==='object'?n.text:n;const dt=typeof n==='object'?n.date:'';return `<div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--b1)"><div style="flex-shrink:0"><div style="font-size:8px;color:var(--muted);letter-spacing:1px">#${i+1}</div>${dt?`<div style="font-size:7px;color:var(--muted2);letter-spacing:1px;margin-top:2px">${dt}</div>`:''}</div><div style="font-size:10px;color:var(--text2);line-height:1.6;flex:1">${txt}</div><span onclick="delTrNote('${tr.id}',${i})" style="font-size:12px;color:var(--muted);cursor:pointer;flex-shrink:0;transition:color .15s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--muted)'">×</span></div>`;}).join('')}
       <div style="display:flex;gap:6px;margin-top:10px">
         <input type="text" id="trnote-inp-${tr.id}" placeholder="${S.lang==='uk'?'Додати нотатку...':'Add note...'}" onkeydown="if(event.key==='Enter')addTrNote('${tr.id}')" style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'DM Mono',monospace;font-size:10px;padding:7px 10px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'">
         <button onclick="addTrNote('${tr.id}')" style="background:none;border:1px solid var(--b2);color:var(--muted);font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;padding:7px 12px;cursor:pointer;transition:all .2s;white-space:nowrap" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--b2)';this.style.color='var(--muted)'">${S.lang==='uk'?'Додати':'Add'}</button>
@@ -2300,11 +2432,11 @@ function closeCert(){document.getElementById('certOverlay').classList.remove('op
 //  FREEMIUM
 // ══════════════════════════════════════
 function renderFreeBanner(){
-  const b=document.getElementById('freeBanner');if(S.isPro){b.innerHTML='';return;}
+  const b=document.getElementById('freeBanner');if(b)b.innerHTML='';return;if(S.isPro){b.innerHTML='';return;}
   const used=S.trackers.length;const left=Math.max(0,FREE_LIMIT-used);
   b.innerHTML=`<div class="free-banner"><div><div class="free-text">${t('freeLbl')(used,FREE_LIMIT)}</div><div style="font-size:9px;color:var(--muted);font-weight:700;letter-spacing:1px;margin-top:3px;text-transform:uppercase">${t('freeUpgrade')}</div></div><div style="display:flex;align-items:center;gap:16px"><div class="free-count">${left}<span> / ${FREE_LIMIT}</span></div><button class="btn-pro" onclick="openPro()">✦ PRO</button></div></div>`;
 }
-function tryAdd(){if(!S.isPro&&S.trackers.length>=FREE_LIMIT){openPro();return;}openTrModal();}
+function tryAdd(){openTrModal();}
 
 // ══════════════════════════════════════
 //  TRACKER MODAL
@@ -2324,15 +2456,23 @@ function openTrModal(){
   document.getElementById('tPeriod').value='1yr';
   document.getElementById('tUnit').value='weeks';
   document.getElementById('tGoal').value='52';
+  document.getElementById('tStartDate').value=new Date().toISOString().split('T')[0];
   selectColor(COLORS[0]);
   document.getElementById('trOverlay').classList.add('open');
 }
 function closeTrModal(){document.getElementById('trOverlay').classList.remove('open');}
-function editTr(id){const tr=S.trackers.find(x=>x.id===id);if(!tr)return;S.editingTr=id;document.getElementById('trMTitle').textContent=t('trMTitleE');document.getElementById('tName').value=tr.name;document.getElementById('tCat').value=tr.cat;document.getElementById('tPeriod').value=tr.period||'1yr';document.getElementById('tUnit').value=tr.unit||'weeks';document.getElementById('tGoal').value=tr.goal||52;selectColor(tr.color||COLORS[0]);document.getElementById('trOverlay').classList.add('open');}
+function editTr(id){const tr=S.trackers.find(x=>x.id===id);if(!tr)return;S.editingTr=id;document.getElementById('trMTitle').textContent=t('trMTitleE');document.getElementById('tName').value=tr.name;document.getElementById('tCat').value=tr.cat;document.getElementById('tPeriod').value=tr.period||'1yr';document.getElementById('tUnit').value=tr.unit||'weeks';document.getElementById('tGoal').value=tr.goal||52;document.getElementById('tStartDate').value=tr.startDate||new Date().toISOString().split('T')[0];selectColor(tr.color||COLORS[0]);document.getElementById('trOverlay').classList.add('open');}
 function delTr(id){if(!confirm(S.lang==='uk'?'Видалити трекер?':'Delete tracker?'))return;S.trackers=S.trackers.filter(x=>x.id!==id);save();renderTrackers();renderHomeTr();renderFreeBanner();}
 function toggleTrNotes(tid){const el=document.getElementById('trnotes-'+tid);if(el)el.style.display=el.style.display==='none'?'block':'none';}
-function addTrNote(tid){const inp=document.getElementById('trnote-inp-'+tid);if(!inp)return;const text=inp.value.trim();if(!text)return;if(!S.trNotes[tid])S.trNotes[tid]=[];S.trNotes[tid].push(text);inp.value='';save();renderTrackers();}
-function delTrNote(tid,idx){if(!S.trNotes[tid])return;S.trNotes[tid].splice(idx,1);save();renderTrackers();}
+function addTrNote(tid){
+  const inp=document.getElementById('trnote-inp-'+tid);if(!inp)return;
+  const text=inp.value.trim();if(!text)return;
+  if(!S.trNotes[tid])S.trNotes[tid]=[];
+  const now=new Date();
+  const dateStr=now.toLocaleDateString(S.lang==='uk'?'uk-UA':'en-GB',{day:'numeric',month:'short',year:'numeric'});
+  S.trNotes[tid].push({text,date:dateStr,ts:now.toISOString()});
+  inp.value='';save();renderTrackers();
+}
 function manualTrInc(tid){
   const tr=S.trackers.find(x=>x.id===tid);if(!tr)return;
   if(!tr.done)tr.done=[];
@@ -2352,15 +2492,24 @@ function saveTr(){
   if(cat==='custom_input'){
     const customVal=document.getElementById('tCatCustom').value.trim();
     cat=customVal?'custom_'+customVal.toLowerCase().replace(/\s+/g,'_'):'custom';
-    // Store custom label
     if(customVal) S.customCats=S.customCats||{};
     if(customVal) S.customCats[cat]=customVal;
   }
   const period=document.getElementById('tPeriod').value,unit=document.getElementById('tUnit').value;
   const goal=parseInt(document.getElementById('tGoal').value)||52;
   const color=document.querySelector('.cswatch.on')?.dataset.color||COLORS[0];
-  if(S.editingTr){const tr=S.trackers.find(x=>x.id===S.editingTr);if(tr){tr.name=name;tr.cat=cat;tr.period=period;tr.unit=unit;tr.goal=goal;tr.color=color;}}
-  else{S.trackers.push({id:uid(),name,cat,color,period,unit,goal,done:[]});}
+  const startDate=document.getElementById('tStartDate').value||new Date().toISOString().split('T')[0];
+  if(S.editingTr){
+    const tr=S.trackers.find(x=>x.id===S.editingTr);
+    if(tr){tr.name=name;tr.cat=cat;tr.period=period;tr.unit=unit;tr.goal=goal;tr.color=color;
+      // Ask if reset needed
+      if(confirm(S.lang==='uk'?'Скинути прогрес і почати з нової дати?':'Reset progress and start from new date?')){
+        tr.done=[];tr.startDate=startDate;
+      }
+    }
+  } else {
+    S.trackers.push({id:uid(),name,cat,color,period,unit,goal,done:[],startDate});
+  }
   save();closeTrModal();renderCatRow();renderTrackers();renderHomeTr();renderFreeBanner();
 }
 function buildColorPicker(){const w=document.getElementById('cSwatches');COLORS.forEach((c,i)=>{const s=document.createElement('div');s.className='cswatch'+(i===0?' on':'');s.style.background=c;s.dataset.color=c;s.onclick=()=>selectColor(c);w.appendChild(s);});}
@@ -2455,6 +2604,172 @@ function scheduleNotif(){
   }
 }
 function openPro(){document.getElementById('proOverlay').classList.add('open');}
+// ══════════════════════════════════════
+//  PLANNER
+// ══════════════════════════════════════
+let planCurrentDate=null;
+function planKey(y,m,d){return`${y}_${m}_${d}`;}
+function initPlanYearSel(){
+  const sel=document.getElementById('planYearSel');if(!sel||sel.options.length)return;
+  const ny=new Date().getFullYear();
+  for(let y=ny-1;y<=ny+2;y++){const o=document.createElement('option');o.value=y;o.textContent=y;if(y===ny)o.selected=true;sel.appendChild(o);}
+}
+function renderPlanner(){
+  initPlanYearSel();
+  const now=new Date();
+  const sel=document.getElementById('planYearSel');
+  const year=sel?+sel.value:now.getFullYear();
+  const todayKey=planKey(now.getFullYear(),now.getMonth(),now.getDate());
+  const todayTasks=(S.tasks&&S.tasks[todayKey])||[];
+  const todayDone=todayTasks.filter(t=>t.done).length;
+  const pct=todayTasks.length?Math.round(todayDone/todayTasks.length*100):0;
+  const sv=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  sv('planTodayTotal',todayTasks.length);sv('planTodayDone',`виконано ${todayDone}`);sv('planDayPct',pct+'%');
+  let mTotal=0,mDone=0;
+  Object.entries(S.tasks||{}).forEach(([k,tasks])=>{if(k.startsWith(year+'_'+now.getMonth()+'_')){mTotal+=tasks.length;mDone+=tasks.filter(t=>t.done).length;}});
+  sv('planMonthTotal',mTotal);sv('planMonthDone',`виконано ${mDone}`);
+  const grid=document.getElementById('plannerGrid');if(!grid)return;
+  grid.innerHTML='';
+  const MN=S.lang==='uk'?['Січень','Лютий','Березень','Квітень','Травень','Червень','Липень','Серпень','Вересень','Жовтень','Листопад','Грудень']:['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const DN=S.lang==='uk'?['Нд','Пн','Вт','Ср','Чт','Пт','Сб']:['Su','Mo','Tu','We','Th','Fr','Sa'];
+  grid.style.cssText='display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px';
+  for(let m=0;m<12;m++){
+    const card=document.createElement('div');card.style.cssText='background:var(--s1);border:1px solid var(--b1);padding:14px';
+    const isCurrentMonth=year===now.getFullYear()&&m===now.getMonth();
+    const hdr=document.createElement('div');hdr.style.cssText='font-family:"Cormorant Garamond",serif;font-size:15px;font-weight:600;color:'+(isCurrentMonth?'var(--gold)':'var(--text2)')+';margin-bottom:8px';hdr.textContent=MN[m];card.appendChild(hdr);
+    const dnRow=document.createElement('div');dnRow.style.cssText='display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:3px';
+    DN.forEach(d=>{const el=document.createElement('div');el.style.cssText='font-size:6px;color:var(--muted);text-align:center';el.textContent=d;dnRow.appendChild(el);});card.appendChild(dnRow);
+    const dGrid=document.createElement('div');dGrid.style.cssText='display:grid;grid-template-columns:repeat(7,1fr);gap:2px';
+    const firstDay=new Date(year,m,1).getDay();
+    for(let i=0;i<firstDay;i++) dGrid.appendChild(document.createElement('div'));
+    const dim=new Date(year,m+1,0).getDate();
+    for(let d=1;d<=dim;d++){
+      const key=planKey(year,m,d);const tasks=(S.tasks&&S.tasks[key])||[];const done=tasks.filter(t=>t.done).length;
+      const isToday=year===now.getFullYear()&&m===now.getMonth()&&d===now.getDate();
+      const isPast=new Date(year,m,d)<new Date(now.getFullYear(),now.getMonth(),now.getDate());
+      const cell=document.createElement('div');
+      cell.style.cssText='aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:8px;cursor:pointer;position:relative;transition:all .15s;border-radius:2px;font-family:"IBM Plex Mono",monospace';
+      cell.textContent=d;
+      if(isToday){cell.style.cssText+=';background:var(--gold);color:var(--bg);font-weight:700';}
+      else if(tasks.length&&done===tasks.length){cell.style.cssText+=';background:var(--green);color:#fff;font-weight:700';}
+      else if(tasks.length){cell.style.cssText+=';background:var(--s2);color:var(--text);border:1px solid var(--gold)';const dot=document.createElement('div');dot.style.cssText='position:absolute;bottom:1px;right:1px;width:3px;height:3px;border-radius:50%;background:var(--gold)';cell.appendChild(dot);}
+      else if(isPast){cell.style.cssText+=';color:var(--muted2)';}
+      else{cell.style.cssText+=';color:var(--muted2);border:1px solid var(--b1)';}
+      cell.addEventListener('click',()=>openPlanDay(key,new Date(year,m,d)));
+      cell.addEventListener('mouseenter',e=>{cell.style.transform='scale(1.3)';cell.style.zIndex='10';tip(e,`${d} ${MN[m]}`,tasks.length?`${done}/${tasks.length} задач`:'Немає задач');});
+      cell.addEventListener('mousemove',moveTip);cell.addEventListener('mouseleave',()=>{hideTip();cell.style.transform='';cell.style.zIndex='';});
+      dGrid.appendChild(cell);
+    }
+    card.appendChild(dGrid);grid.appendChild(card);
+  }
+}
+let planDayKey=null;
+function openPlanDay(key,date){
+  planDayKey=key;planCurrentDate=date;
+  document.getElementById('planModalTitle').textContent=date.toLocaleDateString(S.lang==='uk'?'uk-UA':'en-GB',{weekday:'long',day:'numeric',month:'long'});
+  document.getElementById('planTaskText').value='';
+  document.querySelectorAll('.plan-pri-btn').forEach((b,i)=>{b.classList.toggle('on',i===0);b.style.borderColor=i===0?'var(--gold)':'var(--b2)';b.style.color=i===0?'var(--gold)':'var(--text2)';});
+  document.getElementById('planOverlay').classList.add('open');
+  renderPlanDayTasks(key);
+}
+function renderPlanDayTasks(key){
+  const tasks=(S.tasks&&S.tasks[key])||[];
+  let list=document.getElementById('planDayTaskList');
+  if(!list){list=document.createElement('div');list.id='planDayTaskList';const modal=document.querySelector('#planOverlay .modal');const mbtns=modal.querySelector('.mbtns');modal.insertBefore(list,mbtns);}
+  list.innerHTML='';
+  if(!tasks.length){list.innerHTML=`<div style="font-size:9px;color:var(--muted);letter-spacing:2px;text-align:center;padding:12px 0">Задач поки немає</div>`;return;}
+  tasks.forEach((task,i)=>{
+    const item=document.createElement('div');item.style.cssText='display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--b1)';
+    const priColor=task.pri==='high'?'var(--red)':task.pri==='low'?'var(--blue)':'var(--muted)';
+    item.innerHTML=`<div style="width:4px;height:28px;background:${priColor};flex-shrink:0;border-radius:2px"></div><input type="checkbox" ${task.done?'checked':''} onchange="togglePlanTask('${key}',${i},this)" style="width:16px;height:16px;accent-color:var(--gold);cursor:pointer;flex-shrink:0"><div style="flex:1;font-size:11px;color:${task.done?'var(--muted)':'var(--text)'};text-decoration:${task.done?'line-through':'none'};line-height:1.4">${task.text}</div><span onclick="deletePlanTask('${key}',${i})" style="font-size:14px;color:var(--muted);cursor:pointer" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--muted)'">×</span>`;
+    list.appendChild(item);
+  });
+  const done=tasks.filter(t=>t.done).length;const pct=tasks.length?Math.round(done/tasks.length*100):0;
+  const pe=document.getElementById('planDayPct');if(pe)pe.textContent=pct+'%';
+}
+function selPlanPri(btn){document.querySelectorAll('.plan-pri-btn').forEach(b=>{b.classList.remove('on');b.style.borderColor='var(--b2)';b.style.color='var(--text2)';});btn.classList.add('on');btn.style.borderColor='var(--gold)';btn.style.color='var(--gold)';}
+function savePlanTask(){
+  const text=document.getElementById('planTaskText').value.trim();if(!text)return;
+  const pri=document.querySelector('.plan-pri-btn.on')?.dataset.pri||'normal';
+  if(!S.tasks)S.tasks={};if(!S.tasks[planDayKey])S.tasks[planDayKey]=[];
+  S.tasks[planDayKey].push({text,pri,done:false,created:new Date().toISOString()});
+  save();document.getElementById('planTaskText').value='';renderPlanDayTasks(planDayKey);renderPlanner();
+}
+function togglePlanTask(key,idx,cb){if(!S.tasks||!S.tasks[key])return;S.tasks[key][idx].done=cb.checked;save();renderPlanDayTasks(key);renderPlanner();}
+function deletePlanTask(key,idx){if(!S.tasks||!S.tasks[key])return;S.tasks[key].splice(idx,1);if(!S.tasks[key].length)delete S.tasks[key];save();renderPlanDayTasks(key);renderPlanner();}
+function closePlanModal(){document.getElementById('planOverlay').classList.remove('open');}
+
+// ══════════════════════════════════════
+//  GRATITUDE
+// ══════════════════════════════════════
+const GRAT_SUGGESTIONS=['Здоров\'я своє та близьких','Нові можливості сьогодні','Дах над головою','Їжа на столі','Хороших людей поруч','Навчання та ріст','Природу навколо','Спокійний ранок','Улюблену музику','Гарну погоду','Цікаву роботу','Підтримку друзів','Можливість мріяти','Здатність любити','Силу рухатись вперед','Кожен новий день','Своє тіло','Свободу вибору','Технології що допомагають','Красу світу навколо'];
+function initGratYearSel(){const sel=document.getElementById('gratYearSel');if(!sel||sel.options.length)return;const ny=new Date().getFullYear();for(let y=ny-2;y<=ny+1;y++){const o=document.createElement('option');o.value=y;o.textContent=y;if(y===ny)o.selected=true;sel.appendChild(o);}}
+function renderGratitude(){
+  initGratYearSel();
+  const now=new Date();const sel=document.getElementById('gratYearSel');const year=sel?+sel.value:now.getFullYear();
+  const todayKey=diaryKey(now.getFullYear(),now.getMonth(),now.getDate());
+  const todayGrats=(S.gratitude&&S.gratitude[todayKey])||[];
+  const pct=Math.min(100,Math.round(todayGrats.length/30*100));
+  const sv=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  sv('gratTodayCount',todayGrats.length);
+  let streak=0;const d=new Date(now);
+  while(streak<366){const k=diaryKey(d.getFullYear(),d.getMonth(),d.getDate());if(S.gratitude&&S.gratitude[k]&&S.gratitude[k].length>0){streak++;d.setDate(d.getDate()-1);}else break;}
+  sv('gratStreak',streak);
+  let total=0;Object.entries(S.gratitude||{}).forEach(([k,v])=>{if(k.startsWith(year+'_'))total+=v.length;});
+  sv('gratTotal',total);
+  const bar=document.getElementById('gratPctBar');if(bar)bar.style.width=pct+'%';
+  const lbl=document.getElementById('gratPctLbl');if(lbl)lbl.textContent=`${todayGrats.length} / 30`;
+  renderGratTodayList(todayKey);
+  const sugg=document.getElementById('gratSuggestions');
+  if(sugg){sugg.innerHTML='';const shuffled=[...GRAT_SUGGESTIONS].sort(()=>Math.random()-.5).slice(0,6);shuffled.forEach(s=>{const btn=document.createElement('button');btn.style.cssText='background:var(--s2);border:1px solid var(--b1);color:var(--text2);font-size:9px;letter-spacing:1px;padding:5px 10px;cursor:pointer;transition:all .2s';btn.textContent=s;btn.onmouseover=()=>{btn.style.borderColor='var(--gold)';btn.style.color='var(--gold)';};btn.onmouseout=()=>{btn.style.borderColor='var(--b1)';btn.style.color='var(--text2)';};btn.onclick=()=>{document.getElementById('gratInput').value=s;document.getElementById('gratInput').focus();};sugg.appendChild(btn);});}
+  renderGratCalendar(year);
+}
+function renderGratTodayList(key){
+  const list=document.getElementById('gratTodayList');if(!list)return;
+  const grats=(S.gratitude&&S.gratitude[key])||[];list.innerHTML='';
+  if(!grats.length){list.innerHTML=`<div style="font-size:9px;color:var(--muted);letter-spacing:2px;text-align:center;padding:8px 0">Ще нічого не додано сьогодні</div>`;return;}
+  grats.forEach((g,i)=>{const item=document.createElement('div');item.style.cssText='display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--b1)';item.innerHTML=`<span style="font-size:9px;color:var(--gold);font-weight:700;min-width:20px">${i+1}.</span><span style="flex:1;font-size:11px;color:var(--text2);line-height:1.4">${g}</span><span onclick="deleteGratitude('${key}',${i})" style="font-size:14px;color:var(--muted);cursor:pointer" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--muted)'">×</span>`;list.appendChild(item);});
+}
+function addGratitude(){
+  const inp=document.getElementById('gratInput');if(!inp)return;const text=inp.value.trim();if(!text)return;
+  const now=new Date();const key=diaryKey(now.getFullYear(),now.getMonth(),now.getDate());
+  if(!S.gratitude)S.gratitude={};if(!S.gratitude[key])S.gratitude[key]=[];
+  if(S.gratitude[key].length>=30){alert(S.lang==='uk'?'Ти вже досяг мети 30 вдячностей! 🎉':'You reached the goal of 30 gratitudes today! 🎉');return;}
+  S.gratitude[key].push(text);save();inp.value='';renderGratitude();
+  if(S.gratitude[key].length===30)setTimeout(()=>launchConfetti('#c8a050'),300);
+}
+function deleteGratitude(key,idx){if(!S.gratitude||!S.gratitude[key])return;S.gratitude[key].splice(idx,1);save();renderGratitude();}
+function renderGratCalendar(year){
+  const cal=document.getElementById('gratCalendar');if(!cal)return;cal.innerHTML='';
+  cal.style.cssText='display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-top:8px';
+  const now=new Date();
+  const MN=S.lang==='uk'?['Січень','Лютий','Березень','Квітень','Травень','Червень','Липень','Серпень','Вересень','Жовтень','Листопад','Грудень']:['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const DN=S.lang==='uk'?['Нд','Пн','Вт','Ср','Чт','Пт','Сб']:['Su','Mo','Tu','We','Th','Fr','Sa'];
+  for(let m=0;m<12;m++){
+    const card=document.createElement('div');card.style.cssText='background:var(--s1);border:1px solid var(--b1);padding:12px';
+    const mGrats=Object.entries(S.gratitude||{}).filter(([k])=>k.startsWith(year+'_'+m+'_')).reduce((sum,[,v])=>sum+v.length,0);
+    const hdr=document.createElement('div');hdr.style.cssText='font-family:"Cormorant Garamond",serif;font-size:15px;font-weight:600;color:var(--gold);margin-bottom:8px;display:flex;justify-content:space-between';hdr.innerHTML=`${MN[m]}<span style="font-size:9px;color:var(--muted);letter-spacing:1px">${mGrats} записів</span>`;card.appendChild(hdr);
+    const dnRow=document.createElement('div');dnRow.style.cssText='display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:3px';DN.forEach(d=>{const el=document.createElement('div');el.style.cssText='font-size:6px;color:var(--muted);text-align:center';el.textContent=d;dnRow.appendChild(el);});card.appendChild(dnRow);
+    const dGrid=document.createElement('div');dGrid.style.cssText='display:grid;grid-template-columns:repeat(7,1fr);gap:2px';
+    const firstDay=new Date(year,m,1).getDay();for(let i=0;i<firstDay;i++)dGrid.appendChild(document.createElement('div'));
+    const dim=new Date(year,m+1,0).getDate();
+    for(let d=1;d<=dim;d++){
+      const key=diaryKey(year,m,d);const grats=(S.gratitude&&S.gratitude[key])||[];
+      const isToday=year===now.getFullYear()&&m===now.getMonth()&&d===now.getDate();
+      const pct=Math.min(100,Math.round(grats.length/30*100));
+      const cell=document.createElement('div');cell.style.cssText='aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:8px;cursor:pointer;border-radius:2px;transition:all .15s;font-family:"IBM Plex Mono",monospace';cell.textContent=d;
+      if(isToday){cell.style.cssText+=';background:var(--goldd);color:var(--gold);font-weight:700;outline:1px solid var(--gold)';}
+      else if(grats.length>=30){cell.style.cssText+=';background:var(--gold);color:var(--bg);font-weight:700';}
+      else if(grats.length>0){const op=0.2+0.6*(pct/100);cell.style.cssText+=`;background:rgba(200,160,80,${op.toFixed(2)});color:var(--text)`;}
+      else{cell.style.cssText+=';color:var(--muted2);border:1px solid var(--b1)';}
+      cell.addEventListener('mouseenter',e=>{cell.style.transform='scale(1.3)';cell.style.zIndex='10';tip(e,`${d} ${MN[m]}`,grats.length?`${grats.length} вдячностей`:'Порожньо');});
+      cell.addEventListener('mousemove',moveTip);cell.addEventListener('mouseleave',()=>{hideTip();cell.style.transform='';cell.style.zIndex='';});
+      dGrid.appendChild(cell);
+    }
+    card.appendChild(dGrid);cal.appendChild(card);
+  }
+}
+
 // ══════════════════════════════════════
 //  VISION BOARD
 // ══════════════════════════════════════
@@ -2591,6 +2906,8 @@ function setupNotifications(){
 // ══════════════════════════════════════
 function showPage(name,btn){
   if(name==='vision') setTimeout(renderVisionBoard,50);
+  if(name==='plan') setTimeout(renderPlanner,50);
+  if(name==='grat') setTimeout(renderGratitude,50);
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('on'));
   document.getElementById('page-'+name).classList.add('on');
@@ -2853,9 +3170,9 @@ function updateSphere(key,val,max){
 }
 
 // Close handlers
-['noteOverlay','capsuleOverlay','reviewOverlay','chapterOverlay','trOverlay','proOverlay','diaryOverlay','profileOverlay','visionOverlay'].forEach(id=>{document.getElementById(id).addEventListener('click',e=>{if(e.target===document.getElementById(id))document.getElementById(id).classList.remove('open');});});
+['noteOverlay','capsuleOverlay','reviewOverlay','chapterOverlay','trOverlay','proOverlay','diaryOverlay','profileOverlay','visionOverlay','planOverlay'].forEach(id=>{document.getElementById(id).addEventListener('click',e=>{if(e.target===document.getElementById(id))document.getElementById(id).classList.remove('open');});});
 document.getElementById('certOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('certOverlay'))closeCert();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){['noteOverlay','capsuleOverlay','reviewOverlay','chapterOverlay','trOverlay','proOverlay','diaryOverlay','profileOverlay','visionOverlay'].forEach(id=>document.getElementById(id).classList.remove('open'));closeCert();document.getElementById('ctx').style.display='none';}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){['noteOverlay','capsuleOverlay','reviewOverlay','chapterOverlay','trOverlay','proOverlay','diaryOverlay','profileOverlay','visionOverlay','planOverlay'].forEach(id=>document.getElementById(id).classList.remove('open'));closeCert();document.getElementById('ctx').style.display='none';}});
 </script>
 <!-- AUTH MODAL -->
 <div class="auth-overlay" id="authOverlay">
