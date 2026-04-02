@@ -620,6 +620,10 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
 .vcat-btn{background:var(--s2);border:1px solid var(--b2);color:var(--muted);font-size:8px;padding:6px 4px;cursor:pointer;transition:all .2s;text-align:center}
 .vcat-btn.on{border-color:var(--gold);color:var(--gold);background:var(--goldl)}
 .vcat-btn:hover{border-color:var(--b3);color:var(--text2)}
+
+.modal-close{position:absolute;top:14px;right:14px;background:none;border:1px solid var(--b2);color:var(--muted);width:32px;height:32px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;border-radius:2px;flex-shrink:0}
+.modal-close:hover,.modal-close:active{border-color:var(--red);color:var(--red)}
+.modal{position:relative}
 /* AUTH */
 .auth-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:800;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
 .auth-overlay.open{display:flex}
@@ -892,13 +896,25 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
         </div>
       </div>
       <div class="stats-strip" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px">
-        <div class="stile"><div class="sl">Записів сьогодні</div><div class="sn" id="gratTodayCount" style="color:var(--gold)">0</div><div class="ss">з 30</div></div>
+        <div class="stile"><div class="sl">Записів сьогодні</div><div class="sn" id="gratTodayCount" style="color:var(--gold)">0</div><div class="ss">з <span id="gratGoalLbl">30</span></div></div>
         <div class="stile"><div class="sl">Днів підряд</div><div class="sn" id="gratStreak">0</div><div class="ss">серія</div></div>
         <div class="stile"><div class="sl">Всього записів</div><div class="sn" id="gratTotal">0</div><div class="ss">за рік</div></div>
       </div>
       <!-- Today's gratitude -->
       <div style="background:var(--s1);border:1px solid var(--b1);padding:20px;margin-bottom:24px">
-        <div style="font-size:8px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-bottom:14px">СЬОГОДНІ Я ВДЯЧНИЙ(НА) ЗА...</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <div style="font-size:8px;letter-spacing:4px;color:var(--muted);text-transform:uppercase">СЬОГОДНІ Я ВДЯЧНИЙ(НА) ЗА...</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:8px;color:var(--muted);letter-spacing:2px">ЦІЛЬ:</span>
+            <select id="gratGoalSel" onchange="changeGratGoal(this.value)" style="background:var(--s2);border:1px solid var(--b2);color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:11px;padding:4px 8px;outline:none;cursor:pointer">
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="30" selected>30</option>
+              <option value="40">40</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+        </div>
         <div id="gratTodayList" style="margin-bottom:12px"></div>
         <div style="display:flex;gap:8px">
           <input id="gratInput" type="text" placeholder="Введи свою вдячність або вибери нижче..." style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:12px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'" onkeydown="if(event.key==='Enter')addGratitude()">
@@ -928,7 +944,8 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
 
 <!-- PLANNER TASK MODAL -->
 <div class="overlay" id="planOverlay">
-  <div class="modal" style="width:440px">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closePlanModal()" aria-label="Close">✕</button> style="width:440px">
     <div class="modal-title" style="margin-bottom:16px"><em id="planModalTitle">Нова задача</em></div>
     <div class="mf">
       <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Задача</label>
@@ -944,6 +961,8 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
     </div>
     <div class="mbtns">
       <button class="mbtn-c" onclick="closePlanModal()">Скасувати</button>
+      <button class="mbtn-c" onclick="savePlanTask('week')" style="border-color:var(--blue);color:var(--blue)">📅 На тиждень</button>
+      <button class="mbtn-c" onclick="savePlanTask('month')" style="border-color:var(--violet);color:var(--violet)">🗓 На місяць</button>
       <button class="mbtn-ok" onclick="savePlanTask()"><span>Зберегти →</span></button>
     </div>
   </div>
@@ -951,7 +970,8 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
 
 <!-- VISION BOARD MODAL -->
 <div class="overlay" id="visionOverlay">
-  <div class="modal" style="width:480px">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closeVisionModal()" aria-label="Close">✕</button> style="width:480px">
     <div class="modal-title" style="margin-bottom:20px"><em id="visionModalTitle">Нова мрія</em></div>
 
     <!-- Photo upload -->
@@ -995,7 +1015,8 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
 
 <!-- PROFILE SETTINGS MODAL -->
 <div class="overlay" id="profileOverlay">
-  <div class="modal" style="width:480px;max-height:90vh;overflow-y:auto">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closeProfileSettings()" aria-label="Close">✕</button> style="width:480px;max-height:90vh;overflow-y:auto">
     <div class="modal-title" style="margin-bottom:20px">⚙️ <em>Налаштування профілю</em></div>
 
     <!-- Avatar -->
@@ -1063,7 +1084,8 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
 
 <!-- DIARY MODAL -->
 <div class="overlay" id="diaryOverlay">
-  <div class="modal" style="width:520px;max-height:90vh;overflow-y:auto">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closeDiaryModal()" aria-label="Close">✕</button> style="width:520px;max-height:90vh;overflow-y:auto">
     <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px" id="diaryModalDate"></div>
     <div class="modal-title" style="margin-bottom:16px"><em>Запис дня</em></div>
     <div class="mf">
@@ -1099,7 +1121,8 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
 
 <!-- NOTE MODAL -->
 <div class="overlay" id="noteOverlay">
-  <div class="modal">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closeNote()" aria-label="Close">✕</button>>
     <div class="modal-title"><em id="noteTitleWeek">Тиждень</em></div>
     <div class="note-week-info" id="noteWeekInfo"></div>
     <div id="capsuleReadView" style="display:none"></div>
@@ -1124,7 +1147,8 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
 
 <!-- TIME CAPSULE MODAL -->
 <div class="overlay" id="capsuleOverlay">
-  <div class="modal">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closeCapsule()" aria-label="Close">✕</button>>
     <div style="text-align:center;font-size:40px;margin-bottom:8px">✉️</div>
     <div class="modal-title" style="text-align:center" id="capsuleTitle">Лист у Майбутнє</div>
     <div style="font-size:10px;color:var(--text2);text-align:center;line-height:1.7;margin-bottom:16px" id="capsuleDesc">Напиши повідомлення собі. Воно з'явиться у вибраному тижні через роки — і нагадає, ким ти був тоді.</div>
@@ -1195,7 +1219,8 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
 
 <!-- CHAPTER MODAL -->
 <div class="overlay" id="chapterOverlay">
-  <div class="modal">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closeChapter()" aria-label="Close">✕</button>>
     <div class="modal-title" id="chapterModalTitle"><em>Новий розділ</em></div>
     <div class="mf"><label id="lChName">Назва розділу</label><input type="text" id="chName" placeholder="Університет, Перша робота..."></div>
     <div class="mf"><label id="lChColor">Колір</label>
@@ -1210,7 +1235,8 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
 
 <!-- TRACKER MODAL -->
 <div class="overlay" id="trOverlay">
-  <div class="modal">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closeTrModal()" aria-label="Close">✕</button>>
     <div class="modal-title" id="trMTitle">Новий трекер</div>
     <div class="mf"><label id="trl-name">Назва</label><input type="text" id="tName" placeholder="Ранкова пробіжка"></div>
     <div class="mf">
@@ -1665,7 +1691,7 @@ const FREE_LIMIT=999;
 //  STATE
 // ══════════════════════════════════════
 let S={
-  lang:'uk',theme:'dark',profileName:'',notifEnabled:false,notifTime:'20:00',dreams:[],tasks:{},gratitude:{},
+  lang:'uk',theme:'dark',profileName:'',notifEnabled:false,notifTime:'20:00',dreams:[],tasks:{},gratitude:{},gratGoal:30,
   birth:null,lifespan:90,lived:0,total:0,
   markedWeeks:{},
   markedDays:{},
@@ -1687,9 +1713,22 @@ let S={
 };
 
 const t=k=>(T[S.lang]||T.uk)[k]||k;
-function save(){localStorage.setItem('timebox',JSON.stringify({birth:S.birth,lifespan:S.lifespan,markedWeeks:S.markedWeeks,markedDays:S.markedDays||{},weekNotes:S.weekNotes,dayNotes:S.dayNotes||{},diary:S.diary||{},timeCapsules:S.timeCapsules,chapters:S.chapters,chapterMap:S.chapterMap,trackers:S.trackers,trNotes:S.trNotes,reviews:S.reviews,isPro:S.isPro,lang:S.lang,capsuleYrs:S.capsuleYrs,capsuleMonths:S.capsuleMonths,spheres:S.spheres,customCats:S.customCats||{},theme:S.theme||'dark'}))}
 
-function loadSaved(){try{const d=JSON.parse(localStorage.getItem('timebox')||localStorage.getItem('mv7'));if(d?.birth){Object.assign(S,d);if(!S.trNotes)S.trNotes={};if(!S.markedDays)S.markedDays={};if(!S.dayNotes)S.dayNotes={};if(!S.capsuleMonths)S.capsuleMonths=12;if(!S.capsuleYrs)S.capsuleYrs=1;if(!S.spheres)S.spheres={fin:0,sport:0,learn:0};if(!S.customCats)S.customCats={};if(!S.diary)S.diary={};if(!S.dreams)S.dreams=[];if(!S.tasks)S.tasks={};if(!S.gratitude)S.gratitude={};return true}}catch(e){}return false}
+// Multi-language helper for inline strings
+function tl(uk, en, de, es, fr, pt, pl){
+  const l=S.lang;
+  if(l==='uk')return uk;
+  if(l==='en')return en||uk;
+  if(l==='de')return de||en||uk;
+  if(l==='es')return es||en||uk;
+  if(l==='fr')return fr||en||uk;
+  if(l==='pt')return pt||en||uk;
+  if(l==='pl')return pl||en||uk;
+  return en||uk;
+}
+function save(){localStorage.setItem('timebox',JSON.stringify({birth:S.birth,lifespan:S.lifespan,markedWeeks:S.markedWeeks,markedDays:S.markedDays||{},weekNotes:S.weekNotes,dayNotes:S.dayNotes||{},diary:S.diary||{},timeCapsules:S.timeCapsules,chapters:S.chapters,chapterMap:S.chapterMap,trackers:S.trackers,trNotes:S.trNotes,reviews:S.reviews,isPro:S.isPro,lang:S.lang,capsuleYrs:S.capsuleYrs,capsuleMonths:S.capsuleMonths,spheres:S.spheres,customCats:S.customCats||{},theme:S.theme||'dark',profileName:S.profileName||'',notifEnabled:S.notifEnabled||false,notifTime:S.notifTime||'20:00',dreams:S.dreams||[],tasks:S.tasks||{},gratitude:S.gratitude||{},gratGoal:S.gratGoal||30}))}
+
+function loadSaved(){try{const d=JSON.parse(localStorage.getItem('timebox')||localStorage.getItem('mv7'));if(d?.birth){Object.assign(S,d);if(!S.trNotes)S.trNotes={};if(!S.markedDays)S.markedDays={};if(!S.dayNotes)S.dayNotes={};if(!S.capsuleMonths)S.capsuleMonths=12;if(!S.capsuleYrs)S.capsuleYrs=1;if(!S.spheres)S.spheres={fin:0,sport:0,learn:0};if(!S.customCats)S.customCats={};if(!S.diary)S.diary={};if(!S.dreams)S.dreams=[];if(!S.tasks)S.tasks={};if(!S.gratitude)S.gratitude={};if(!S.gratGoal)S.gratGoal=30;return true}}catch(e){}return false}
 function uid(){return Math.random().toString(36).slice(2,9)}
 function getWeekOfYear(d){const s=new Date(d.getFullYear(),0,1);return Math.ceil(((d-s)/86400000+s.getDay()+1)/7)}
 function getDayOfYear(d){return Math.ceil((d-new Date(d.getFullYear(),0,1))/86400000)+1}
@@ -2633,8 +2672,8 @@ function renderPlanner(){
   sv('planMonthTotal',mTotal);sv('planMonthDone',`виконано ${mDone}`);
   const grid=document.getElementById('plannerGrid');if(!grid)return;
   grid.innerHTML='';
-  const MN=S.lang==='uk'?['Січень','Лютий','Березень','Квітень','Травень','Червень','Липень','Серпень','Вересень','Жовтень','Листопад','Грудень']:['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const DN=S.lang==='uk'?['Нд','Пн','Вт','Ср','Чт','Пт','Сб']:['Su','Mo','Tu','We','Th','Fr','Sa'];
+  const _MN={uk:['Січень','Лютий','Березень','Квітень','Травень','Червень','Липень','Серпень','Вересень','Жовтень','Листопад','Грудень'],en:['January','February','March','April','May','June','July','August','September','October','November','December'],de:['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'],es:['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],fr:['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],pt:['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],pl:['Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec','Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień']};const MN=_MN[S.lang]||_MN.en;
+  const _DN={uk:['Нд','Пн','Вт','Ср','Чт','Пт','Сб'],en:['Su','Mo','Tu','We','Th','Fr','Sa'],de:['So','Mo','Di','Mi','Do','Fr','Sa'],es:['Do','Lu','Ma','Mi','Ju','Vi','Sá'],fr:['Di','Lu','Ma','Me','Je','Ve','Sa'],pt:['Do','Se','Te','Qu','Qu','Se','Sá'],pl:['Nd','Pn','Wt','Śr','Cz','Pt','Sb']};const DN=_DN[S.lang]||_DN.en;
   grid.style.cssText='display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px';
   for(let m=0;m<12;m++){
     const card=document.createElement('div');card.style.cssText='background:var(--s1);border:1px solid var(--b1);padding:14px';
@@ -2691,12 +2730,31 @@ function renderPlanDayTasks(key){
   const pe=document.getElementById('planDayPct');if(pe)pe.textContent=pct+'%';
 }
 function selPlanPri(btn){document.querySelectorAll('.plan-pri-btn').forEach(b=>{b.classList.remove('on');b.style.borderColor='var(--b2)';b.style.color='var(--text2)';});btn.classList.add('on');btn.style.borderColor='var(--gold)';btn.style.color='var(--gold)';}
-function savePlanTask(){
+function savePlanTask(repeat){
   const text=document.getElementById('planTaskText').value.trim();if(!text)return;
   const pri=document.querySelector('.plan-pri-btn.on')?.dataset.pri||'normal';
-  if(!S.tasks)S.tasks={};if(!S.tasks[planDayKey])S.tasks[planDayKey]=[];
-  S.tasks[planDayKey].push({text,pri,done:false,created:new Date().toISOString()});
-  save();document.getElementById('planTaskText').value='';renderPlanDayTasks(planDayKey);renderPlanner();
+  if(!S.tasks)S.tasks={};
+  const task={text,pri,done:false,created:new Date().toISOString()};
+  if(!repeat){
+    // Single day
+    if(!S.tasks[planDayKey])S.tasks[planDayKey]=[];
+    S.tasks[planDayKey].push({...task});
+  } else {
+    // Repeat for week (7 days) or month (30 days)
+    const days=repeat==='week'?7:30;
+    const base=planCurrentDate||new Date();
+    for(let i=0;i<days;i++){
+      const d=new Date(base);d.setDate(d.getDate()+i);
+      const k=planKey(d.getFullYear(),d.getMonth(),d.getDate());
+      if(!S.tasks[k])S.tasks[k]=[];
+      S.tasks[k].push({...task,done:false});
+    }
+  }
+  save();
+  document.getElementById('planTaskText').value='';
+  renderPlanDayTasks(planDayKey);
+  renderPlanner();
+  if(repeat)closePlanModal();
 }
 function togglePlanTask(key,idx,cb){if(!S.tasks||!S.tasks[key])return;S.tasks[key][idx].done=cb.checked;save();renderPlanDayTasks(key);renderPlanner();}
 function deletePlanTask(key,idx){if(!S.tasks||!S.tasks[key])return;S.tasks[key].splice(idx,1);if(!S.tasks[key].length)delete S.tasks[key];save();renderPlanDayTasks(key);renderPlanner();}
@@ -2705,23 +2763,24 @@ function closePlanModal(){document.getElementById('planOverlay').classList.remov
 // ══════════════════════════════════════
 //  GRATITUDE
 // ══════════════════════════════════════
-const GRAT_SUGGESTIONS=['Здоров\'я своє та близьких','Нові можливості сьогодні','Дах над головою','Їжа на столі','Хороших людей поруч','Навчання та ріст','Природу навколо','Спокійний ранок','Улюблену музику','Гарну погоду','Цікаву роботу','Підтримку друзів','Можливість мріяти','Здатність любити','Силу рухатись вперед','Кожен новий день','Своє тіло','Свободу вибору','Технології що допомагають','Красу світу навколо'];
+const GRAT_SUGGESTIONS=['Здоров\'я своє та близьких','Нові можливості сьогодні','Дах над головою','Їжа на столі','Хороших людей поруч','Навчання та ріст','Природу навколо','Спокійний ранок','Улюблену музику','Гарну погоду','Цікаву роботу','Підтримку друзів','Можливість мріяти','Здатність любити','Силу рухатись вперед','Кожен новий день','Своє тіло','Свободу вибору','Технології що допомагають','Красу світу навколо','Тепло домашнього затишку','Можливість вчитись','Хороший сон','Смачну їжу','Улюблених тварин','Сонячне світло','Свіже повітря','Здорове серце','Гарний настрій','Цікаві ідеї','Творчість і натхнення','Фізичну силу','Ментальну стійкість','Вдячних людей навколо','Мирне небо','Можливість подорожувати','Свої таланти','Приємні спогади','Майбутні мрії','Сьогоднішній день','Тишу вранці','Сміх близьких','Теплий чай або каву','Улюблену книгу','Гарну музику','Нові знайомства'];
 function initGratYearSel(){const sel=document.getElementById('gratYearSel');if(!sel||sel.options.length)return;const ny=new Date().getFullYear();for(let y=ny-2;y<=ny+1;y++){const o=document.createElement('option');o.value=y;o.textContent=y;if(y===ny)o.selected=true;sel.appendChild(o);}}
 function renderGratitude(){
   initGratYearSel();
+  const gs=document.getElementById('gratGoalSel');if(gs)gs.value=String(S.gratGoal||30);
   const now=new Date();const sel=document.getElementById('gratYearSel');const year=sel?+sel.value:now.getFullYear();
   const todayKey=diaryKey(now.getFullYear(),now.getMonth(),now.getDate());
   const todayGrats=(S.gratitude&&S.gratitude[todayKey])||[];
-  const pct=Math.min(100,Math.round(todayGrats.length/30*100));
+  const pct=Math.min(100,Math.round(todayGrats.length/(S.gratGoal||30)*100));
   const sv=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  sv('gratTodayCount',todayGrats.length);
+  sv('gratTodayCount',todayGrats.length); sv('gratGoalLbl',S.gratGoal||30);
   let streak=0;const d=new Date(now);
   while(streak<366){const k=diaryKey(d.getFullYear(),d.getMonth(),d.getDate());if(S.gratitude&&S.gratitude[k]&&S.gratitude[k].length>0){streak++;d.setDate(d.getDate()-1);}else break;}
   sv('gratStreak',streak);
   let total=0;Object.entries(S.gratitude||{}).forEach(([k,v])=>{if(k.startsWith(year+'_'))total+=v.length;});
   sv('gratTotal',total);
   const bar=document.getElementById('gratPctBar');if(bar)bar.style.width=pct+'%';
-  const lbl=document.getElementById('gratPctLbl');if(lbl)lbl.textContent=`${todayGrats.length} / 30`;
+  const lbl=document.getElementById('gratPctLbl');if(lbl)lbl.textContent=`${todayGrats.length} / ${S.gratGoal||30}`;
   renderGratTodayList(todayKey);
   const sugg=document.getElementById('gratSuggestions');
   if(sugg){sugg.innerHTML='';const shuffled=[...GRAT_SUGGESTIONS].sort(()=>Math.random()-.5).slice(0,6);shuffled.forEach(s=>{const btn=document.createElement('button');btn.style.cssText='background:var(--s2);border:1px solid var(--b1);color:var(--text2);font-size:9px;letter-spacing:1px;padding:5px 10px;cursor:pointer;transition:all .2s';btn.textContent=s;btn.onmouseover=()=>{btn.style.borderColor='var(--gold)';btn.style.color='var(--gold)';};btn.onmouseout=()=>{btn.style.borderColor='var(--b1)';btn.style.color='var(--text2)';};btn.onclick=()=>{document.getElementById('gratInput').value=s;document.getElementById('gratInput').focus();};sugg.appendChild(btn);});}
@@ -2733,21 +2792,26 @@ function renderGratTodayList(key){
   if(!grats.length){list.innerHTML=`<div style="font-size:9px;color:var(--muted);letter-spacing:2px;text-align:center;padding:8px 0">Ще нічого не додано сьогодні</div>`;return;}
   grats.forEach((g,i)=>{const item=document.createElement('div');item.style.cssText='display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--b1)';item.innerHTML=`<span style="font-size:9px;color:var(--gold);font-weight:700;min-width:20px">${i+1}.</span><span style="flex:1;font-size:11px;color:var(--text2);line-height:1.4">${g}</span><span onclick="deleteGratitude('${key}',${i})" style="font-size:14px;color:var(--muted);cursor:pointer" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--muted)'">×</span>`;list.appendChild(item);});
 }
+
+function changeGratGoal(val){
+  S.gratGoal=parseInt(val)||30;
+  save();renderGratitude();
+}
 function addGratitude(){
   const inp=document.getElementById('gratInput');if(!inp)return;const text=inp.value.trim();if(!text)return;
   const now=new Date();const key=diaryKey(now.getFullYear(),now.getMonth(),now.getDate());
   if(!S.gratitude)S.gratitude={};if(!S.gratitude[key])S.gratitude[key]=[];
-  if(S.gratitude[key].length>=30){alert(S.lang==='uk'?'Ти вже досяг мети 30 вдячностей! 🎉':'You reached the goal of 30 gratitudes today! 🎉');return;}
+  if(S.gratitude[key].length>=(S.gratGoal||30)){alert(S.lang==='uk'?'Ти вже досяг мети 30 вдячностей! 🎉':'You reached the goal of 30 gratitudes today! 🎉');return;}
   S.gratitude[key].push(text);save();inp.value='';renderGratitude();
-  if(S.gratitude[key].length===30)setTimeout(()=>launchConfetti('#c8a050'),300);
+  if(S.gratitude[key].length===(S.gratGoal||30))setTimeout(()=>launchConfetti('#c8a050'),300);
 }
 function deleteGratitude(key,idx){if(!S.gratitude||!S.gratitude[key])return;S.gratitude[key].splice(idx,1);save();renderGratitude();}
 function renderGratCalendar(year){
   const cal=document.getElementById('gratCalendar');if(!cal)return;cal.innerHTML='';
   cal.style.cssText='display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-top:8px';
   const now=new Date();
-  const MN=S.lang==='uk'?['Січень','Лютий','Березень','Квітень','Травень','Червень','Липень','Серпень','Вересень','Жовтень','Листопад','Грудень']:['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const DN=S.lang==='uk'?['Нд','Пн','Вт','Ср','Чт','Пт','Сб']:['Su','Mo','Tu','We','Th','Fr','Sa'];
+  const _MN={uk:['Січень','Лютий','Березень','Квітень','Травень','Червень','Липень','Серпень','Вересень','Жовтень','Листопад','Грудень'],en:['January','February','March','April','May','June','July','August','September','October','November','December'],de:['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'],es:['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],fr:['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],pt:['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],pl:['Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec','Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień']};const MN=_MN[S.lang]||_MN.en;
+  const _DN={uk:['Нд','Пн','Вт','Ср','Чт','Пт','Сб'],en:['Su','Mo','Tu','We','Th','Fr','Sa'],de:['So','Mo','Di','Mi','Do','Fr','Sa'],es:['Do','Lu','Ma','Mi','Ju','Vi','Sá'],fr:['Di','Lu','Ma','Me','Je','Ve','Sa'],pt:['Do','Se','Te','Qu','Qu','Se','Sá'],pl:['Nd','Pn','Wt','Śr','Cz','Pt','Sb']};const DN=_DN[S.lang]||_DN.en;
   for(let m=0;m<12;m++){
     const card=document.createElement('div');card.style.cssText='background:var(--s1);border:1px solid var(--b1);padding:12px';
     const mGrats=Object.entries(S.gratitude||{}).filter(([k])=>k.startsWith(year+'_'+m+'_')).reduce((sum,[,v])=>sum+v.length,0);
@@ -2759,14 +2823,15 @@ function renderGratCalendar(year){
     for(let d=1;d<=dim;d++){
       const key=diaryKey(year,m,d);const grats=(S.gratitude&&S.gratitude[key])||[];
       const isToday=year===now.getFullYear()&&m===now.getMonth()&&d===now.getDate();
-      const pct=Math.min(100,Math.round(grats.length/30*100));
+      const goal=S.gratGoal||30;const pct=Math.min(100,Math.round(grats.length/goal*100));
       const cell=document.createElement('div');cell.style.cssText='aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:8px;cursor:pointer;border-radius:2px;transition:all .15s;font-family:"IBM Plex Mono",monospace';cell.textContent=d;
       if(isToday){cell.style.cssText+=';background:var(--goldd);color:var(--gold);font-weight:700;outline:1px solid var(--gold)';}
-      else if(grats.length>=30){cell.style.cssText+=';background:var(--gold);color:var(--bg);font-weight:700';}
+      else if(grats.length>=goal){cell.style.cssText+=';background:var(--gold);color:var(--bg);font-weight:700';}
       else if(grats.length>0){const op=0.2+0.6*(pct/100);cell.style.cssText+=`;background:rgba(200,160,80,${op.toFixed(2)});color:var(--text)`;}
       else{cell.style.cssText+=';color:var(--muted2);border:1px solid var(--b1)';}
       cell.addEventListener('mouseenter',e=>{cell.style.transform='scale(1.3)';cell.style.zIndex='10';tip(e,`${d} ${MN[m]}`,grats.length?`${grats.length} вдячностей`:'Порожньо');});
       cell.addEventListener('mousemove',moveTip);cell.addEventListener('mouseleave',()=>{hideTip();cell.style.transform='';cell.style.zIndex='';});
+      cell.addEventListener('click',()=>showGratDay(key, d, MN[m], year));
       dGrid.appendChild(cell);
     }
     card.appendChild(dGrid);cal.appendChild(card);
@@ -2776,6 +2841,48 @@ function renderGratCalendar(year){
 // ══════════════════════════════════════
 //  VISION BOARD
 // ══════════════════════════════════════
+
+function showGratDay(key, day, month, year){
+  const grats=(S.gratitude&&S.gratitude[key])||[];
+  const isToday=key===diaryKey(new Date().getFullYear(),new Date().getMonth(),new Date().getDate());
+  // Show in a simple overlay
+  let overlay=document.getElementById('gratDayOverlay');
+  if(!overlay){
+    overlay=document.createElement('div');
+    overlay.id='gratDayOverlay';
+    overlay.className='overlay';
+    overlay.style.cssText='z-index:600';
+    overlay.innerHTML=`<div class="modal" style="width:460px;max-height:80vh;overflow-y:auto;position:relative">
+      <button class="modal-close" onclick="document.getElementById('gratDayOverlay').classList.remove('open')">✕</button>
+      <div id="gratDayTitle" class="modal-title" style="margin-bottom:16px"></div>
+      <div id="gratDayContent"></div>
+    </div>`;
+    overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.classList.remove('open');});
+    document.body.appendChild(overlay);
+  }
+  document.getElementById('gratDayTitle').innerHTML=`<em>${day} ${month} ${year}</em>`;
+  const content=document.getElementById('gratDayContent');
+  if(!grats.length){
+    content.innerHTML=`<div style="text-align:center;padding:24px;font-size:10px;color:var(--muted);letter-spacing:2px">${isToday?'Ще нічого не додано':'Порожній день'}</div>`;
+  } else {
+    const goal=S.gratGoal||30;
+    const pct=Math.min(100,Math.round(grats.length/goal*100));
+    content.innerHTML=`
+      <div style="margin-bottom:16px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <span style="font-size:8px;letter-spacing:2px;color:var(--muted)">ПРОГРЕС</span>
+          <span style="font-size:8px;color:var(--gold)">${grats.length} / ${goal}</span>
+        </div>
+        <div style="background:var(--s2);height:4px;border-radius:2px">
+          <div style="height:100%;background:var(--gold);border-radius:2px;width:${pct}%"></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        ${grats.map((g,i)=>`<div style="display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--b1)"><span style="font-size:9px;color:var(--gold);font-weight:700;min-width:24px;padding-top:1px">${i+1}.</span><span style="font-size:11px;color:var(--text2);line-height:1.5;flex:1">${g}</span></div>`).join('')}
+      </div>`;
+  }
+  overlay.classList.add('open');
+}
 let visionEditId=null;
 let visionImgData=null;
 
