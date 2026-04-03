@@ -726,21 +726,21 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
           </div>
           <!-- Stats -->
           <div style="padding:10px 16px;border-bottom:1px solid var(--b1);display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center">
-            <div><div id="statTrackers" style="font-size:18px;font-weight:700;color:var(--gold)">0</div><div style="font-size:7px;color:var(--muted);letter-spacing:1px">ТРЕКЕРІВ</div></div>
-            <div><div id="statDiary" style="font-size:18px;font-weight:700;color:var(--gold)">0</div><div style="font-size:7px;color:var(--muted);letter-spacing:1px">ЗАПИСІВ</div></div>
-            <div><div id="statWeeks" style="font-size:18px;font-weight:700;color:var(--gold)">0</div><div style="font-size:7px;color:var(--muted);letter-spacing:1px">ТИЖНІВ</div></div>
+            <div><div id="statTrackers" style="font-size:18px;font-weight:700;color:var(--gold)">0</div><div style="font-size:7px;color:var(--muted);letter-spacing:1px" data-i18n="statTrackersLbl">ТРЕКЕРІВ</div></div>
+            <div><div id="statDiary" style="font-size:18px;font-weight:700;color:var(--gold)">0</div><div style="font-size:7px;color:var(--muted);letter-spacing:1px" data-i18n="statDiaryLbl">ЗАПИСІВ</div></div>
+            <div><div id="statWeeks" style="font-size:18px;font-weight:700;color:var(--gold)">0</div><div style="font-size:7px;color:var(--muted);letter-spacing:1px" data-i18n="statWeeksLbl">ТИЖНІВ</div></div>
           </div>
           <!-- Theme -->
           <div style="padding:10px 16px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between">
-            <span style="font-size:9px;color:var(--text2);letter-spacing:1px">ТЕМА</span>
+            <span style="font-size:9px;color:var(--text2);letter-spacing:1px" data-i18n="themeLabel">ТЕМА</span>
             <div style="display:flex;gap:6px">
-              <button onclick="setTheme('dark')" id="themeDarkBtn" style="background:var(--bg);border:1px solid var(--b2);color:var(--text);font-size:10px;padding:4px 10px;cursor:pointer;transition:all .2s">🌙 Темна</button>
-              <button onclick="setTheme('light')" id="themeLightBtn" style="background:var(--bg);border:1px solid var(--b2);color:var(--text);font-size:10px;padding:4px 10px;cursor:pointer;transition:all .2s">☀️ Світла</button>
+              <button onclick="setTheme('dark')" id="themeDarkBtn" style="background:var(--bg);border:1px solid var(--b2);color:var(--text);font-size:10px;padding:4px 10px;cursor:pointer;transition:all .2s" data-i18n="themeDark">🌙 Темна</button>
+              <button onclick="setTheme('light')" id="themeLightBtn" style="background:var(--bg);border:1px solid var(--b2);color:var(--text);font-size:10px;padding:4px 10px;cursor:pointer;transition:all .2s" data-i18n="themeLight">☀️ Світла</button>
             </div>
           </div>
-          <div class="profile-menu-item" onclick="openProfileSettings()">⚙️ <span>Налаштування</span></div>
-          <div class="profile-menu-item" onclick="syncToCloud()">☁ <span id="pmSync">Зберегти в хмару</span></div>
-          <div class="profile-menu-item danger" onclick="signOut()">→ <span id="pmLogout">Вийти</span></div>
+          <div class="profile-menu-item" onclick="openProfileSettings()">⚙️ <span data-i18n="settingsTitle">Налаштування</span></div>
+          <div class="profile-menu-item" onclick="syncToCloud()">☁ <span id="pmSync" data-i18n="pmSync">Зберегти в хмару</span></div>
+          <div class="profile-menu-item danger" onclick="signOut()">→ <span id="pmLogout" data-i18n="pmLogout">Вийти</span></div>
         </div>
       </div>
       
@@ -843,7 +843,7 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
         <select id="diaryYearSel" onchange="renderDiaryGrid()" style="background:var(--s1);border:1px solid var(--b2);color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:6px 10px;outline:none;cursor:pointer"></select>
       </div>
       <div class="stats-strip" style="grid-template-columns:repeat(3,1fr)">
-        <div class="stile"><div class="sl" id="dsl0" data-i18n="diaryStatEntries">Записів</div><div class="sn" id="dsn0" style="color:var(--gold)">—</div><div class="ss" id="dss0">у році</div></div>
+        <div class="stile"><div class="sl" id="dsl0" data-i18n="diaryStatEntries" data-i18n="statDiaryLbl2">Записів</div><div class="sn" id="dsn0" style="color:var(--gold)">—</div><div class="ss" id="dss0">у році</div></div>
         <div class="stile"><div class="sl" id="dsl1" data-i18n="diaryStatDayOfYear">День року</div><div class="sn" id="dsn1">—</div><div class="ss" id="dss1">з 365</div></div>
         <div class="stile"><div class="sl" id="dsl2" data-i18n="diaryStatLeft">Залишилось</div><div class="sn" id="dsn2">—</div><div class="ss" id="dss2">днів</div></div>
       </div>
@@ -1050,18 +1050,18 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
     <div class="mf">
       <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px">Тема</label>
       <div style="display:flex;gap:8px">
-        <button onclick="setTheme('dark')" id="settingsDarkBtn" style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-size:11px;padding:10px;cursor:pointer;transition:all .2s">🌙 Темна</button>
-        <button onclick="setTheme('light')" id="settingsLightBtn" style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-size:11px;padding:10px;cursor:pointer;transition:all .2s">☀️ Світла</button>
+        <button onclick="setTheme('dark')" id="settingsDarkBtn" style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-size:11px;padding:10px;cursor:pointer;transition:all .2s" data-i18n="themeDark">🌙 Темна</button>
+        <button onclick="setTheme('light')" id="settingsLightBtn" style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-size:11px;padding:10px;cursor:pointer;transition:all .2s" data-i18n="themeLight">☀️ Світла</button>
       </div>
     </div>
 
     <!-- Stats -->
     <div style="padding:16px;background:var(--s2);border:1px solid var(--b1);margin-bottom:16px">
-      <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:12px">СТАТИСТИКА</div>
+      <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:12px" data-i18n="statsTitle">СТАТИСТИКА</div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center">
-        <div><div id="statTrackers2" style="font-size:24px;font-weight:700;color:var(--gold)">0</div><div style="font-size:8px;color:var(--muted)">Трекерів</div></div>
-        <div><div id="statDiary2" style="font-size:24px;font-weight:700;color:var(--gold)">0</div><div style="font-size:8px;color:var(--muted)">Записів</div></div>
-        <div><div id="statWeeks2" style="font-size:24px;font-weight:700;color:var(--gold)">0</div><div style="font-size:8px;color:var(--muted)">Тижнів ✓</div></div>
+        <div><div id="statTrackers2" style="font-size:24px;font-weight:700;color:var(--gold)">0</div><div style="font-size:8px;color:var(--muted)" data-i18n="statTrackersLbl2">Трекерів</div></div>
+        <div><div id="statDiary2" style="font-size:24px;font-weight:700;color:var(--gold)">0</div><div style="font-size:8px;color:var(--muted)" data-i18n="statDiaryLbl2">Записів</div></div>
+        <div><div id="statWeeks2" style="font-size:24px;font-weight:700;color:var(--gold)">0</div><div style="font-size:8px;color:var(--muted)" data-i18n="statWeeksLbl2">Тижнів ✓</div></div>
       </div>
     </div>
 
@@ -1156,18 +1156,18 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
     <div class="mf">
       <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px">Тема</label>
       <div style="display:flex;gap:8px">
-        <button onclick="setTheme('dark')" id="settingsDarkBtn" style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-size:11px;padding:10px;cursor:pointer;transition:all .2s">🌙 Темна</button>
-        <button onclick="setTheme('light')" id="settingsLightBtn" style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-size:11px;padding:10px;cursor:pointer;transition:all .2s">☀️ Світла</button>
+        <button onclick="setTheme('dark')" id="settingsDarkBtn" style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-size:11px;padding:10px;cursor:pointer;transition:all .2s" data-i18n="themeDark">🌙 Темна</button>
+        <button onclick="setTheme('light')" id="settingsLightBtn" style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-size:11px;padding:10px;cursor:pointer;transition:all .2s" data-i18n="themeLight">☀️ Світла</button>
       </div>
     </div>
 
     <!-- Stats -->
     <div style="padding:16px;background:var(--s2);border:1px solid var(--b1);margin-bottom:16px">
-      <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:12px">СТАТИСТИКА</div>
+      <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:12px" data-i18n="statsTitle">СТАТИСТИКА</div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center">
-        <div><div id="statTrackers2" style="font-size:24px;font-weight:700;color:var(--gold)">0</div><div style="font-size:8px;color:var(--muted)">Трекерів</div></div>
-        <div><div id="statDiary2" style="font-size:24px;font-weight:700;color:var(--gold)">0</div><div style="font-size:8px;color:var(--muted)">Записів</div></div>
-        <div><div id="statWeeks2" style="font-size:24px;font-weight:700;color:var(--gold)">0</div><div style="font-size:8px;color:var(--muted)">Тижнів ✓</div></div>
+        <div><div id="statTrackers2" style="font-size:24px;font-weight:700;color:var(--gold)">0</div><div style="font-size:8px;color:var(--muted)" data-i18n="statTrackersLbl2">Трекерів</div></div>
+        <div><div id="statDiary2" style="font-size:24px;font-weight:700;color:var(--gold)">0</div><div style="font-size:8px;color:var(--muted)" data-i18n="statDiaryLbl2">Записів</div></div>
+        <div><div id="statWeeks2" style="font-size:24px;font-weight:700;color:var(--gold)">0</div><div style="font-size:8px;color:var(--muted)" data-i18n="statWeeksLbl2">Тижнів ✓</div></div>
       </div>
     </div>
 
@@ -2216,6 +2216,123 @@ const T_I18N = {
 "fr": "TERMINÉ",
 "pt": "CONCLUÍDO",
 "pl": "UKOŃCZONO"
+},
+"statTrackersLbl": {
+"uk": "ТРЕКЕРІВ",
+"en": "TRACKERS",
+"de": "TRACKER",
+"es": "RASTREADORES",
+"fr": "SUIVIS",
+"pt": "RASTREADORES",
+"pl": "TRACKERY"
+},
+"statDiaryLbl": {
+"uk": "ЗАПИСІВ",
+"en": "ENTRIES",
+"de": "EINTRÄGE",
+"es": "ENTRADAS",
+"fr": "ENTRÉES",
+"pt": "ENTRADAS",
+"pl": "WPISY"
+},
+"statWeeksLbl": {
+"uk": "ТИЖНІВ",
+"en": "WEEKS",
+"de": "WOCHEN",
+"es": "SEMANAS",
+"fr": "SEMAINES",
+"pt": "SEMANAS",
+"pl": "TYGODNIE"
+},
+"statTrackersLbl2": {
+"uk": "Трекерів",
+"en": "Trackers",
+"de": "Tracker",
+"es": "Rastreadores",
+"fr": "Suivis",
+"pt": "Rastreadores",
+"pl": "Trackery"
+},
+"statDiaryLbl2": {
+"uk": "Записів",
+"en": "Entries",
+"de": "Einträge",
+"es": "Entradas",
+"fr": "Entrées",
+"pt": "Entradas",
+"pl": "Wpisy"
+},
+"statWeeksLbl2": {
+"uk": "Тижнів ✓",
+"en": "Weeks ✓",
+"de": "Wochen ✓",
+"es": "Semanas ✓",
+"fr": "Semaines ✓",
+"pt": "Semanas ✓",
+"pl": "Tygodnie ✓"
+},
+"themeLabel": {
+"uk": "ТЕМА",
+"en": "THEME",
+"de": "THEMA",
+"es": "TEMA",
+"fr": "THÈME",
+"pt": "TEMA",
+"pl": "MOTYW"
+},
+"themeDark": {
+"uk": "🌙 Темна",
+"en": "🌙 Dark",
+"de": "🌙 Dunkel",
+"es": "🌙 Oscuro",
+"fr": "🌙 Sombre",
+"pt": "🌙 Escuro",
+"pl": "🌙 Ciemny"
+},
+"themeLight": {
+"uk": "☀️ Світла",
+"en": "☀️ Light",
+"de": "☀️ Hell",
+"es": "☀️ Claro",
+"fr": "☀️ Clair",
+"pt": "☀️ Claro",
+"pl": "☀️ Jasny"
+},
+"pmSync": {
+"uk": "Зберегти в хмару",
+"en": "Save to cloud",
+"de": "In Cloud speichern",
+"es": "Guardar en nube",
+"fr": "Enregistrer dans le cloud",
+"pt": "Salvar na nuvem",
+"pl": "Zapisz w chmurze"
+},
+"pmLogout": {
+"uk": "Вийти",
+"en": "Sign out",
+"de": "Abmelden",
+"es": "Cerrar sesión",
+"fr": "Se déconnecter",
+"pt": "Sair",
+"pl": "Wyloguj"
+},
+"statsTitle": {
+"uk": "СТАТИСТИКА",
+"en": "STATISTICS",
+"de": "STATISTIKEN",
+"es": "ESTADÍSTICAS",
+"fr": "STATISTIQUES",
+"pt": "ESTATÍSTICAS",
+"pl": "STATYSTYKI"
+},
+"settingsTitle": {
+"uk": "Налаштування",
+"en": "Settings",
+"de": "Einstellungen",
+"es": "Configuración",
+"fr": "Paramètres",
+"pt": "Configurações",
+"pl": "Ustawienia"
 }
 };
 function ti(key){
@@ -2456,7 +2573,7 @@ function updateTodayWidget(){
         <div class="tw-quote">"${text}"</div>
         <div class="tw-bar-wrap">
           <div class="tw-bar-track"><div class="tw-bar-fill" style="width:${dayPct}%"></div></div>
-          <div class="tw-bar-label">ТИЖДЕНЬ №${currentWeekNum} · ${dayPct}% ЗАВЕРШЕНО</div>
+          <div class="tw-bar-label">${ti('homeWeekLabel')} №${currentWeekNum} · ${dayPct}% ${ti('homeCompletedLabel')}</div>
         </div>
       </div>
       <div class="tw-right">
@@ -3434,7 +3551,7 @@ function renderGratCalendar(year){
   for(let m=0;m<12;m++){
     const card=document.createElement('div');card.style.cssText='background:var(--s1);border:1px solid var(--b1);padding:12px';
     const mGrats=Object.entries(S.gratitude||{}).filter(([k])=>k.startsWith(year+'_'+m+'_')).reduce((sum,[,v])=>sum+v.length,0);
-    const hdr=document.createElement('div');hdr.style.cssText='font-family:"Cormorant Garamond",serif;font-size:15px;font-weight:600;color:var(--gold);margin-bottom:8px;display:flex;justify-content:space-between';hdr.innerHTML=`${MN[m]}<span style="font-size:9px;color:var(--muted);letter-spacing:1px">${mGrats} записів</span>`;card.appendChild(hdr);
+    const hdr=document.createElement('div');hdr.style.cssText='font-family:"Cormorant Garamond",serif;font-size:15px;font-weight:600;color:var(--gold);margin-bottom:8px;display:flex;justify-content:space-between';hdr.innerHTML=`${MN[m]}<span style="font-size:9px;color:var(--muted);letter-spacing:1px">${mGrats}</span>`;card.appendChild(hdr);
     const dnRow=document.createElement('div');dnRow.style.cssText='display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:3px';DN.forEach(d=>{const el=document.createElement('div');el.style.cssText='font-size:6px;color:var(--muted);text-align:center';el.textContent=d;dnRow.appendChild(el);});card.appendChild(dnRow);
     const dGrid=document.createElement('div');dGrid.style.cssText='display:grid;grid-template-columns:repeat(7,1fr);gap:2px';
     const firstDay=new Date(year,m,1).getDay();for(let i=0;i<firstDay;i++)dGrid.appendChild(document.createElement('div'));
@@ -3535,12 +3652,14 @@ function openAddDream(){
   document.getElementById('visionFileInput').value='';
   document.getElementById('visionModalTitle').textContent='Нова мрія';
   const prev=document.getElementById('visionImgPreview');
-  prev.innerHTML=`<span style="font-size:32px">📸</span><span data-i18n="visionPhotoLabel" style="font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase">Натисни щоб вибрати фото</span><input type="file" id="visionFileInput" accept="image/*" style="display:none" onchange="handleVisionImg(this)">`;
+  prev.innerHTML=`<span style="font-size:32px">📸</span><span style="font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase">${ti('visionPhotoLabel')}</span><input type="file" id="visionFileInput" accept="image/*" style="display:none" onchange="handleVisionImg(this)">`;
   prev.onclick=()=>document.getElementById('visionFileInput').click();
   document.querySelectorAll('.vcat-btn').forEach((b,i)=>b.classList.toggle('on',i===0));
   const delBtn=document.getElementById('visionDeleteBtn');
   if(delBtn)delBtn.style.display='none';
-  document.getElementById('visionOverlay').classList.add('open');
+  // Update modal title
+  const vmt=document.getElementById('visionModalTitle');if(vmt)vmt.innerHTML=`<em>${ti('visionModalNewTitle')}</em>`;
+  document.getElementById('visionOverlay').classList.add('open');applyI18n();
 }
 
 function openEditDream(id){
