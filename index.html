@@ -843,9 +843,9 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
         <select id="diaryYearSel" onchange="renderDiaryGrid()" style="background:var(--s1);border:1px solid var(--b2);color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:6px 10px;outline:none;cursor:pointer"></select>
       </div>
       <div class="stats-strip" style="grid-template-columns:repeat(3,1fr)">
-        <div class="stile"><div class="sl" id="dsl0">Записів</div><div class="sn" id="dsn0" style="color:var(--gold)">—</div><div class="ss" id="dss0">у році</div></div>
-        <div class="stile"><div class="sl" id="dsl1">День року</div><div class="sn" id="dsn1">—</div><div class="ss" id="dss1">з 365</div></div>
-        <div class="stile"><div class="sl" id="dsl2">Залишилось</div><div class="sn" id="dsn2">—</div><div class="ss" id="dss2">днів</div></div>
+        <div class="stile"><div class="sl" id="dsl0" data-i18n="diaryStatEntries">Записів</div><div class="sn" id="dsn0" style="color:var(--gold)">—</div><div class="ss" id="dss0">у році</div></div>
+        <div class="stile"><div class="sl" id="dsl1" data-i18n="diaryStatDayOfYear">День року</div><div class="sn" id="dsn1">—</div><div class="ss" id="dss1">з 365</div></div>
+        <div class="stile"><div class="sl" id="dsl2" data-i18n="diaryStatLeft">Залишилось</div><div class="sn" id="dsn2">—</div><div class="ss" id="dss2">днів</div></div>
       </div>
       <div id="diaryGrid" style="margin-top:20px"></div>
       <div id="diaryEntries" style="margin-top:32px"></div>
@@ -856,14 +856,14 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
   <div class="page" id="page-vision">
     <div class="inner">
       <div class="life-head">
-        <div class="ptitle">Мої<br><em>Мрії</em></div>
-        <button onclick="openAddDream()" style="background:none;border:1px solid var(--gold);color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;padding:8px 18px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='var(--gold)';this.style.color='var(--bg)'" onmouseout="this.style.background='none';this.style.color='var(--gold)'">+ ДОДАТИ</button>
+        <div class="ptitle" data-i18n="visionPtitle">Мої<br><em>Мрії</em></div>
+        <button onclick="openAddDream()" style="background:none;border:1px solid var(--gold);color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;padding:8px 18px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='var(--gold)';this.style.color='var(--bg)'" onmouseout="this.style.background='none';this.style.color='var(--gold)'" data-i18n="visionAddBtn">+ ДОДАТИ</button>
       </div>
       <div id="visionBoard" style="columns:2;column-gap:8px;margin-top:20px"></div>
       <div id="visionEmpty" style="text-align:center;padding:60px 20px;display:none">
         <div style="font-size:48px;margin-bottom:16px">✨</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--text2);margin-bottom:8px">Твоя дошка мрій порожня</div>
-        <div style="font-size:10px;color:var(--muted);letter-spacing:2px">Додай перше фото своєї мрії</div>
+        <div data-i18n="visionEmptyTitle" style="font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--text2);margin-bottom:8px">Твоя дошка мрій порожня</div>
+        <div data-i18n="visionEmptyDesc" style="font-size:10px;color:var(--muted);letter-spacing:2px">Додай перше фото своєї мрії</div>
       </div>
     </div>
   </div>
@@ -872,15 +872,15 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
   <div class="page" id="page-plan">
     <div class="inner">
       <div class="life-head">
-        <div class="ptitle">Мій<br><em>Планер</em></div>
+        <div class="ptitle" data-i18n="planPtitle">Мій<br><em>Планер</em></div>
         <div style="display:flex;align-items:center;gap:10px">
           <select id="planYearSel" onchange="renderPlanner()" style="background:var(--s1);border:1px solid var(--b2);color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:6px 10px;outline:none;cursor:pointer"></select>
         </div>
       </div>
       <div class="stats-strip" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px">
-        <div class="stile"><div class="sl">Задач сьогодні</div><div class="sn" id="planTodayTotal" style="color:var(--gold)">0</div><div class="ss" id="planTodayDone">виконано 0</div></div>
-        <div class="stile"><div class="sl">За місяць</div><div class="sn" id="planMonthTotal">0</div><div class="ss" id="planMonthDone">—</div></div>
-        <div class="stile"><div class="sl">Прогрес дня</div><div class="sn" id="planDayPct" style="color:var(--gold)">0%</div><div class="ss">виконання</div></div>
+        <div class="stile"><div class="sl" id="planLblToday">Задач сьогодні</div><div class="sn" id="planTodayTotal" style="color:var(--gold)">0</div><div class="ss" id="planTodayDone">виконано 0</div></div>
+        <div class="stile"><div class="sl" id="planLblMonth">За місяць</div><div class="sn" id="planMonthTotal">0</div><div class="ss" id="planMonthDone">—</div></div>
+        <div class="stile"><div class="sl" id="planLblProgress">Прогрес дня</div><div class="sn" id="planDayPct" style="color:var(--gold)">0%</div><div class="ss" id="planLblDone">виконання</div></div>
       </div>
       <div id="plannerGrid"></div>
     </div>
@@ -890,20 +890,20 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
   <div class="page" id="page-grat">
     <div class="inner">
       <div class="life-head">
-        <div class="ptitle">Моя<br><em>Вдячність</em></div>
+        <div class="ptitle" data-i18n="gratPtitle">Моя<br><em>Вдячність</em></div>
         <div style="display:flex;align-items:center;gap:10px">
           <select id="gratYearSel" onchange="renderGratitude()" style="background:var(--s1);border:1px solid var(--b2);color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:6px 10px;outline:none;cursor:pointer"></select>
         </div>
       </div>
       <div class="stats-strip" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px">
-        <div class="stile"><div class="sl">Записів сьогодні</div><div class="sn" id="gratTodayCount" style="color:var(--gold)">0</div><div class="ss">з <span id="gratGoalLbl">30</span></div></div>
-        <div class="stile"><div class="sl">Днів підряд</div><div class="sn" id="gratStreak">0</div><div class="ss">серія</div></div>
-        <div class="stile"><div class="sl">Всього записів</div><div class="sn" id="gratTotal">0</div><div class="ss">за рік</div></div>
+        <div class="stile"><div class="sl" id="gratLblToday">Записів сьогодні</div><div class="sn" id="gratTodayCount" style="color:var(--gold)">0</div><div class="ss">з <span id="gratGoalLbl">30</span></div></div>
+        <div class="stile"><div class="sl" id="gratLblStreak">Днів підряд</div><div class="sn" id="gratStreak">0</div><div class="ss" id="gratLblSeries">серія</div></div>
+        <div class="stile"><div class="sl" id="gratLblTotal">Всього записів</div><div class="sn" id="gratTotal">0</div><div class="ss" id="gratLblYear">за рік</div></div>
       </div>
       <!-- Today's gratitude -->
       <div style="background:var(--s1);border:1px solid var(--b1);padding:20px;margin-bottom:24px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-          <div style="font-size:8px;letter-spacing:4px;color:var(--muted);text-transform:uppercase">СЬОГОДНІ Я ВДЯЧНИЙ(НА) ЗА...</div>
+          <div id="gratTodayTitle" style="font-size:8px;letter-spacing:4px;color:var(--muted);text-transform:uppercase">СЬОГОДНІ Я ВДЯЧНИЙ(НА) ЗА...</div>
           <div style="display:flex;align-items:center;gap:8px">
             <span style="font-size:8px;color:var(--muted);letter-spacing:2px">ЦІЛЬ:</span>
             <select id="gratGoalSel" onchange="changeGratGoal(this.value)" style="background:var(--s2);border:1px solid var(--b2);color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:11px;padding:4px 8px;outline:none;cursor:pointer">
@@ -917,18 +917,18 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
         </div>
         <div id="gratTodayList" style="margin-bottom:12px"></div>
         <div style="display:flex;gap:8px">
-          <input id="gratInput" type="text" placeholder="Введи свою вдячність або вибери нижче..." style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:12px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'" onkeydown="if(event.key==='Enter')addGratitude()">
+          <input id="gratInput" type="text" data-i18n-placeholder="gratInputPlaceholder" placeholder="Введи свою вдячність або вибери нижче..." style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:12px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'" onkeydown="if(event.key==='Enter')addGratitude()">
           <button onclick="addGratitude()" style="background:var(--gold);border:none;color:var(--bg);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;padding:10px 16px;cursor:pointer;font-weight:700">+</button>
         </div>
         <!-- Suggestions -->
         <div style="margin-top:12px">
-          <div style="font-size:7px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:8px">Підказки:</div>
+          <div data-i18n="gratSuggestionsLabel" style="font-size:7px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:8px">Підказки:</div>
           <div id="gratSuggestions" style="display:flex;flex-wrap:wrap;gap:6px"></div>
         </div>
         <!-- Progress bar -->
         <div style="margin-top:14px">
           <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-            <span style="font-size:8px;letter-spacing:2px;color:var(--muted)">ПРОГРЕС ДНЯ</span>
+            <span data-i18n="gratProgressLabel" style="font-size:8px;letter-spacing:2px;color:var(--muted)">ПРОГРЕС ДНЯ</span>
             <span id="gratPctLbl" style="font-size:8px;letter-spacing:2px;color:var(--gold)">0 / 30</span>
           </div>
           <div style="background:var(--s2);height:4px;border-radius:2px">
@@ -945,22 +945,22 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
 <!-- PLANNER TASK MODAL -->
 <div class="overlay" id="planOverlay">
   <div class="modal" style="position:relative">
-    <button class="modal-close" onclick="closePlanModal()" aria-label="Close">✕</button> style="width:440px">
+    <button class="modal-close" onclick="closePlanModal()" aria-label="Close">✕</button>
     <div class="modal-title" style="margin-bottom:16px"><em id="planModalTitle">Нова задача</em></div>
     <div class="mf">
-      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Задача</label>
-      <input id="planTaskText" type="text" placeholder="Що потрібно зробити?" style="width:100%;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'" onkeydown="if(event.key==='Enter')savePlanTask()">
+      <label data-i18n="planTaskLabel" style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Задача</label>
+      <input id="planTaskText" type="text" placeholder="Task..." style="width:100%;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'" onkeydown="if(event.key==='Enter')savePlanTask()">
     </div>
     <div class="mf">
       <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Пріоритет</label>
       <div style="display:flex;gap:8px">
-        <button class="plan-pri-btn on" data-pri="normal" onclick="selPlanPri(this)" style="flex:1;background:var(--s2);border:1px solid var(--b2);color:var(--text2);font-size:10px;padding:8px;cursor:pointer;transition:all .2s">⚪ Звичайна</button>
-        <button class="plan-pri-btn" data-pri="high" onclick="selPlanPri(this)" style="flex:1;background:var(--s2);border:1px solid var(--b2);color:var(--text2);font-size:10px;padding:8px;cursor:pointer;transition:all .2s">🔴 Висока</button>
-        <button class="plan-pri-btn" data-pri="low" onclick="selPlanPri(this)" style="flex:1;background:var(--s2);border:1px solid var(--b2);color:var(--text2);font-size:10px;padding:8px;cursor:pointer;transition:all .2s">🔵 Низька</button>
+        <button class="plan-pri-btn on" data-pri="normal" onclick="selPlanPri(this)" style="flex:1;background:var(--s2);border:1px solid var(--b2);color:var(--text2);font-size:10px;padding:8px;cursor:pointer;transition:all .2s"><span class="t-normal">⚪ Normal</span></button>
+        <button class="plan-pri-btn" data-pri="high" onclick="selPlanPri(this)" style="flex:1;background:var(--s2);border:1px solid var(--b2);color:var(--text2);font-size:10px;padding:8px;cursor:pointer;transition:all .2s"><span class="t-high">🔴 High</span></button>
+        <button class="plan-pri-btn" data-pri="low" onclick="selPlanPri(this)" style="flex:1;background:var(--s2);border:1px solid var(--b2);color:var(--text2);font-size:10px;padding:8px;cursor:pointer;transition:all .2s"><span class="t-low">🔵 Low</span></button>
       </div>
     </div>
     <div class="mbtns">
-      <button class="mbtn-c" onclick="closePlanModal()">Скасувати</button>
+      <button class="mbtn-c" data-i18n="btnCancel" onclick="closePlanModal()">Скасувати</button>
       <button class="mbtn-c" onclick="savePlanTask('week')" style="border-color:var(--blue);color:var(--blue)">📅 На тиждень</button>
       <button class="mbtn-c" onclick="savePlanTask('month')" style="border-color:var(--violet);color:var(--violet)">🗓 На місяць</button>
       <button class="mbtn-ok" onclick="savePlanTask()"><span>Зберегти →</span></button>
@@ -971,44 +971,44 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
 <!-- VISION BOARD MODAL -->
 <div class="overlay" id="visionOverlay">
   <div class="modal" style="position:relative">
-    <button class="modal-close" onclick="closeVisionModal()" aria-label="Close">✕</button> style="width:480px">
+    <button class="modal-close" onclick="closeVisionModal()" aria-label="Close">✕</button>
     <div class="modal-title" style="margin-bottom:20px"><em id="visionModalTitle">Нова мрія</em></div>
 
     <!-- Photo upload -->
     <div id="visionImgPreview" style="width:100%;height:200px;background:var(--s2);border:1px dashed var(--b2);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;cursor:pointer;margin-bottom:16px;overflow:hidden;position:relative" onclick="document.getElementById('visionFileInput').click()">
       <span style="font-size:32px">📸</span>
-      <span style="font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase">Натисни щоб вибрати фото</span>
+      <span data-i18n="visionPhotoLabel" style="font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase">Натисни щоб вибрати фото</span>
       <input type="file" id="visionFileInput" accept="image/*" style="display:none" onchange="handleVisionImg(this)">
     </div>
 
     <div class="mf">
-      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Назва мрії</label>
-      <input id="visionName" type="text" placeholder="Наприклад: Власна квартира" style="width:100%;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'">
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px" data-i18n="visionNameLabel">Назва мрії</label>
+      <input id="visionName" type="text" data-i18n-placeholder="visionNamePlaceholder" placeholder="Наприклад: Власна квартира" style="width:100%;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'">
     </div>
 
     <div class="mf">
-      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Категорія</label>
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px" data-i18n="visionCatLabel">Категорія</label>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px" id="visionCatGrid">
-        <button class="vcat-btn on" data-cat="🌍 Подорожі" onclick="selVisionCat(this)">🌍 Подорожі</button>
-        <button class="vcat-btn" data-cat="🏠 Дім" onclick="selVisionCat(this)">🏠 Дім</button>
-        <button class="vcat-btn" data-cat="💰 Фінанси" onclick="selVisionCat(this)">💰 Фінанси</button>
-        <button class="vcat-btn" data-cat="💪 Здоров'я" onclick="selVisionCat(this)">💪 Здоров'я</button>
-        <button class="vcat-btn" data-cat="❤️ Стосунки" onclick="selVisionCat(this)">❤️ Стосунки</button>
-        <button class="vcat-btn" data-cat="🚗 Авто" onclick="selVisionCat(this)">🚗 Авто</button>
-        <button class="vcat-btn" data-cat="📚 Освіта" onclick="selVisionCat(this)">📚 Освіта</button>
-        <button class="vcat-btn" data-cat="✨ Інше" onclick="selVisionCat(this)">✨ Інше</button>
+        <button class="vcat-btn on" data-cat="🌍 Подорожі" onclick="selVisionCat(this)" data-i18n="visionCat1">🌍 Подорожі</button>
+        <button class="vcat-btn" data-cat="🏠 Дім" onclick="selVisionCat(this)" data-i18n="visionCat2">🏠 Дім</button>
+        <button class="vcat-btn" data-cat="💰 Фінанси" onclick="selVisionCat(this)" data-i18n="visionCat3">💰 Фінанси</button>
+        <button class="vcat-btn" data-cat="💪 Здоров'я" onclick="selVisionCat(this)" data-i18n="visionCat4">💪 Здоров'я</button>
+        <button class="vcat-btn" data-cat="❤️ Стосунки" onclick="selVisionCat(this)" data-i18n="visionCat5">❤️ Стосунки</button>
+        <button class="vcat-btn" data-cat="🚗 Авто" onclick="selVisionCat(this)" data-i18n="visionCat6">🚗 Авто</button>
+        <button class="vcat-btn" data-cat="📚 Освіта" onclick="selVisionCat(this)" data-i18n="visionCat7">📚 Освіта</button>
+        <button class="vcat-btn" data-cat="✨ Інше" onclick="selVisionCat(this)" data-i18n="visionCat8">✨ Інше</button>
       </div>
     </div>
 
     <div class="mf">
-      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Дедлайн (рік)</label>
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px" data-i18n="visionDeadlineLabel">Дедлайн (рік)</label>
       <input id="visionDeadline" type="number" min="2025" max="2050" placeholder="2026" style="width:100%;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'">
     </div>
 
     <div class="mbtns">
       <button class="mbtn-c" onclick="closeVisionModal()" id="visionDeleteBtn" style="color:var(--red);border-color:var(--red)">🗑 Видалити</button>
-      <button class="mbtn-c" onclick="closeVisionModal()">Скасувати</button>
-      <button class="mbtn-ok" onclick="saveVisionDream()"><span>Зберегти →</span></button>
+      <button class="mbtn-c" data-i18n="btnCancel" onclick="closeVisionModal()">Скасувати</button>
+      <button class="mbtn-ok" onclick="saveVisionDream()"><span data-i18n="btnSave">Зберегти →</span></button>
     </div>
   </div>
 </div>
@@ -1016,7 +1016,7 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
 <!-- PROFILE SETTINGS MODAL -->
 <div class="overlay" id="profileOverlay">
   <div class="modal" style="position:relative">
-    <button class="modal-close" onclick="closeProfileSettings()" aria-label="Close">✕</button> style="width:480px;max-height:90vh;overflow-y:auto">
+    <button class="modal-close" onclick="closeProfileSettings()" aria-label="Close">✕</button>
     <div class="modal-title" style="margin-bottom:20px">⚙️ <em>Налаштування профілю</em></div>
 
     <!-- Avatar -->
@@ -1084,10 +1084,116 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
 
 <!-- DIARY MODAL -->
 <div class="overlay" id="diaryOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeDiaryModal()">✕</button>
+    <div id="diaryModalDate" style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px"></div>
+    <div class="modal-title" style="margin-bottom:16px"><em data-i18n="diaryModalTitle">Запис дня</em></div>
+    <div class="mf">
+      <label data-i18n="diaryMoodLabel" style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px">Настрій</label>
+      <div class="mood-row" id="diaryMoodRow">
+        <button class="mood-btn" data-mood="😊" onclick="selDiaryMood(this)">😊</button>
+        <button class="mood-btn" data-mood="😐" onclick="selDiaryMood(this)">😐</button>
+        <button class="mood-btn" data-mood="😔" onclick="selDiaryMood(this)">😔</button>
+        <button class="mood-btn" data-mood="🔥" onclick="selDiaryMood(this)">🔥</button>
+        <button class="mood-btn" data-mood="😴" onclick="selDiaryMood(this)">😴</button>
+        <button class="mood-btn" data-mood="🎉" onclick="selDiaryMood(this)">🎉</button>
+        <button class="mood-btn" data-mood="💪" onclick="selDiaryMood(this)">💪</button>
+        <button class="mood-btn" data-mood="❤️" onclick="selDiaryMood(this)">❤️</button>
+      </div>
+    </div>
+    <div class="mf">
+      <label data-i18n="diaryTextLabel" style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Запис дня</label>
+      <textarea id="diaryText" rows="5" placeholder="..." style="width:100%;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:10px 12px;outline:none;resize:vertical;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'"></textarea>
+    </div>
+    <div class="mf">
+      <label data-i18n="diaryRatingLabel" style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px">Оцінка дня (1-10)</label>
+      <div style="display:flex;align-items:center;gap:14px">
+        <input type="range" id="diaryRating" min="1" max="10" value="7" oninput="document.getElementById('diaryRatingVal').textContent=this.value" style="flex:1;accent-color:var(--gold)">
+        <span id="diaryRatingVal" style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold);min-width:24px">7</span>
+      </div>
+    </div>
+    <div class="mbtns">
+      <button class="mbtn-c" data-i18n="btnCancel" onclick="closeDiaryModal()">Скасувати</button>
+      <button class="mbtn-ok" onclick="saveDiaryEntry()"><span data-i18n="btnSave">Зберегти →</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE SETTINGS MODAL -->
+<div class="overlay" id="profileOverlay">
   <div class="modal" style="position:relative">
-    <button class="modal-close" onclick="closeDiaryModal()" aria-label="Close">✕</button> style="width:520px;max-height:90vh;overflow-y:auto">
+    <button class="modal-close" onclick="closeProfileSettings()" aria-label="Close">✕</button>
+    <div class="modal-title" style="margin-bottom:20px">⚙️ <em>Налаштування профілю</em></div>
+
+    <!-- Avatar -->
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;padding:16px;background:var(--s2);border:1px solid var(--b1)">
+      <div id="profileAvatarBig" style="width:64px;height:64px;border-radius:50%;background:var(--gold);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;flex-shrink:0">A</div>
+      <div>
+        <div id="profileEmailBig" style="font-size:12px;color:var(--text);margin-bottom:4px"></div>
+        <div style="font-size:9px;color:var(--muted);letter-spacing:2px">АКАУНТ TIMEBOX</div>
+      </div>
+    </div>
+
+    <!-- Name -->
+    <div class="mf">
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Ім'я</label>
+      <input id="profileNameInput" type="text" placeholder="Твоє ім'я" style="width:100%;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'">
+    </div>
+
+    <!-- Birth date -->
+    <div class="mf">
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Дата народження</label>
+      <input id="profileBirthInput" type="date" style="width:100%;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'">
+    </div>
+
+    <!-- Lifespan -->
+    <div class="mf">
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Очікувана тривалість життя (років)</label>
+      <input id="profileLifespanInput" type="number" min="50" max="120" placeholder="90" style="width:100%;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'">
+    </div>
+
+    <!-- Theme -->
+    <div class="mf">
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px">Тема</label>
+      <div style="display:flex;gap:8px">
+        <button onclick="setTheme('dark')" id="settingsDarkBtn" style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-size:11px;padding:10px;cursor:pointer;transition:all .2s">🌙 Темна</button>
+        <button onclick="setTheme('light')" id="settingsLightBtn" style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-size:11px;padding:10px;cursor:pointer;transition:all .2s">☀️ Світла</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div style="padding:16px;background:var(--s2);border:1px solid var(--b1);margin-bottom:16px">
+      <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:12px">СТАТИСТИКА</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center">
+        <div><div id="statTrackers2" style="font-size:24px;font-weight:700;color:var(--gold)">0</div><div style="font-size:8px;color:var(--muted)">Трекерів</div></div>
+        <div><div id="statDiary2" style="font-size:24px;font-weight:700;color:var(--gold)">0</div><div style="font-size:8px;color:var(--muted)">Записів</div></div>
+        <div><div id="statWeeks2" style="font-size:24px;font-weight:700;color:var(--gold)">0</div><div style="font-size:8px;color:var(--muted)">Тижнів ✓</div></div>
+      </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="mf">
+      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px">🔔 Щоденне нагадування</label>
+      <div style="display:flex;align-items:center;gap:12px">
+        <input type="checkbox" id="notifToggle" onchange="toggleNotif(this.checked)" style="width:18px;height:18px;accent-color:var(--gold);cursor:pointer">
+        <label for="notifToggle" style="font-size:11px;color:var(--text2);cursor:pointer">Нагадувати заповнити щоденник</label>
+        <input type="time" id="notifTime" value="20:00" style="background:var(--bg);border:1px solid var(--b2);color:var(--text);font-size:11px;padding:4px 8px;outline:none">
+      </div>
+    </div>
+
+    <div class="mbtns">
+      <button class="mbtn-c" onclick="closeProfileSettings()">Скасувати</button>
+      <button class="mbtn-ok" onclick="saveProfileSettings()"><span>Зберегти →</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- DIARY MODAL -->
+<div class="overlay" id="diaryOverlay">
+  <div class="modal" style="position:relative;max-height:90vh;overflow-y:auto">
+    <button class="modal-close" onclick="closeDiaryModal()" aria-label="Close">✕</button>
     <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px" id="diaryModalDate"></div>
-    <div class="modal-title" style="margin-bottom:16px"><em>Запис дня</em></div>
+    <div class="modal-title" style="margin-bottom:16px"><em data-i18n="diaryModalTitle">Запис дня</em></div>
     <div class="mf">
       <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px">Настрій</label>
       <div class="mood-row" id="diaryMoodRow">
@@ -1113,8 +1219,8 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
       </div>
     </div>
     <div class="mbtns">
-      <button class="mbtn-c" onclick="closeDiaryModal()">Скасувати</button>
-      <button class="mbtn-ok" onclick="saveDiaryEntry()"><span>Зберегти →</span></button>
+      <button class="mbtn-c" data-i18n="btnCancel" onclick="closeDiaryModal()">Скасувати</button>
+      <button class="mbtn-ok" onclick="saveDiaryEntry()"><span data-i18n="btnSave">Зберегти →</span></button>
     </div>
   </div>
 </div>
@@ -1238,9 +1344,9 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
   <div class="modal" style="position:relative">
     <button class="modal-close" onclick="closeTrModal()" aria-label="Close">✕</button>>
     <div class="modal-title" id="trMTitle">Новий трекер</div>
-    <div class="mf"><label id="trl-name">Назва</label><input type="text" id="tName" placeholder="Ранкова пробіжка"></div>
+    <div class="mf"><label id="trl-name">Назва</label><input type="text" id="tName" data-i18n-placeholder="trNamePlaceholder" placeholder="Ранкова пробіжка"></div>
     <div class="mf">
-      <label id="trl-cat">Категорія</label>
+      <label id="trl-cat" data-i18n="visionCatLabel">Категорія</label>
       <select id="tCat" onchange="toggleCustomCat(this.value)" style="margin-bottom:6px"></select>
       <input type="text" id="tCatCustom" placeholder="Введи свою категорію..." style="display:none;width:100%;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'">
     </div>
@@ -1248,17 +1354,17 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
     <div class="mf"><label id="trl-unit">Одиниця</label><select id="tUnit"></select></div>
     <div class="mf"><label id="trl-goal">Ціль</label><input type="number" id="tGoal" value="52" min="1"></div>
     <div class="mf">
-      <label style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px" id="trl-startdate">Дата старту</label>
+      <label data-i18n="trStartDateLabel" style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px" id="trl-startdate">Дата старту</label>
       <div style="display:flex;gap:8px;align-items:center">
         <input type="date" id="tStartDate" style="flex:1;background:var(--bg);border:1px solid var(--b2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:12px;padding:10px 12px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--b2)'">
-        <button onclick="document.getElementById('tStartDate').value=new Date().toISOString().split('T')[0]" style="background:var(--s2);border:1px solid var(--b2);color:var(--muted);font-size:9px;letter-spacing:1px;padding:6px 10px;cursor:pointer;white-space:nowrap" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--b2)'">Сьогодні</button>
+        <button onclick="document.getElementById('tStartDate').value=new Date().toISOString().split('T')[0]" data-i18n="trTodayBtn" style="background:var(--s2);border:1px solid var(--b2);color:var(--muted);font-size:9px;letter-spacing:1px;padding:6px 10px;cursor:pointer;white-space:nowrap" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--b2)'">Сьогодні</button>
       </div>
-      <div style="font-size:9px;color:var(--muted);margin-top:6px;letter-spacing:1px">Клітинки рахуються від цієї дати</div>
+      <div data-i18n="trStartDateHint" style="font-size:9px;color:var(--muted);margin-top:6px;letter-spacing:1px">Клітинки рахуються від цієї дати</div>
     </div>
     <div class="mf"><label id="trl-color">Колір</label><div class="cswatches" id="cSwatches"></div></div>
     <div class="mbtns">
-      <button class="mbtn-c" onclick="closeTrModal()">Скасувати</button>
-      <button class="mbtn-ok" onclick="saveTr()">Зберегти →</button>
+      <button class="mbtn-c" data-i18n="btnCancel" onclick="closeTrModal()">Скасувати</button>
+      <button class="mbtn-ok" data-i18n="btnSave" onclick="saveTr()">Зберегти →</button>
     </div>
   </div>
 </div>
@@ -1307,7 +1413,7 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
 </div>
 
 <div id="tip"><span id="tipM"></span><small id="tipS"></small></div>
-<div class="ctx" id="ctx">
+<div class="ctx" id="ctx" style="display:none!important">
   <div class="ctx-item g" id="ctxMark">✓ Відмітити</div>
   <div class="ctx-item b" id="ctxNote">📝 Нотатка / настрій</div>
   <div class="ctx-item p" id="ctxCapsule">✉️ Лист у майбутнє</div>
@@ -1394,7 +1500,7 @@ en:{
   iSub:'4680 weeks · 90 years · each one matters',
   lBirth:'Date of birth',lLife:'Lifespan (years)',
   btnStart:'Start →',
-  navHome:'Home',navLife:'My Life',navTr:'My Trackers',navDays:'Diary',navVision:'My Dreams',navPlan:'Planner',navGrat:'Gratitude',navLang:'УКР',
+  navHome:'Home',navLife:'My Life',navTr:'My Trackers',navDays:'Diary',navVision:'My Dreams',navPlan:'Planner',navGrat:'Gratitude',navLang:'УКР',planStats:{today:"Today's tasks",month:"This month",progress:"Day progress"},gratStats:{today:"Today's entries",streak:"Day streak",series:"streak",total:"Total entries",title:"GRATITUDE FOR TODAY..."},planModal:{task:"Task",priority:"Priority",cancel:"Cancel",save:"Save →",week:"📅 Weekly",month:"🗓 Monthly",noTasks:"No tasks yet"},
   hTagline:'Your personal dashboard',
   hTitle:'Your<br><em>Life</em>',
   hDesc:'Visualize your life in weeks. Track progress in sport, finance, learning, and any goal. Write notes for each week. Leave letters to your future self.',
@@ -1456,7 +1562,7 @@ en:{
 de:{
   iTitle:'Dein<br>Leben in <em>Wochen</em>',iSub:'4680 Wochen · 90 Jahre · jede zählt',
   lBirth:'Geburtsdatum',lLife:'Lebenserwartung (Jahre)',btnStart:'Starten →',
-  navHome:'Startseite',navLife:'Mein Leben',navTr:'Meine Tracker',navDays:'Tagebuch',navVision:'Meine Träume',navPlan:'Planer',navGrat:'Dankbarkeit',navLang:'DE',
+  navHome:'Startseite',navLife:'Mein Leben',navTr:'Meine Tracker',navDays:'Tagebuch',navVision:'Meine Träume',navPlan:'Planer',navGrat:'Dankbarkeit',navLang:'DE',planStats:{today:'Aufgaben heute',month:'Diesen Monat',progress:'Tagesfortschritt'},gratStats:{today:'Heute',streak:'Tage Serie',series:'Serie',total:'Gesamt',title:'HEUTE BIN ICH DANKBAR FÜR...'},planModal:{task:'Aufgabe',priority:'Priorität',cancel:'Abbrechen',save:'Speichern →',week:'📅 Woche',month:'🗓 Monat',noTasks:'Keine Aufgaben'},
   hTagline:'Dein persönliches Dashboard',hTitle:'Dein<br><em>Leben</em>',
   hDesc:'Visualisiere dein Leben in Wochen. Verfolge Fortschritte in Sport, Finanzen und Lernen.',
   hsl1:'Gelebte Wochen',hsl2:'Verbleibend',hsl3:'Alter',hsl4:'% gelebt',
@@ -1501,7 +1607,7 @@ de:{
 es:{
   iTitle:'Tu<br>Vida en <em>Semanas</em>',iSub:'4680 semanas · 90 años · cada una importa',
   lBirth:'Fecha de nacimiento',lLife:'Esperanza de vida (años)',btnStart:'Comenzar →',
-  navHome:'Inicio',navLife:'Mi Vida',navTr:'Mis Trackers',navDays:'Diario',navVision:'Mis Sueños',navPlan:'Planificador',navGrat:'Gratitud',navLang:'ES',
+  navHome:'Inicio',navLife:'Mi Vida',navTr:'Mis Trackers',navDays:'Diario',navVision:'Mis Sueños',navPlan:'Planificador',navGrat:'Gratitud',navLang:'ES',planStats:{today:'Tareas hoy',month:'Este mes',progress:'Progreso del día'},gratStats:{today:'Hoy',streak:'Días seguidos',series:'racha',total:'Total',title:'HOY ESTOY AGRADECIDO/A POR...'},planModal:{task:'Tarea',priority:'Prioridad',cancel:'Cancelar',save:'Guardar →',week:'📅 Semana',month:'🗓 Mes',noTasks:'Sin tareas'},
   hTagline:'Tu panel personal',hTitle:'Tu<br><em>Vida</em>',
   hDesc:'Visualiza tu vida en semanas. Sigue el progreso en deporte, finanzas y aprendizaje.',
   hsl1:'Semanas vividas',hsl2:'Restantes',hsl3:'Edad',hsl4:'% vivido',
@@ -1546,7 +1652,7 @@ es:{
 fr:{
   iTitle:'Ta<br>Vie en <em>Semaines</em>',iSub:'4680 semaines · 90 ans · chacune compte',
   lBirth:'Date de naissance',lLife:'Espérance de vie (ans)',btnStart:'Commencer →',
-  navHome:'Accueil',navLife:'Ma Vie',navTr:'Mes Trackers',navDays:'Journal',navVision:'Mes Rêves',navPlan:'Planificateur',navGrat:'Gratitude',navLang:'FR',
+  navHome:'Accueil',navLife:'Ma Vie',navTr:'Mes Trackers',navDays:'Journal',navVision:'Mes Rêves',navPlan:'Planificateur',navGrat:'Gratitude',navLang:'FR',planStats:{today:"Tâches aujourd'hui",month:'Ce mois',progress:'Progrès du jour'},gratStats:{today:"Aujourd\'hui",streak:"Jours consécutifs",series:"série",total:"Total",title:"AUJOURD\'HUI JE SUIS RECONNAISSANT(E) POUR..."},planModal:{task:'Tâche',priority:'Priorité',cancel:'Annuler',save:'Sauvegarder →',week:'📅 Semaine',month:'🗓 Mois',noTasks:'Pas de tâches'},
   hTagline:'Ton tableau de bord personnel',hTitle:'Ta<br><em>Vie</em>',
   hDesc:'Visualise ta vie en semaines. Suis tes progrès en sport, finances et apprentissage.',
   hsl1:'Semaines vécues',hsl2:'Restantes',hsl3:'Âge',hsl4:'% vécu',
@@ -1591,7 +1697,7 @@ fr:{
 pt:{
   iTitle:'A Tua<br>Vida em <em>Semanas</em>',iSub:'4680 semanas · 90 anos · cada uma importa',
   lBirth:'Data de nascimento',lLife:'Esperança de vida (anos)',btnStart:'Começar →',
-  navHome:'Início',navLife:'Minha Vida',navTr:'Meus Rastreadores',navDays:'Diário',navVision:'Meus Sonhos',navPlan:'Planejador',navGrat:'Gratidão',navLang:'PT',
+  navHome:'Início',navLife:'Minha Vida',navTr:'Meus Rastreadores',navDays:'Diário',navVision:'Meus Sonhos',navPlan:'Planejador',navGrat:'Gratidão',navLang:'PT',planStats:{today:'Tarefas hoje',month:'Este mês',progress:'Progresso do dia'},gratStats:{today:'Hoje',streak:'Dias seguidos',series:'sequência',total:'Total',title:'HOJE SOU GRATO/A POR...'},planModal:{task:'Tarefa',priority:'Prioridade',cancel:'Cancelar',save:'Salvar →',week:'📅 Semana',month:'🗓 Mês',noTasks:'Sem tarefas'},
   hTagline:'O teu painel pessoal',hTitle:'A Tua<br><em>Vida</em>',
   hDesc:'Visualiza a tua vida em semanas. Acompanha progressos em desporto, finanças e aprendizagem.',
   hsl1:'Semanas vividas',hsl2:'Restantes',hsl3:'Idade',hsl4:'% vivido',
@@ -1636,7 +1742,7 @@ pt:{
 pl:{
   iTitle:'Twoje<br>Życie w <em>Tygodniach</em>',iSub:'4680 tygodni · 90 lat · każdy ma znaczenie',
   lBirth:'Data urodzenia',lLife:'Oczekiwana długość życia (lat)',btnStart:'Rozpocznij →',
-  navHome:'Strona główna',navLife:'Moje Życie',navTr:'Moje Trackery',navDays:'Pamiętnik',navVision:'Moje Marzenia',navPlan:'Planer',navGrat:'Wdzięczność',navLang:'PL',
+  navHome:'Strona główna',navLife:'Moje Życie',navTr:'Moje Trackery',navDays:'Pamiętnik',navVision:'Moje Marzenia',navPlan:'Planer',navGrat:'Wdzięczność',navLang:'PL',planStats:{today:'Zadania dziś',month:'W tym miesiącu',progress:'Postęp dnia'},gratStats:{today:'Dzisiaj',streak:'Dni z rzędu',series:'seria',total:'Łącznie',title:'DZIŚ JESTEM WDZIĘCZNY/A ZA...'},planModal:{task:'Zadanie',priority:'Priorytet',cancel:'Anuluj',save:'Zapisz →',week:'📅 Tydzień',month:'🗓 Miesiąc',noTasks:'Brak zadań'},
   hTagline:'Twój osobisty pulpit',hTitle:'Twoje<br><em>Życie</em>',
   hDesc:'Wizualizuj swoje życie w tygodniach. Śledź postępy w sporcie, finansach i nauce.',
   hsl1:'Przeżytych tygodni',hsl2:'Pozostało',hsl3:'Wiek',hsl4:'% przeżytego',
@@ -1714,6 +1820,411 @@ let S={
 
 const t=k=>(T[S.lang]||T.uk)[k]||k;
 
+const T_I18N = {
+"visionAddBtn": {
+"uk": "+ ДОДАТИ",
+"en": "+ ADD",
+"de": "+ HINZUFÜGEN",
+"es": "+ AÑADIR",
+"fr": "+ AJOUTER",
+"pt": "+ ADICIONAR",
+"pl": "+ DODAJ"
+},
+"visionEmptyTitle": {
+"uk": "Твоя дошка мрій порожня",
+"en": "Your vision board is empty",
+"de": "Dein Visionboard ist leer",
+"es": "Tu tablero está vacío",
+"fr": "Votre tableau est vide",
+"pt": "Seu quadro está vazio",
+"pl": "Twoja tablica jest pusta"
+},
+"visionEmptyDesc": {
+"uk": "Додай перше фото своєї мрії",
+"en": "Add your first dream photo",
+"de": "Füge dein erstes Traumbild hinzu",
+"es": "Agrega tu primera foto",
+"fr": "Ajoutez votre première photo",
+"pt": "Adicione sua primeira foto",
+"pl": "Dodaj swoje pierwsze zdjęcie"
+},
+"visionModalNewTitle": {
+"uk": "Нова мрія",
+"en": "New Dream",
+"de": "Neuer Traum",
+"es": "Nuevo Sueño",
+"fr": "Nouveau Rêve",
+"pt": "Novo Sonho",
+"pl": "Nowe Marzenie"
+},
+"visionPhotoLabel": {
+"uk": "Натисни щоб вибрати фото",
+"en": "Tap to select photo",
+"de": "Foto auswählen",
+"es": "Toca para seleccionar foto",
+"fr": "Appuyez pour sélectionner",
+"pt": "Toque para selecionar",
+"pl": "Dotknij aby wybrać zdjęcie"
+},
+"visionNameLabel": {
+"uk": "Назва мрії",
+"en": "Dream name",
+"de": "Traumname",
+"es": "Nombre del sueño",
+"fr": "Nom du rêve",
+"pt": "Nome do sonho",
+"pl": "Nazwa marzenia"
+},
+"visionCatLabel": {
+"uk": "Категорія",
+"en": "Category",
+"de": "Kategorie",
+"es": "Categoría",
+"fr": "Catégorie",
+"pt": "Categoria",
+"pl": "Kategoria"
+},
+"visionDeadlineLabel": {
+"uk": "Дедлайн (рік)",
+"en": "Deadline (year)",
+"de": "Frist (Jahr)",
+"es": "Fecha límite (año)",
+"fr": "Délai (année)",
+"pt": "Prazo (ano)",
+"pl": "Termin (rok)"
+},
+"visionCat1": {
+"uk": "🌍 Подорожі",
+"en": "🌍 Travel",
+"de": "🌍 Reisen",
+"es": "🌍 Viajes",
+"fr": "🌍 Voyages",
+"pt": "🌍 Viagens",
+"pl": "🌍 Podróże"
+},
+"visionCat2": {
+"uk": "🏠 Дім",
+"en": "🏠 Home",
+"de": "🏠 Zuhause",
+"es": "🏠 Hogar",
+"fr": "🏠 Maison",
+"pt": "🏠 Casa",
+"pl": "🏠 Dom"
+},
+"visionCat3": {
+"uk": "💰 Фінанси",
+"en": "💰 Finance",
+"de": "💰 Finanzen",
+"es": "💰 Finanzas",
+"fr": "💰 Finance",
+"pt": "💰 Finanças",
+"pl": "💰 Finanse"
+},
+"visionCat4": {
+"uk": "💪 Здоров'я",
+"en": "💪 Health",
+"de": "💪 Gesundheit",
+"es": "💪 Salud",
+"fr": "💪 Santé",
+"pt": "💪 Saúde",
+"pl": "💪 Zdrowie"
+},
+"visionCat5": {
+"uk": "❤️ Стосунки",
+"en": "❤️ Relationships",
+"de": "❤️ Beziehungen",
+"es": "❤️ Relaciones",
+"fr": "❤️ Relations",
+"pt": "❤️ Relacionamentos",
+"pl": "❤️ Relacje"
+},
+"visionCat6": {
+"uk": "🚗 Авто",
+"en": "🚗 Car",
+"de": "🚗 Auto",
+"es": "🚗 Auto",
+"fr": "🚗 Voiture",
+"pt": "🚗 Carro",
+"pl": "🚗 Auto"
+},
+"visionCat7": {
+"uk": "📚 Освіта",
+"en": "📚 Education",
+"de": "📚 Bildung",
+"es": "📚 Educación",
+"fr": "📚 Éducation",
+"pt": "📚 Educação",
+"pl": "📚 Edukacja"
+},
+"visionCat8": {
+"uk": "✨ Інше",
+"en": "✨ Other",
+"de": "✨ Andere",
+"es": "✨ Otro",
+"fr": "✨ Autre",
+"pt": "✨ Outro",
+"pl": "✨ Inne"
+},
+"plannerNoTasks": {
+"uk": "Задач поки немає",
+"en": "No tasks yet",
+"de": "Noch keine Aufgaben",
+"es": "Sin tareas aún",
+"fr": "Pas encore de tâches",
+"pt": "Sem tarefas ainda",
+"pl": "Brak zadań"
+},
+"plannerWeekBtn": {
+"uk": "📅 На тиждень",
+"en": "📅 Weekly",
+"de": "📅 Wöchentlich",
+"es": "📅 Semanal",
+"fr": "📅 Hebdomadaire",
+"pt": "📅 Semanal",
+"pl": "📅 Tygodniowo"
+},
+"plannerMonthBtn": {
+"uk": "🗓 На місяць",
+"en": "🗓 Monthly",
+"de": "🗓 Monatlich",
+"es": "🗓 Mensual",
+"fr": "🗓 Mensuel",
+"pt": "🗓 Mensal",
+"pl": "🗓 Miesięcznie"
+},
+"diaryMoodLabel": {
+"uk": "Настрій",
+"en": "Mood",
+"de": "Stimmung",
+"es": "Estado de ánimo",
+"fr": "Humeur",
+"pt": "Humor",
+"pl": "Nastrój"
+},
+"diaryTextLabel": {
+"uk": "Запис дня",
+"en": "Day entry",
+"de": "Tageseintrag",
+"es": "Entrada del día",
+"fr": "Entrée du jour",
+"pt": "Entrada do dia",
+"pl": "Wpis dnia"
+},
+"diaryRatingLabel": {
+"uk": "Оцінка дня (1-10)",
+"en": "Day rating (1-10)",
+"de": "Tagesbewertung (1-10)",
+"es": "Calificación (1-10)",
+"fr": "Évaluation (1-10)",
+"pt": "Avaliação (1-10)",
+"pl": "Ocena dnia (1-10)"
+},
+"diaryModalTitle": {
+"uk": "Запис дня",
+"en": "Day Entry",
+"de": "Tageseintrag",
+"es": "Entrada del día",
+"fr": "Entrée du jour",
+"pt": "Entrada do dia",
+"pl": "Wpis dnia"
+},
+"gratDayEmpty": {
+"uk": "Порожній день",
+"en": "Empty day",
+"de": "Leerer Tag",
+"es": "Día vacío",
+"fr": "Journée vide",
+"pt": "Dia vazio",
+"pl": "Pusty dzień"
+},
+"visionPtitle": {
+"uk": "Мої<br><em>Мрії</em>",
+"en": "My<br><em>Dreams</em>",
+"de": "Meine<br><em>Träume</em>",
+"es": "Mis<br><em>Sueños</em>",
+"fr": "Mes<br><em>Rêves</em>",
+"pt": "Meus<br><em>Sonhos</em>",
+"pl": "Moje<br><em>Marzenia</em>"
+},
+"planPtitle": {
+"uk": "Мій<br><em>Планер</em>",
+"en": "My<br><em>Planner</em>",
+"de": "Mein<br><em>Planer</em>",
+"es": "Mi<br><em>Planificador</em>",
+"fr": "Mon<br><em>Planificateur</em>",
+"pt": "Meu<br><em>Planejador</em>",
+"pl": "Mój<br><em>Planer</em>"
+},
+"gratPtitle": {
+"uk": "Моя<br><em>Вдячність</em>",
+"en": "My<br><em>Gratitude</em>",
+"de": "Meine<br><em>Dankbarkeit</em>",
+"es": "Mi<br><em>Gratitud</em>",
+"fr": "Ma<br><em>Gratitude</em>",
+"pt": "Minha<br><em>Gratidão</em>",
+"pl": "Moja<br><em>Wdzięczność</em>"
+},
+"btnCancel": {
+"uk": "Скасувати",
+"en": "Cancel",
+"de": "Abbrechen",
+"es": "Cancelar",
+"fr": "Annuler",
+"pt": "Cancelar",
+"pl": "Anuluj"
+},
+"btnSave": {
+"uk": "Зберегти →",
+"en": "Save →",
+"de": "Speichern →",
+"es": "Guardar →",
+"fr": "Sauvegarder →",
+"pt": "Salvar →",
+"pl": "Zapisz →"
+},
+"trStartDateLabel": {
+"uk": "Дата старту",
+"en": "Start date",
+"de": "Startdatum",
+"es": "Fecha de inicio",
+"fr": "Date de début",
+"pt": "Data de início",
+"pl": "Data startu"
+},
+"trStartDateHint": {
+"uk": "Клітинки рахуються від цієї дати",
+"en": "Cells count from this date",
+"de": "Zellen zählen ab diesem Datum",
+"es": "Las celdas cuentan desde esta fecha",
+"fr": "Les cellules comptent depuis cette date",
+"pt": "As células contam a partir desta data",
+"pl": "Komórki liczone od tej daty"
+},
+"trTodayBtn": {
+"uk": "Сьогодні",
+"en": "Today",
+"de": "Heute",
+"es": "Hoy",
+"fr": "Aujourd'hui",
+"pt": "Hoje",
+"pl": "Dzisiaj"
+},
+"trNamePlaceholder": {
+"uk": "Ранкова пробіжка",
+"en": "Morning run",
+"de": "Morgenlauf",
+"es": "Carrera matutina",
+"fr": "Course matinale",
+"pt": "Corrida matinal",
+"pl": "Poranny bieg"
+},
+"diaryStatEntries": {
+"uk": "Записів",
+"en": "Entries",
+"de": "Einträge",
+"es": "Entradas",
+"fr": "Entrées",
+"pt": "Entradas",
+"pl": "Wpisy"
+},
+"diaryStatDayOfYear": {
+"uk": "День року",
+"en": "Day of year",
+"de": "Tag des Jahres",
+"es": "Día del año",
+"fr": "Jour de l'année",
+"pt": "Dia do ano",
+"pl": "Dzień roku"
+},
+"diaryStatLeft": {
+"uk": "Залишилось",
+"en": "Remaining",
+"de": "Verbleibend",
+"es": "Restante",
+"fr": "Restant",
+"pt": "Restante",
+"pl": "Pozostało"
+},
+"visionNamePlaceholder": {
+"uk": "Наприклад: Власна квартира",
+"en": "E.g.: My own apartment",
+"de": "Z.B.: Eigene Wohnung",
+"es": "Ej.: Mi propio apartamento",
+"fr": "Ex.: Mon propre appartement",
+"pt": "Ex.: Meu próprio apartamento",
+"pl": "Np.: Własne mieszkanie"
+},
+"planTaskLabel": {
+"uk": "Задача",
+"en": "Task",
+"de": "Aufgabe",
+"es": "Tarea",
+"fr": "Tâche",
+"pt": "Tarefa",
+"pl": "Zadanie"
+},
+"planPriorityLabel": {
+"uk": "Пріоритет",
+"en": "Priority",
+"de": "Priorität",
+"es": "Prioridad",
+"fr": "Priorité",
+"pt": "Prioridade",
+"pl": "Priorytet"
+},
+"gratInputPlaceholder": {
+"uk": "Введи свою вдячність або вибери нижче...",
+"en": "Enter gratitude or choose below...",
+"de": "Dankbarkeit eingeben...",
+"es": "Escribe tu gratitud...",
+"fr": "Entrez votre gratitude...",
+"pt": "Digite sua gratidão...",
+"pl": "Wpisz swoją wdzięczność..."
+},
+"gratSuggestionsLabel": {
+"uk": "Підказки:",
+"en": "Suggestions:",
+"de": "Vorschläge:",
+"es": "Sugerencias:",
+"fr": "Suggestions:",
+"pt": "Sugestões:",
+"pl": "Podpowiedzi:"
+},
+"gratProgressLabel": {
+"uk": "Прогрес дня",
+"en": "Day progress",
+"de": "Tagesfortschritt",
+"es": "Progreso del día",
+"fr": "Progrès du jour",
+"pt": "Progresso do dia",
+"pl": "Postęp dnia"
+},
+"homeWeekLabel": {
+"uk": "ТИЖДЕНЬ",
+"en": "WEEK",
+"de": "WOCHE",
+"es": "SEMANA",
+"fr": "SEMAINE",
+"pt": "SEMANA",
+"pl": "TYDZIEŃ"
+},
+"homeCompletedLabel": {
+"uk": "ЗАВЕРШЕНО",
+"en": "COMPLETED",
+"de": "ABGESCHLOSSEN",
+"es": "COMPLETADO",
+"fr": "TERMINÉ",
+"pt": "CONCLUÍDO",
+"pl": "UKOŃCZONO"
+}
+};
+function ti(key){
+  const tr=T_I18N[key];
+  if(!tr)return key;
+  return tr[S.lang]||tr['en']||key;
+}
+
+
 // Multi-language helper for inline strings
 function tl(uk, en, de, es, fr, pt, pl){
   const l=S.lang;
@@ -1758,6 +2269,85 @@ function setLang(lang,btn){
 }
 function toggleLang(){/* use select */}
 
+
+function applyModalLang(){
+  const lang=S.lang;
+  const ps=t('planStats')||{};const gs=t('gratStats')||{};const pm=t('planModal')||{};
+  
+  // ── Planner stats labels ──
+  const _planLbls={
+    planLblToday:{uk:'Задач сьогодні',en:"Today's tasks",de:'Aufgaben heute',es:'Tareas hoy',fr:"Tâches aujourd'hui",pt:'Tarefas hoje',pl:'Zadania dziś'},
+    planLblMonth:{uk:'За місяць',en:'This month',de:'Diesen Monat',es:'Este mes',fr:'Ce mois',pt:'Este mês',pl:'W tym miesiącu'},
+    planLblProgress:{uk:'Прогрес дня',en:'Day progress',de:'Tagesfortschritt',es:'Progreso del día',fr:'Progrès du jour',pt:'Progresso do dia',pl:'Postęp dnia'},
+    planLblDone:{uk:'виконання',en:'completion',de:'Abschluss',es:'finalización',fr:'achèvement',pt:'conclusão',pl:'zakończenie'},
+    gratLblToday:{uk:'Записів сьогодні',en:"Today's entries",de:'Heute',es:'Hoy',fr:"Aujourd'hui",pt:'Hoje',pl:'Dzisiaj'},
+    gratLblStreak:{uk:'Днів підряд',en:'Day streak',de:'Tage Serie',es:'Racha días',fr:'Jours consécutifs',pt:'Sequência',pl:'Seria dni'},
+    gratLblSeries:{uk:'серія',en:'streak',de:'Serie',es:'racha',fr:'série',pt:'sequência',pl:'seria'},
+    gratLblTotal:{uk:'Всього записів',en:'Total entries',de:'Gesamt',es:'Total',fr:'Total',pt:'Total',pl:'Łącznie'},
+    gratLblYear:{uk:'за рік',en:'per year',de:'pro Jahr',es:'por año',fr:'par an',pt:'por ano',pl:'na rok'},
+  };
+  Object.entries(_planLbls).forEach(([id,tr])=>{const el=document.getElementById(id);if(el)el.textContent=tr[lang]||tr.en||tr.uk;});
+
+  // ── Gratitude today title ──
+  const gtt=document.getElementById('gratTodayTitle');
+  if(gtt){const _gt={uk:'СЬОГОДНІ Я ВДЯЧНИЙ(НА) ЗА...',en:"TODAY I'M GRATEFUL FOR...",de:'HEUTE BIN ICH DANKBAR FÜR...',es:'HOY ESTOY AGRADECIDO/A POR...',fr:"AUJOURD\'HUI JE SUIS RECONNAISSANT(E) POUR...",pt:'HOJE SOU GRATO/A POR...',pl:'DZIŚ JESTEM WDZIĘCZNY/A ZA...'};gtt.textContent=_gt[lang]||_gt.en;}
+
+  // ── Planner modal strings ──
+  const pmt=document.getElementById('planTaskText');
+  if(pmt){const _ph={uk:'Що потрібно зробити?',en:'What needs to be done?',de:'Was muss erledigt werden?',es:'¿Qué hay que hacer?',fr:'Que faut-il faire?',pt:'O que precisa ser feito?',pl:'Co trzeba zrobić?'};pmt.placeholder=_ph[lang]||_ph.en;}
+  
+  // Priority buttons
+  const _pNorm={uk:'⚪ Звичайна',en:'⚪ Normal',de:'⚪ Normal',es:'⚪ Normal',fr:'⚪ Normal',pt:'⚪ Normal',pl:'⚪ Normal'};
+  const _pHigh={uk:'🔴 Висока',en:'🔴 High',de:'🔴 Hoch',es:'🔴 Alta',fr:'🔴 Haute',pt:'🔴 Alta',pl:'🔴 Wysoki'};
+  const _pLow={uk:'🔵 Низька',en:'🔵 Low',de:'🔵 Niedrig',es:'🔵 Baja',fr:'🔵 Basse',pt:'🔵 Baixa',pl:'🔵 Niski'};
+  document.querySelectorAll('.t-normal').forEach(el=>el.textContent=_pNorm[lang]||_pNorm.en);
+  document.querySelectorAll('.t-high').forEach(el=>el.textContent=_pHigh[lang]||_pHigh.en);
+  document.querySelectorAll('.t-low').forEach(el=>el.textContent=_pLow[lang]||_pLow.en);
+
+  // ── Diary modal ──
+  const _dml1={uk:'Настрій',en:'Mood',de:'Stimmung',es:'Estado de ánimo',fr:'Humeur',pt:'Humor',pl:'Nastrój'};
+  const _dml2={uk:'Запис дня',en:"Day's entry",de:'Tageseintrag',es:'Entrada del día',fr:'Entrée du jour',pt:'Entrada do dia',pl:'Wpis dnia'};
+  const _dml3={uk:'Оцінка дня (1-10)',en:'Day rating (1-10)',de:'Tagesbewertung (1-10)',es:'Calificación del día (1-10)',fr:'Évaluation du jour (1-10)',pt:'Avaliação do dia (1-10)',pl:'Ocena dnia (1-10)'};
+  const d1=document.getElementById('dml1');if(d1)d1.textContent=_dml1[lang]||_dml1.en;
+  const d2=document.getElementById('dml2');if(d2)d2.textContent=_dml2[lang]||_dml2.en;
+  const d3=document.getElementById('dml3');if(d3)d3.textContent=_dml3[lang]||_dml3.en;
+
+  // ── Profile settings modal ──
+  const _profLbls={
+    'profileNameLabel':{uk:"Ім'я",en:'Name',de:'Name',es:'Nombre',fr:'Nom',pt:'Nome',pl:'Imię'},
+    'profileBirthLabel':{uk:'Дата народження',en:'Birth date',de:'Geburtsdatum',es:'Fecha de nacimiento',fr:'Date de naissance',pt:'Data de nascimento',pl:'Data urodzenia'},
+    'profileLifespanLabel':{uk:'Очікувана тривалість (років)',en:'Expected lifespan (years)',de:'Lebenserwartung (Jahre)',es:'Esperanza de vida (años)',fr:'Espérance de vie (ans)',pt:'Expectativa de vida (anos)',pl:'Oczekiwana długość życia (lata)'},
+  };
+  Object.entries(_profLbls).forEach(([id,tr])=>{const el=document.getElementById(id);if(el)el.textContent=tr[lang]||tr.en;});
+
+  // ── Save/Cancel buttons universal ──
+  const _save={uk:'Зберегти →',en:'Save →',de:'Speichern →',es:'Guardar →',fr:'Sauvegarder →',pt:'Salvar →',pl:'Zapisz →'};
+  const _cancel={uk:'Скасувати',en:'Cancel',de:'Abbrechen',es:'Cancelar',fr:'Annuler',pt:'Cancelar',pl:'Anuluj'};
+  document.querySelectorAll('.mbtn-ok span:not(.no-translate)').forEach(el=>{if(el.textContent.includes('Зберегти')||el.textContent.includes('Save')||el.textContent.includes('Speichern'))el.textContent=_save[lang]||_save.en;});
+
+  // ── Week/Month repeat buttons in planner ──
+  const _week={uk:'📅 На тиждень',en:'📅 Weekly',de:'📅 Wöchentlich',es:'📅 Semanal',fr:'📅 Hebdomadaire',pt:'📅 Semanal',pl:'📅 Tygodniowo'};
+  const _month={uk:'🗓 На місяць',en:'🗓 Monthly',de:'🗓 Monatlich',es:'🗓 Mensual',fr:'🗓 Mensuel',pt:'🗓 Mensal',pl:'🗓 Miesięcznie'};
+  document.querySelectorAll('button[onclick*="savePlanTask(\'week\')"]').forEach(el=>el.textContent=_week[lang]||_week.en);
+  document.querySelectorAll('button[onclick*="savePlanTask(\'month\')"]').forEach(el=>el.textContent=_month[lang]||_month.en);
+}
+
+function applyI18n(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key=el.getAttribute('data-i18n');
+    const val=ti(key);
+    if(val&&val!==key){
+      if(val.includes('<')) el.innerHTML=val;
+      else el.textContent=val;
+    }
+  });
+  // Handle placeholders
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+    const key=el.getAttribute('data-i18n-placeholder');
+    const val=ti(key);
+    if(val&&val!==key) el.placeholder=val;
+  });
+}
 function applyLang(){
   const ids=['iLogo','iSub','lBirth','lLife','btnStart',
     'hTagline','hTrLbl','prevLbl','prevCta','editLnk','gridLbl','gridHint','btnNewTr',
@@ -1812,7 +2402,7 @@ window.addEventListener('load',()=>{
   if(loadSaved()){
     const sel=document.getElementById('navLang');if(sel)sel.value=S.lang;
     applyTheme();
-    applyLang();launch();
+    applyLang();applyModalLang();applyI18n();launch();
   } else {applyLang();}
   // PWA push
   if('serviceWorker' in navigator && 'Notification' in window) setupNotifications();
@@ -2003,7 +2593,7 @@ function renderLifeGrid(){
       });
       c.addEventListener('mousemove',moveTip);c.addEventListener('mouseleave',hideTip);
       c.addEventListener('click',()=>handleCellClick(key,c,abs,y,w));
-      c.addEventListener('contextmenu',e=>{e.preventDefault();showCtx(e,key,c,abs,y,w);});
+      
       cells.appendChild(c);
     }
     row.appendChild(cells);grid.appendChild(row);
@@ -2354,13 +2944,14 @@ function buildTrCard(tr){
 
   const card=document.createElement('div');card.className='tcard';
   const isNoneUnit = tr.unit==='none' || tr.period==='none' || total===0;
+  // For no-period trackers: show grid based on goal count + manual buttons
   const gridHTML = isNoneUnit
-    ? `<div style="display:flex;align-items:center;gap:16px;padding:8px 0">
-        <button onclick="manualTrDec('${tr.id}')" style="background:none;border:1px solid var(--b2);color:var(--muted);width:32px;height:32px;cursor:pointer;font-size:18px;line-height:1;transition:all .2s" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--b2)';this.style.color='var(--muted)'">−</button>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:600;color:${color}">${done}</div>
-        <button onclick="manualTrInc('${tr.id}')" style="background:none;border:1px solid var(--b2);color:var(--muted);width:32px;height:32px;cursor:pointer;font-size:18px;line-height:1;transition:all .2s" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--b2)';this.style.color='var(--muted)'">+</button>
+    ? `<div style="display:flex;align-items:center;gap:16px;padding:8px 0;margin-bottom:12px">
+        <button onclick="manualTrDec('${tr.id}')" style="background:none;border:1px solid var(--b2);color:var(--muted);width:36px;height:36px;cursor:pointer;font-size:20px;line-height:1;transition:all .2s;flex-shrink:0" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--b2)';this.style.color='var(--muted)'">−</button>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:600;color:${color};min-width:60px">${done}</div>
+        <button onclick="manualTrInc('${tr.id}')" style="background:none;border:1px solid var(--b2);color:var(--muted);width:36px;height:36px;cursor:pointer;font-size:20px;line-height:1;transition:all .2s;flex-shrink:0" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--b2)';this.style.color='var(--muted)'">+</button>
         <span style="font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase">${t('goalLbl')}: ${tr.goal}</span>
-      </div>`
+      </div>${buildGoalGrid(tr,color)}`
     : buildTrGridHTML(tr,color,total);
   const chartHTML='';
 
@@ -2403,6 +2994,25 @@ function buildTrCard(tr){
   return card;
 }
 
+function buildGoalGrid(tr,color){
+  const goal=tr.goal||100;
+  const done=tr.done.length;
+  const rowSize=25;
+  const numRows=Math.ceil(goal/rowSize);
+  let html='<div class="tgrid-rows">';
+  for(let r=0;r<numRows;r++){
+    const cols=Math.min(rowSize,goal-r*rowSize);
+    html+=`<div class="tgrow"><div class="trow-lbl"></div><div class="trow-cells" style="grid-template-columns:repeat(${cols},1fr)">`;
+    for(let c=0;c<cols;c++){
+      const idx=r*rowSize+c;
+      const filled=idx<done;
+      const style=filled?`background:${color};border-color:${color}`:'';
+      html+=`<div class="tcell${filled?' done':''}" style="${style}" data-tid="${tr.id}" data-idx="${idx}" data-label="${idx+1}"></div>`;
+    }
+    html+='</div></div>';
+  }
+  return html+'</div>';
+}
 function buildTrGridHTML(tr,color,total){
   const rowSize=52;const useMulti=total>rowSize;
   const curIdx=getCurIdx(tr);const startIdx=getStartIdx(tr);
@@ -2763,7 +3373,16 @@ function closePlanModal(){document.getElementById('planOverlay').classList.remov
 // ══════════════════════════════════════
 //  GRATITUDE
 // ══════════════════════════════════════
-const GRAT_SUGGESTIONS=['Здоров\'я своє та близьких','Нові можливості сьогодні','Дах над головою','Їжа на столі','Хороших людей поруч','Навчання та ріст','Природу навколо','Спокійний ранок','Улюблену музику','Гарну погоду','Цікаву роботу','Підтримку друзів','Можливість мріяти','Здатність любити','Силу рухатись вперед','Кожен новий день','Своє тіло','Свободу вибору','Технології що допомагають','Красу світу навколо','Тепло домашнього затишку','Можливість вчитись','Хороший сон','Смачну їжу','Улюблених тварин','Сонячне світло','Свіже повітря','Здорове серце','Гарний настрій','Цікаві ідеї','Творчість і натхнення','Фізичну силу','Ментальну стійкість','Вдячних людей навколо','Мирне небо','Можливість подорожувати','Свої таланти','Приємні спогади','Майбутні мрії','Сьогоднішній день','Тишу вранці','Сміх близьких','Теплий чай або каву','Улюблену книгу','Гарну музику','Нові знайомства'];
+const GRAT_SUGGESTIONS_ML={
+  uk:["Здоров'я своє та близьких","Нові можливості сьогодні","Дах над головою","Їжа на столі","Хороших людей поруч","Навчання та ріст","Природу навколо","Спокійний ранок","Улюблену музику","Гарну погоду","Цікаву роботу","Підтримку друзів","Можливість мріяти","Здатність любити","Силу рухатись вперед","Кожен новий день","Своє тіло","Свободу вибору","Технології що допомагають","Красу світу навколо","Тепло домашнього затишку","Можливість вчитись","Хороший сон","Смачну їжу","Улюблених тварин","Сонячне світло","Свіже повітря","Здорове серце","Гарний настрій","Цікаві ідеї","Творчість і натхнення","Фізичну силу","Ментальну стійкість","Вдячних людей навколо","Мирне небо","Можливість подорожувати","Свої таланти","Приємні спогади","Майбутні мрії","Сьогоднішній день","Тишу вранці","Сміх близьких","Теплий чай або каву","Улюблену книгу","Гарну музику","Нові знайомства"],
+  en:['My health and family health','New opportunities today','A roof over my head','Food on the table','Good people around me','Learning and growth','Nature around me','A peaceful morning','Favorite music','Good weather','Interesting work','Friends support','Ability to dream','Capacity to love','Strength to move forward','Each new day','My body','Freedom of choice','Technology that helps','Beauty of the world','Warmth of home','Ability to learn','Good sleep','Delicious food','Beloved pets','Sunlight','Fresh air','Healthy heart','Good mood','Interesting ideas','Creativity and inspiration','Physical strength','Mental resilience','Grateful people around','Peaceful sky','Ability to travel','My talents','Pleasant memories','Future dreams','Today','Morning silence','Laughter of loved ones','Warm tea or coffee','Favorite book','Good music','New acquaintances'],
+  de:['Gesundheit','Neue Möglichkeiten','Ein Dach über dem Kopf','Essen auf dem Tisch','Gute Menschen','Lernen und Wachstum','Die Natur','Einen ruhigen Morgen','Lieblingsmusik','Gutes Wetter','Interessante Arbeit','Unterstützung von Freunden','Träumen können','Lieben können','Kraft vorwärts zu gehen','Jeden neuen Tag','Meinen Körper','Freiheit der Wahl','Hilfreiche Technologie','Die Schönheit der Welt','Wärme des Zuhauses','Lernmöglichkeiten','Guten Schlaf','Leckeres Essen','Geliebte Tiere','Sonnenlicht','Frische Luft','Gesundes Herz','Gute Stimmung','Interessante Ideen','Kreativität','Körperliche Kraft','Mentale Stärke','Dankbare Menschen','Friedlichen Himmel','Reisemöglichkeiten','Meine Talente','Angenehme Erinnerungen','Zukünftige Träume','Den heutigen Tag'],
+  es:['Mi salud','Nuevas oportunidades','Un techo','Comida','Buena gente','Aprendizaje','La naturaleza','Una mañana tranquila','Música favorita','Buen tiempo','Trabajo interesante','Apoyo de amigos','Poder soñar','Capacidad de amar','Fuerza para avanzar','Cada nuevo día','Mi cuerpo','Libertad de elección','Tecnología útil','Belleza del mundo','Calidez del hogar','Poder aprender','Buen sueño','Comida deliciosa','Mascotas','Luz solar','Aire fresco','Corazón sano','Buen humor','Ideas interesantes','Creatividad','Fuerza física','Resiliencia mental','Personas agradecidas','Cielo pacífico','Poder viajar','Mis talentos','Recuerdos agradables','Sueños futuros','El día de hoy'],
+  fr:["Ma santé","Nouvelles opportunités","Un toit","De la nourriture","De bonnes personnes","Apprentissage","La nature","Un matin tranquille","Musique préférée","Beau temps","Travail intéressant","Soutien des amis","Pouvoir rêver","Capacité d'aimer","Force d'avancer","Chaque nouveau jour","Mon corps","Liberté de choix","Technologie utile","Beauté du monde","Chaleur du foyer","Pouvoir apprendre","Bon sommeil","Nourriture délicieuse","Animaux chéris","Lumière du soleil","Air frais","Cœur en bonne santé","Bonne humeur","Idées intéressantes","Créativité","Force physique","Résilience mentale","Personnes reconnaissantes","Ciel paisible","Pouvoir voyager","Mes talents","Souvenirs agréables","Rêves futurs","La journée d'aujourd'hui"],
+  pt:['Minha saúde','Novas oportunidades','Um teto','Comida','Boas pessoas','Aprendizado','A natureza','Uma manhã tranquila','Música favorita','Bom tempo','Trabalho interessante','Apoio de amigos','Poder sonhar','Capacidade de amar','Força para avançar','Cada novo dia','Meu corpo','Liberdade de escolha','Tecnologia útil','Beleza do mundo','Calor do lar','Poder aprender','Boa noite de sono','Comida deliciosa','Animais de estimação','Luz solar','Ar fresco','Coração saudável','Bom humor','Ideias interessantes','Criatividade','Força física','Resiliência mental','Pessoas gratas','Céu pacífico','Poder viajar','Meus talentos','Memórias agradáveis','Sonhos futuros','O dia de hoje'],
+  pl:['Moje zdrowie','Nowe możliwości','Dach nad głową','Jedzenie','Dobrzy ludzie','Nauka i rozwój','Natura','Spokojny poranek','Ulubiona muzyka','Dobra pogoda','Ciekawa praca','Wsparcie przyjaciół','Możliwość marzenia','Zdolność do miłości','Siłę do działania','Każdy nowy dzień','Moje ciało','Wolność wyboru','Pomocna technologia','Piękno świata','Ciepło domu','Możliwość uczenia','Dobry sen','Pyszne jedzenie','Ulubione zwierzęta','Słońce','Świeże powietrze','Zdrowe serce','Dobry nastrój','Ciekawe pomysły','Kreatywność','Siłę fizyczną','Odporność psychiczną','Wdzięcznych ludzi','Spokojne niebo','Możliwość podróżowania','Moje talenty','Miłe wspomnienia','Przyszłe marzenia','Dzień dzisiejszy'],
+};
+function getGratSuggestions(){ return GRAT_SUGGESTIONS_ML[S.lang]||GRAT_SUGGESTIONS_ML.en; }
 function initGratYearSel(){const sel=document.getElementById('gratYearSel');if(!sel||sel.options.length)return;const ny=new Date().getFullYear();for(let y=ny-2;y<=ny+1;y++){const o=document.createElement('option');o.value=y;o.textContent=y;if(y===ny)o.selected=true;sel.appendChild(o);}}
 function renderGratitude(){
   initGratYearSel();
@@ -2783,7 +3402,7 @@ function renderGratitude(){
   const lbl=document.getElementById('gratPctLbl');if(lbl)lbl.textContent=`${todayGrats.length} / ${S.gratGoal||30}`;
   renderGratTodayList(todayKey);
   const sugg=document.getElementById('gratSuggestions');
-  if(sugg){sugg.innerHTML='';const shuffled=[...GRAT_SUGGESTIONS].sort(()=>Math.random()-.5).slice(0,6);shuffled.forEach(s=>{const btn=document.createElement('button');btn.style.cssText='background:var(--s2);border:1px solid var(--b1);color:var(--text2);font-size:9px;letter-spacing:1px;padding:5px 10px;cursor:pointer;transition:all .2s';btn.textContent=s;btn.onmouseover=()=>{btn.style.borderColor='var(--gold)';btn.style.color='var(--gold)';};btn.onmouseout=()=>{btn.style.borderColor='var(--b1)';btn.style.color='var(--text2)';};btn.onclick=()=>{document.getElementById('gratInput').value=s;document.getElementById('gratInput').focus();};sugg.appendChild(btn);});}
+  if(sugg){sugg.innerHTML='';const shuffled=[...getGratSuggestions()].sort(()=>Math.random()-.5).slice(0,8);shuffled.forEach(s=>{const btn=document.createElement('button');btn.style.cssText='background:var(--s2);border:1px solid var(--b1);color:var(--text2);font-size:9px;letter-spacing:1px;padding:5px 10px;cursor:pointer;transition:all .2s';btn.textContent=s;btn.onmouseover=()=>{btn.style.borderColor='var(--gold)';btn.style.color='var(--gold)';};btn.onmouseout=()=>{btn.style.borderColor='var(--b1)';btn.style.color='var(--text2)';};btn.onclick=()=>{document.getElementById('gratInput').value=s;document.getElementById('gratInput').focus();};sugg.appendChild(btn);});}
   renderGratCalendar(year);
 }
 function renderGratTodayList(key){
@@ -2916,7 +3535,7 @@ function openAddDream(){
   document.getElementById('visionFileInput').value='';
   document.getElementById('visionModalTitle').textContent='Нова мрія';
   const prev=document.getElementById('visionImgPreview');
-  prev.innerHTML=`<span style="font-size:32px">📸</span><span style="font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase">Натисни щоб вибрати фото</span><input type="file" id="visionFileInput" accept="image/*" style="display:none" onchange="handleVisionImg(this)">`;
+  prev.innerHTML=`<span style="font-size:32px">📸</span><span data-i18n="visionPhotoLabel" style="font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase">Натисни щоб вибрати фото</span><input type="file" id="visionFileInput" accept="image/*" style="display:none" onchange="handleVisionImg(this)">`;
   prev.onclick=()=>document.getElementById('visionFileInput').click();
   document.querySelectorAll('.vcat-btn').forEach((b,i)=>b.classList.toggle('on',i===0));
   const delBtn=document.getElementById('visionDeleteBtn');
@@ -2935,7 +3554,7 @@ function openEditDream(id){
     prev.innerHTML=`<img src="${d.img}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0"><div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);text-align:center;padding:6px;font-size:9px;letter-spacing:2px;color:#fff">ЗМІНИТИ ФОТО</div><input type="file" id="visionFileInput" accept="image/*" style="display:none" onchange="handleVisionImg(this)">`;
     prev.style.position='relative';
   } else {
-    prev.innerHTML=`<span style="font-size:32px">📸</span><span style="font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase">Натисни щоб вибрати фото</span><input type="file" id="visionFileInput" accept="image/*" style="display:none" onchange="handleVisionImg(this)">`;
+    prev.innerHTML=`<span style="font-size:32px">📸</span><span data-i18n="visionPhotoLabel" style="font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase">Натисни щоб вибрати фото</span><input type="file" id="visionFileInput" accept="image/*" style="display:none" onchange="handleVisionImg(this)">`;
   }
   prev.onclick=()=>document.getElementById('visionFileInput').click();
   document.querySelectorAll('.vcat-btn').forEach(b=>b.classList.toggle('on',b.dataset.cat===d.cat));
