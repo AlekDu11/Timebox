@@ -2354,7 +2354,14 @@ function tl(uk, en, de, es, fr, pt, pl){
   if(l==='pl')return pl||en||uk;
   return en||uk;
 }
-function save(){localStorage.setItem('timebox',JSON.stringify({birth:S.birth,lifespan:S.lifespan,markedWeeks:S.markedWeeks,markedDays:S.markedDays||{},weekNotes:S.weekNotes,dayNotes:S.dayNotes||{},diary:S.diary||{},timeCapsules:S.timeCapsules,chapters:S.chapters,chapterMap:S.chapterMap,trackers:S.trackers,trNotes:S.trNotes,reviews:S.reviews,isPro:S.isPro,lang:S.lang,capsuleYrs:S.capsuleYrs,capsuleMonths:S.capsuleMonths,spheres:S.spheres,customCats:S.customCats||{},theme:S.theme||'dark',profileName:S.profileName||'',notifEnabled:S.notifEnabled||false,notifTime:S.notifTime||'20:00',dreams:S.dreams||[],tasks:S.tasks||{},gratitude:S.gratitude||{},gratGoal:S.gratGoal||30}))}
+function save(){localStorage.setItem('timebox',JSON.stringify({birth:S.birth,lifespan:S.lifespan,markedWeeks:S.markedWeeks,markedDays:S.markedDays||{},weekNotes:S.weekNotes,dayNotes:S.dayNotes||{},diary:S.diary||{},timeCapsules:S.timeCapsules,chapters:S.chapters,chapterMap:S.chapterMap,trackers:S.trackers,trNotes:S.trNotes,reviews:S.reviews,isPro:S.isPro,lang:S.lang,capsuleYrs:S.capsuleYrs,capsuleMonths:S.capsuleMonths,spheres:S.spheres,customCats:S.customCats||{},theme:S.theme||'dark',profileName:S.profileName||'',notifEnabled:S.notifEnabled||false,notifTime:S.notifTime||'20:00',dreams:S.dreams||[],tasks:S.tasks||{},gratitude:S.gratitude||{},gratGoal:S.gratGoal||30}));scheduleSyncToCloud();}
+// Debounce cloud sync — save locally immediately, sync to cloud after 3 seconds idle
+let _syncTimer=null;
+function scheduleSyncToCloud(){
+  if(!currentUser||!fbDb)return;
+  if(_syncTimer)clearTimeout(_syncTimer);
+  _syncTimer=setTimeout(()=>{syncToCloud();},3000);
+}
 
 function loadSaved(){try{const d=JSON.parse(localStorage.getItem('timebox')||localStorage.getItem('mv7'));if(d?.birth){Object.assign(S,d);if(!S.trNotes)S.trNotes={};if(!S.markedDays)S.markedDays={};if(!S.dayNotes)S.dayNotes={};if(!S.capsuleMonths)S.capsuleMonths=12;if(!S.capsuleYrs)S.capsuleYrs=1;if(!S.spheres)S.spheres={fin:0,sport:0,learn:0};if(!S.customCats)S.customCats={};if(!S.diary)S.diary={};if(!S.dreams)S.dreams=[];if(!S.tasks)S.tasks={};if(!S.gratitude)S.gratitude={};if(!S.gratGoal)S.gratGoal=30;return true}}catch(e){}return false}
 function uid(){return Math.random().toString(36).slice(2,9)}
@@ -4183,7 +4190,33 @@ async function syncToCloud(){
     return;
   }
   try{
-    const data={birth:S.birth,lifespan:S.lifespan,markedWeeks:S.markedWeeks,weekNotes:S.weekNotes,timeCapsules:S.timeCapsules,chapters:S.chapters,chapterMap:S.chapterMap,trackers:S.trackers,trNotes:S.trNotes,reviews:S.reviews,isPro:S.isPro,lang:S.lang,capsuleMonths:S.capsuleMonths,spheres:S.spheres?{fin:S.spheres.fin||0,sport:S.spheres.sport||0,learn:S.spheres.learn||0}:{fin:0,sport:0,learn:0},updatedAt:new Date().toISOString()};
+    const data={
+      birth:S.birth,
+      lifespan:S.lifespan,
+      markedWeeks:S.markedWeeks,
+      markedDays:S.markedDays||{},
+      weekNotes:S.weekNotes,
+      dayNotes:S.dayNotes||{},
+      timeCapsules:S.timeCapsules,
+      chapters:S.chapters,
+      chapterMap:S.chapterMap,
+      trackers:S.trackers,
+      trNotes:S.trNotes,
+      reviews:S.reviews,
+      diary:S.diary||{},
+      gratitude:S.gratitude||{},
+      tasks:S.tasks||{},
+      dreams:S.dreams||[],
+      gratGoal:S.gratGoal||30,
+      isPro:S.isPro,
+      lang:S.lang,
+      theme:S.theme||'dark',
+      profileName:S.profileName||'',
+      capsuleMonths:S.capsuleMonths,
+      spheres:S.spheres?{fin:S.spheres.fin||0,sport:S.spheres.sport||0,learn:S.spheres.learn||0}:{fin:0,sport:0,learn:0},
+      customCats:S.customCats||{},
+      updatedAt:new Date().toISOString()
+    };
     await fbDb.collection('timebox_users').doc(currentUser.uid).set(data,{merge:true});
     document.getElementById('syncStatus').textContent=S.lang==='uk'?'✓ Збережено':'✓ Saved';
     setTimeout(()=>{const el=document.getElementById('syncStatus');if(el)el.textContent=S.lang==='uk'?'Синхронізовано':'Synced';},2000);
@@ -4196,12 +4229,26 @@ async function loadFromCloud(){
     const doc=await fbDb.collection('timebox_users').doc(currentUser.uid).get();
     if(doc.exists){
       const data=doc.data();
-      // Merge cloud data — cloud wins for most fields
       Object.assign(S,data);
+      // Ensure all fields exist
       if(!S.trNotes)S.trNotes={};
       if(!S.spheres)S.spheres={fin:0,sport:0,learn:0};
+      if(!S.diary)S.diary={};
+      if(!S.gratitude)S.gratitude={};
+      if(!S.tasks)S.tasks={};
+      if(!S.dreams)S.dreams=[];
+      if(!S.gratGoal)S.gratGoal=30;
+      if(!S.markedDays)S.markedDays={};
+      if(!S.dayNotes)S.dayNotes={};
+      if(!S.customCats)S.customCats={};
+      // Save to localStorage too
+      save();
       calcStats();
-      if(S.birth){renderLifeGrid();renderHomePreview();renderHomeTr();renderCatRow();renderTrackers();renderFreeBanner();renderChapterToolbar();renderReviewBanner();updateTodayWidget();}
+      if(S.birth){
+        renderLifeGrid();renderHomePreview();renderHomeTr();
+        renderCatRow();renderTrackers();renderFreeBanner();
+        renderChapterToolbar();renderReviewBanner();updateTodayWidget();
+      }
     }
   }catch(e){console.log('Cloud load error:',e);}
 }
